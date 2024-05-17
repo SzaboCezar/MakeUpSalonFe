@@ -9,6 +9,7 @@
 body {
     font-family: "Open Sans", sans-serif;
     color: #444444;
+    
   }
   
   a {
@@ -387,7 +388,6 @@ body {
 
 #commercial-photo {
   padding: 60px 0;
-  background: #f7f7f7;
 }
 
 #commercial-photo .container {
@@ -742,7 +742,6 @@ body {
   # Team
   --------------------------------------------------------------*/
   .team {
-    background: #fff;
     padding: 60px 0;
   }
   
