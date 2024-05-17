@@ -1,0 +1,33 @@
+/* src/app/login/login.component.css */
+.container {
+  margin-top: 100px;
+}
+
+.card {
+  border: 2px;
+  box-shadow: 0.5rem 0.5rem 0.5rem 0.5rem rgba(248, 9, 9, 0.384);
+  background-color: rgba(56, 54, 54, 0.075);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.btn-outline-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-outline-primary i {
+  margin-right: 0.5rem;
+}
+
+.text-center a {
+  color: #6c757d;
+  text-decoration: none;
+}
+
+.text-center a:hover {
+  text-decoration: underline;
+}
