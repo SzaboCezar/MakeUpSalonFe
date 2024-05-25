@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RegisterRequestDTOModel} from "../../models/RegisterRequest.DTO.model";
 import {EnrollmentService} from "../../service/enrollment.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-enrollment',
@@ -19,7 +20,7 @@ export class EnrollmentComponent implements OnInit{
   };
   enrollmentForm: FormGroup;
 
-  constructor(private enrollmentService: EnrollmentService) {
+  constructor(private enrollmentService: EnrollmentService, private router: Router) {
   }
 
   ngOnInit() {
@@ -44,6 +45,7 @@ export class EnrollmentComponent implements OnInit{
     this.enrollmentService.enroll(this.registerRequest).subscribe(
       data => {
         console.log(data);
+        this.router.navigate(['/login']); // Adjust the route as necessary
       },
       error => {
         console.log(error);
