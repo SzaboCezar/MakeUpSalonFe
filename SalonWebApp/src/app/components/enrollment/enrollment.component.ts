@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {RegisterRequestDTOModel} from "../../models/RegisterRequest.DTO.model";
+import {EnrollmentService} from "../../service/enrollment.service";
 
 @Component({
   selector: 'app-enrollment',
@@ -9,7 +11,16 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
   styleUrl: './enrollment.component.css',
 })
 export class EnrollmentComponent implements OnInit{
+  registerRequest: RegisterRequestDTOModel = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  };
   enrollmentForm: FormGroup;
+
+  constructor(private enrollmentService: EnrollmentService) {
+  }
 
   ngOnInit() {
     this.enrollmentForm = new FormGroup({
@@ -25,5 +36,20 @@ export class EnrollmentComponent implements OnInit{
 
   onSubmit() {
     console.log(this.enrollmentForm)
+    this.registerRequest.firstName = this.enrollmentForm.get('firstName').value;
+    this.registerRequest.lastName = this.enrollmentForm.get('lastName').value;
+    this.registerRequest.email = this.enrollmentForm.get('email').value;
+    this.registerRequest.password = this.enrollmentForm.get('password').value;
+
+    this.enrollmentService.enroll(this.registerRequest).subscribe(
+      data => {
+        console.log(data);
+      },
+      error => {
+        console.log(error);
+        window.alert("Error: user was not added!")
+      }
+    );
+
   }
 }
