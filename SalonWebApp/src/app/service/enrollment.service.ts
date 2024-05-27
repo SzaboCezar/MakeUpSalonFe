@@ -12,7 +12,8 @@ export class EnrollmentService {
   constructor(private http: HttpClient) { }
 
   enroll(registerRequest: RegisterRequestDTOModel): Observable<any> {
-    console.log("Service: " + registerRequest.firstName + " " + registerRequest.lastName + " " + registerRequest.email + " " + registerRequest.password)
-    return this.http.post<any>(this.enrollmentURL, { firstName: registerRequest.firstName, lastName: registerRequest.lastName, email: registerRequest.email, password: registerRequest.password});
+    console.log("Service: " + registerRequest.firstName + " " + registerRequest.lastName + " " + registerRequest.email + " " + registerRequest.password);
+    return this.http.post<any>(this.enrollmentURL, registerRequest);
+    // return this.http.post<any>(this.enrollmentURL, { firstName: registerRequest.firstName, lastName: registerRequest.lastName, email: registerRequest.email, password: registerRequest.password});
   }
 }

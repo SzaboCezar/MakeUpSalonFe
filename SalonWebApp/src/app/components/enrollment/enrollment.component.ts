@@ -37,10 +37,16 @@ export class EnrollmentComponent implements OnInit{
 
   onSubmit() {
     console.log(this.enrollmentForm)
-    this.registerRequest.firstName = this.enrollmentForm.get('firstName').value;
-    this.registerRequest.lastName = this.enrollmentForm.get('lastName').value;
-    this.registerRequest.email = this.enrollmentForm.get('email').value;
-    this.registerRequest.password = this.enrollmentForm.get('password').value;
+    // this.registerRequest.firstName = this.enrollmentForm.get('firstName').value;
+    // this.registerRequest.lastName = this.enrollmentForm.get('lastName').value;
+    // this.registerRequest.email = this.enrollmentForm.get('email').value;
+    // this.registerRequest.password = this.enrollmentForm.get('password').value;
+
+    this.registerRequest = this.enrollmentForm.getRawValue()
+
+    // this.enrollmentService.enroll(this.registerRequest).subscribe(
+    //   data => console.log(data)
+    // );
 
     this.enrollmentService.enroll(this.registerRequest).subscribe(
       data => {

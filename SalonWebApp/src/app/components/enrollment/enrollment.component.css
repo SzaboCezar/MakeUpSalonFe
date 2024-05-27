@@ -1,46 +1,27 @@
-.bg-image {
-  background-image: url('../../../assets/img/Enrollment/Enrollment_Wallpaper.jpg')
-}
-
-/* Stil pentru mască cu gradient */
-.gradient-custom-3 {
-  background: linear-gradient(45deg, #f03c52, #ff8e53); /* Definire gradient personalizat */
-}
-
-/* Setare stil pentru container */
-.container {
-  width: 100%; /* Lățime de 100% */
-  padding-right: 15px; /* Margini interne */
-  padding-left: 15px; /* Margini interne */
-  margin-right: auto; /* Margini externe */
-  margin-left: auto; /* Margini externe */
-}
-
-/* Setare stil pentru card */
 .card {
-  border-radius: 15px; /* Rază pentru colțurile cardului */
+  max-width: 100%; /* Asigură că cardul nu depășește lățimea containerului */
+  border-radius: 15px;
 }
 
-/* Stil pentru etichetă */
-.form-label {
-  color: #495057; /* Culoare text */
+.card-body {
+  padding: 2rem; /* Ajustează padding-ul */
 }
 
-/* Setare stil pentru buton */
-.btn-success {
-  color: #fff; /* Culoare text */
-  background-color: #28a745; /* Culoare fundal */
-  border-color: #28a745; /* Culoare chenar */
+.form-control {
+  font-size: 0.875rem; /* Diminuiește dimensiunea fontului */
+  padding: 0.5rem; /* Reduce padding-ul inputurilor */
 }
 
-/* Setare stil pentru buton la hover */
-.btn-success:hover {
-  color: #fff; /* Culoare text la hover */
-  background-color: #218838; /* Culoare fundal la hover */
-  border-color: #1e7e34; /* Culoare chenar la hover */
+.btn {
+  font-size: 0.875rem; /* Diminuiește dimensiunea fontului butonului */
+  padding: 0.5rem 1rem; /* Reduce padding-ul butonului */
 }
 
-.form-control::placeholder {
-  font-size: small; /* Dimensiune text */
-  color: rgba(73, 80, 87, 0.36); /* Culoare text */
+.bg-image {
+  background-size: cover;
+  background-position: center;
+}
+
+.gradient-custom-3 {
+  background: rgba(0, 0, 0, 0.5); /* Adaugă o mască gradient */
 }
