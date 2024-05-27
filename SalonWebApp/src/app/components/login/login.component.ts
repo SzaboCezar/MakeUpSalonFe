@@ -1,9 +1,9 @@
-// src/app/login/login.component.ts
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../service/auth.service'; // Assuming you have an AuthService for login
+import { AuthService } from '../../service/auth.service';
+import { UserService } from '../../service/user.service';
 
 @Component({
   standalone: true,
@@ -17,13 +17,22 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private userService: UserService, private router: Router) { }
 
-  onLogin(): void {
+  onLogin(): any {
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         console.log('Login successful', response);
-        this.router.navigate(['/home']); // Adjust the route as necessary
+        this.authService.getUserByEmail(this.email).subscribe({
+          next: (userResponse) => {
+            console.log('User details:', userResponse);
+            this.userService.setUserDetails(userResponse); // Setarea detaliilor despre utilizator în serviciul UserService
+            this.router.navigate(['/home']);
+          },
+          error: (userError) => {
+            console.error('Error fetching user details:', userError);
+          }
+        });
       },
       error: (err) => {
         console.error('Login failed', err);
@@ -33,12 +42,10 @@ export class LoginComponent {
   }
 
   loginWithGoogle(): void {
-    // Logic for Google login
     console.log('Google login');
   }
 
   loginWithFacebook(): void {
-    // Logic for Facebook login
     console.log('Facebook login');
   }
 }
