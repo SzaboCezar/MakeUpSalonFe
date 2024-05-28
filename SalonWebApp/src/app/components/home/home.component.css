@@ -1119,6 +1119,13 @@
   max-width: 50%;
 }
 
+
+.btn-outline-light {
+  color: #30505F;
+  border-color: #30505F;
+  max-width: 50%;
+}
+
 .btn.btn-primary:hover{
   color: #3F858C;
   background: #F2E5BD;
@@ -1131,19 +1138,37 @@
   border-color: #F2E5BD;
 }
 
+.btn-outline-light:hover{
+  color: #F2E5BD;
+  background: #30505F;
+  border-color: #F2E5BD;
+}
+
+
 #firstCarousel{
   background: linear-gradient(to right, #F2E5BD, #F2E5BD, #F2E5BD,  #F2B56B);
+}
+
+#secondCarousel{
+  background: linear-gradient(to right, #eadbcc, #eadbcc, #eadbcc, #bf7e78);
+}
+
+#thirdCarousel{
+  background: linear-gradient(to right,  #F2E4F2, #F2E4F2, #F2E4F2, rgba(242, 162, 155, 0.89));
 }
 
 #firstCarouselSecondRow {
   margin-top: 10vh;
 }
 
+
+#secondCarouselSecondRow {
+  margin-top: 10vh;
+}
+
 .carousel-caption{
   color: #333333;
 }
-
-
 
 
 .carousel-item .row {
@@ -1156,8 +1181,17 @@
   max-height: 1vh;
 }
 
+#secondCarousellImg {
+  max-height: 1vh;
+}
+
+
 #firstCarouselText {
   max-width: 80%;
+}
+
+.blue-text{
+  color: #30505F;
 }
 
 @media (max-width: 758px) {
@@ -1165,12 +1199,13 @@
     opacity: 0.07;
   }
 
-  .btn-primary {
-  }
-
   .btn-responsive {
     font-size: 0.875rem;
     padding: 0.25rem 0.5rem;
+  }
+
+  .btn-outline-light{
+    padding-bottom: 1vh;
   }
 
   .text-responsive {
@@ -1181,6 +1216,7 @@
     font-style: normal;
     font-size: 3vh;
   }
+
 }
 
 
