@@ -27,7 +27,5 @@ export class AppComponent {
 // Bootstrap-ul aplicației
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(routes),
-    provideHttpClient()
-  ]
+    provideRouter(routes)]
 }).catch(err => console.error(err));

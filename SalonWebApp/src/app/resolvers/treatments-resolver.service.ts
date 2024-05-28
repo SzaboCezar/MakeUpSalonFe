@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import {TreatmentService} from "../services/treatment.service";
 import {Treatment} from "../shared/models/Treatment.model";
-import {ActivatedRouteSnapshot, MaybeAsync, Resolve, RouterStateSnapshot} from "@angular/router";
+import {Resolve, ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
 import {TreatmentDataStorageService} from "../storage/treatment-data-storage.service";
-import {Observable, of, switchMap, take} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -35,9 +34,10 @@ export class TreatmentsResolverService implements Resolve<Treatment[]>{
     const treatments = this.treatmentsService.getTreatments();
 
     if (treatments.length === 0) {
+      console.log('Resolver fetchTreatments() called');
       return this.treatmentDataStorageService.fetchTreatments();
     } else {
-      return of(treatments);
+      return treatments;
     }
   }
 

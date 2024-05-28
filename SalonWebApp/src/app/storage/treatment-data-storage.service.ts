@@ -14,14 +14,14 @@ export class TreatmentDataStorageService {
 
   constructor(
     private http: HttpClient,
+    private treatmentService: TreatmentService
   ) { }
 
   fetchTreatments(): Observable<Treatment[]> {
     //Just for test is hardcoded
     // Adăugați temporar un token în antetul de autorizare pentru testare
     // Definim antetul cu token-ul JWT
-    const authToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWhhaUBhZG1pbi5jb20iLCJpYXQiOjE3MTY5MTkyNTcsImV4cCI6MTcxNjkyMDY5N30.2QBafHLTc_-RqWnSaklYZMMza-UAlj8ADvmVRwrsJAQ";
-    ;
+    const authToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWhhaUBhZG1pbi5jb20iLCJpYXQiOjE3MTY5MjIyNDEsImV4cCI6MTcxNjkyMzY4MX0.Bep7btHXnIIjKS-EJXuvBTuaA7zpmtFqGVMTnEDnuT4";
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${authToken}`
@@ -36,7 +36,13 @@ export class TreatmentDataStorageService {
     return this.http.get<Treatment[]>(this.baseUrl, options).pipe(
       tap(treatments => {
         // Aici puteți face ceva cu tratamentul, dacă este necesar
-        console.log(treatments)
+        this.treatmentService.setTreatments(treatments);
+
+
+
+        // console.log(treatments)
+        console.log('Data stroage fetchTreatments() called');
+
       })
     );
   }

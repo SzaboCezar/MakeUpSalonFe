@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Treatment} from "../../../shared/models/Treatment.model";
 import {TreatmentService} from "../../../services/treatment.service";
 import {CommonModule, DatePipe} from "@angular/common";
@@ -28,7 +28,7 @@ import {Subscription} from "rxjs";
   templateUrl: './treatment-list.component.html',
   styleUrl: './treatment-list.component.scss'
 })
-export class TreatmentListComponent implements OnInit {
+export class TreatmentListComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
   selectedTreatment?: Treatment;
@@ -62,4 +62,7 @@ export class TreatmentListComponent implements OnInit {
     this.treatmentService.getTreatment(treatment.treatmentID);
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }
