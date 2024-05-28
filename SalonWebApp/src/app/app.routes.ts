@@ -1,10 +1,21 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { EnrollmentComponent } from './components/enrollment/enrollment.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
+import {TreatmentComponent} from "./components/treatment/treatment.component";
 
 export const routes: Routes = [
-  { path: '', loadComponent: () => import('./components/home/home.component').then(m => m.HomeComponent) }, // Home route
-  { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent) },
-  { path: 'enrollment', loadComponent: () => import('./components/enrollment/enrollment.component').then(m => m.EnrollmentComponent)},
-  { path: 'reset-password', loadComponent: () => import('./components/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)},
-  { path: '**', redirectTo: '', pathMatch: 'full' }, // Default route
+  { path: '', component: HomeComponent }, // Home route
+  { path: 'login', component: LoginComponent },
+  { path: 'enrollment', component: EnrollmentComponent },
+  {
+    path: 'treatments',
+    component: TreatmentComponent, // Componenta care necesită datele de la resolver
+    resolve: { treatments: TreatmentsResolverService }
+  },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' } // Default route
 ];
