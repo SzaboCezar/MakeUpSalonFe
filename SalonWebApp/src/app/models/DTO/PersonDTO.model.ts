@@ -1,3 +1,6 @@
+import {EmployeeTreatment} from "../EmployeeTreatment.model";
+import {Appointment} from "../Appointment.model";
+
 export interface PersonDTO {
   personId: number;
   firstName: string;

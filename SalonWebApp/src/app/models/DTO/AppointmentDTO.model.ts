@@ -1,5 +1,6 @@
 import {PersonDTO} from "./PersonDTO.model";
 import {Person} from "../Person.model";
+import {Status} from "../Enum/Status.enum";
 
 export interface AppointmentDTO {
   appointmentID: number;

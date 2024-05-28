@@ -1,13 +1,12 @@
-import {PersonDTO} from "./PersonDTO.model";
-import {Role} from "../Enum/Role.enum";
+import {Role} from "./Enum/Role.enum";
+import {Person} from "./Person.model";
 
-export interface UserDTO {
+export interface User {
   userId: number;
   email: string;
   password: string;
   role: Role;
-  personDto: PersonDTO;
-
+  person: Person;
   accountNonExpired: boolean;
   accountNonLocked: boolean;
   credentialsNonExpired: boolean;

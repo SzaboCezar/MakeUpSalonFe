@@ -1,6 +1,6 @@
-import {EmployeeTreatment} from "../EmployeeTreatment.model";
+import {EmployeeTreatment} from "./EmployeeTreatment.model";
 
-export interface TreatmentDTO {
+export interface Treatment {
 
   treatmentID: number;
   name: string;
