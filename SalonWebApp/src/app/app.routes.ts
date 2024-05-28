@@ -6,10 +6,12 @@ import { EnrollmentComponent } from './components/enrollment/enrollment.componen
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
 import {TreatmentListComponent} from "./components/treatment/treatment-list/treatment-list.component";
+import {AuthComponent} from "./auth/auth.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Home route
   { path: 'login', component: LoginComponent },
+  { path: 'auth', component: AuthComponent },
   { path: 'enrollment', component: EnrollmentComponent },
   {
     path: 'treatments',
