@@ -540,7 +540,7 @@
 
       <div class="carousel-inner">
 
-        <div id="firstCarousel" class="carousel-item active" data-bs-interval="10000He:o">
+        <div id="firstCarousel" class="carousel-item active" data-bs-interval="10000">
           <div class="container">
             <div id="firstCarouselFirstRow" class="row">
               <div class="col-lg-4 col-md-6 col-sm-12 CarouselImg">
@@ -563,7 +563,7 @@
         <div id="secondCarousel" class="carousel-item" data-bs-interval="2000">
           <div class="container">
             <div id="secondCarouselFirstRow" class="row">
-              <div class="col-lg-8 col-md-6 col-sm-12 CarouselImg">
+              <div class="col-lg-8 col-md-6 col-sm-12 CarouselImg d-none d-md-block">
                 <img class="img-fluid mb-3 mb-sm-0" src="./assets/img/HomePage/RealisticMakeup.png" alt="Brush image">
               </div>
               <div id="secondCarouselText" class="col-lg-4 col-md-6 col-sm-12 text-left">
@@ -591,7 +591,7 @@
         <div id="thirdCarousel" class="carousel-item" data-bs-interval="10000">
           <div class="container">
             <div id="thirdCarouselFirstRow" class="row">
-              <div class="col-lg-7 col-md-6 col-sm-12 mt-3 mx-auto text-center CarouselImg">
+              <div class="col-lg-7 col-md-6 col-sm-12 mt-3 mx-auto text-center CarouselImg d-none d-md-block">
                 <img class="img-fluid mb-sm-0" src="./assets/img/HomePage/Place.png" alt="The place image">
               </div>
               <div id="thirdCarouselText" class="col-lg-5 col-md-6 col-sm-12 text-center mt-3">
@@ -608,7 +608,9 @@
                     <a href="https://maps.app.goo.gl/P5cjLhLRxf5fC6mc8" target="_blank">
                       Str. Iuliu Maniu
                     </a>
-                    <app-map class="container-fluid"></app-map>
+                    <div class="mx-5">
+                      <app-map class="container-fluid"></app-map>
+                    </div>
                   </div>
                 </div>
 
