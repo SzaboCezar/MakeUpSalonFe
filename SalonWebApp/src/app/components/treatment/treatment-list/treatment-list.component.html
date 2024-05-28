@@ -1,0 +1,60 @@
+<main class="container-fluid">
+  <h3 class="d-flex justify-content-between">
+    <i>Treatment list</i>
+    <a routerLink="/treatment/add">
+      <button
+        class="btn btn-outline-primary bi-patch-plus">
+        Add treatment
+      </button>
+    </a>
+  </h3>
+
+  <div *ngFor="let treatment of treatments">
+    <div ngbAccordion (shown)="onSelect(treatment)">
+      <div ngbAccordionItem="{{treatment.treatmentID}}">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>
+            <span class="p-2 border rounded-start-2">{{treatment.treatmentID}}</span>
+            <span class="p-2 border rounded-end-2">Treatment id: {{treatment.treatmentID}}</span>
+          </button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+
+            <ng-template>
+
+              <p><strong>Treatment name </strong> <em>{{treatment.name}}</em>
+              <p><strong>Treatment description </strong> <em>{{treatment.description}}</em>
+                <br>
+                <span class="text-primary-emphasis">Treatment estimated duration: </span> {{treatment.estimatedDuration}}
+                <br>
+                <span  class="text-success">Treatment price: </span>  {{treatment.price}}
+              </p>
+
+              <!--Details, edit and delete buttons.-->
+              <div class="d-flex justify-content-end mx-auto">
+                <a class="mt-2 me-2" routerLink="/treatment/detail/{{treatment.treatmentID}}">
+                  <button type="button" class="btn btn-outline-secondary bi-sun" ngbTooltip="READ">
+                    Details</button>
+                </a>
+
+                <a class="mt-2 me-2" routerLink="/treatment/detail/update/{{treatment.treatmentID}}">
+                  <button type="button" class="btn btn-outline-success bi-gear" ngbTooltip="UPDATE">
+                    Edit</button>
+                </a>
+
+                <a class="mt-2 me-2" routerLink="/treatment/delete/{{treatment.treatmentID}}">
+                  <button type="button" class="btn btn-outline-danger">
+                    Delete</button>
+                </a>
+              </div>
+            </ng-template>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+

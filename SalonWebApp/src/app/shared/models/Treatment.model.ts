@@ -9,5 +9,4 @@ export interface Treatment {
   price: number;
   pictureURL: string;
   employeeTreatments: EmployeeTreatment[];
-
 }

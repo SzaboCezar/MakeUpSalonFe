@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { TreatmentService } from '../services/treatment.service';
 import { Treatment } from '../shared/models/Treatment.model';
-import { map, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Person } from '../shared/models/Person.model';
 import {Observable} from "rxjs";
 
@@ -14,11 +14,26 @@ export class TreatmentDataStorageService {
 
   constructor(
     private http: HttpClient,
-    private treatmentService: TreatmentService
   ) { }
 
   fetchTreatments(): Observable<Treatment[]> {
-    return this.http.get<Treatment[]>(this.baseUrl).pipe(
+    //Just for test is hardcoded
+    // Adăugați temporar un token în antetul de autorizare pentru testare
+    // Definim antetul cu token-ul JWT
+    const authToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWhhaUBhZG1pbi5jb20iLCJpYXQiOjE3MTY5MTY3OTgsImV4cCI6MTcxNjkxODIzOH0.XYMjV4JT9X4d9hxvdCQhSmK0Hs4yDiEmK9DoTkCGbhg"
+    ;
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${authToken}`
+    });
+
+    // Specificăm antetul în opțiunile de cerere
+    const options = { headers: headers };
+
+
+
+
+    return this.http.get<Treatment[]>(this.baseUrl, options).pipe(
       tap(treatments => {
         // Aici puteți face ceva cu tratamentul, dacă este necesar
         console.log(treatments)

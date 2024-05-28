@@ -5,7 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { EnrollmentComponent } from './components/enrollment/enrollment.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
-import {TreatmentComponent} from "./components/treatment/treatment.component";
+import {TreatmentListComponent} from "./components/treatment/treatment-list/treatment-list.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Home route
@@ -13,8 +13,8 @@ export const routes: Routes = [
   { path: 'enrollment', component: EnrollmentComponent },
   {
     path: 'treatments',
-    component: TreatmentComponent, // Componenta care necesită datele de la resolver
-    // resolve: { treatments: TreatmentsResolverService }
+    component: TreatmentListComponent, // Componenta care necesită datele de la resolver
+    resolve: { treatments: TreatmentsResolverService }
   },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Default route

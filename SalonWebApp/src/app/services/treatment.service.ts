@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import { Treatment } from '../shared/models/Treatment.model';
 import { AppointmentService } from './appointment.service';
 import { TreatmentDataStorageService } from '../storage/treatment-data-storage.service';
@@ -15,15 +15,20 @@ export class TreatmentService {
   constructor(
     private appointmentService: AppointmentService,
     private treatmentDataStorageService: TreatmentDataStorageService
-  ) { }
+  ) {
+    this.treatmentDataStorageService.fetchTreatments().subscribe((treatments: Treatment[]) => {
+      this.setTreatments(treatments);
+    });
+  }
 
   setTreatments(treatments: Treatment[]) {
     this.treatments = treatments;
     this.treatmentsChanged.next(this.treatments.slice());
   }
 
-  getTreatments() {
-    return this.treatments.slice();
+  getTreatments(): Observable<Treatment[]> {
+    const treatments = of(this.treatments.slice());
+    return treatments;
   }
 
   getTreatment(index: number) {
@@ -34,11 +39,11 @@ export class TreatmentService {
     this.appointmentService.addTreatments(treatments);
   }
 
-  fetchTreatments() {
-    this.treatmentDataStorageService.fetchTreatments().subscribe((treatments: Treatment[]) => {
-      this.setTreatments(treatments);
-    });
-  }
+  // fetchTreatments() {
+  //   this.treatmentDataStorageService.fetchTreatments().subscribe((treatments: Treatment[]) => {
+  //     this.setTreatments(treatments);
+  //   });
+  // }
 
   addTreatment(treatment: Treatment) {
     this.treatmentDataStorageService.addTreatment(treatment).subscribe((newTreatment: Treatment) => {
