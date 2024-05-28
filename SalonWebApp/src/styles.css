@@ -1,5 +1,6 @@
+@import 'maplibre-gl/dist/maplibre-gl.css';
+
 /* You can add global styles to this file, and also import other style files */
 body {
     background-color: #d6d4d4; /* Codul de culoare pentru gri deschis */
   }
-  
