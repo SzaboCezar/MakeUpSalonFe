@@ -26,6 +26,7 @@
   max-width: 50%;
 }
 
+
 .btn.btn-primary:hover{
   color: #3F858C;
   background: #F2E5BD;
@@ -44,6 +45,11 @@
   border-color: #F2E5BD;
 }
 
+.btn-secondary:hover{
+  background: #F2E5BD;
+  color: #333333;
+  border-color: #333333;
+}
 
 #firstCarousel{
   background: linear-gradient(to right, #F2E5BD, #F2E5BD, #F2E5BD,  #F2B56B);
