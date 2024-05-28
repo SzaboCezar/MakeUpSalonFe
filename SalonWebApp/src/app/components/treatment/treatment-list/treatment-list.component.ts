@@ -8,7 +8,8 @@ import {
   NgbAccordionDirective, NgbAccordionHeader,
   NgbAccordionItem
 } from "@ng-bootstrap/ng-bootstrap";
-import {RouterLink} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-treatment-list',
@@ -29,23 +30,32 @@ import {RouterLink} from "@angular/router";
 })
 export class TreatmentListComponent implements OnInit {
 
+  subscription: Subscription;
   selectedTreatment?: Treatment;
   treatments: Treatment[];
 
-  constructor(private treatmentService: TreatmentService) {
+  constructor(private treatmentService: TreatmentService, private route: ActivatedRoute) {
 
   }
 
   ngOnInit(): void {
-   this.getTreatments();
+   // this.getTreatments();
+    this.subscription = this.treatmentService.treatmentsChanged
+      .subscribe(
+        (treatments: Treatment[]) => {
+          this.treatments = treatments;
+        }
+      );
+
+    this.treatments = this.treatmentService.getTreatments();
   }
 
-  getTreatments(): void {
-    this.treatmentService.getTreatments().subscribe((treatments) => {
-      this.treatments = treatments;
-      console.log(this.treatments.length);
-    });
-  }
+  // getTreatments(): void {
+  //   this.treatmentService.getTreatments().subscribe((treatments) => {
+  //     this.treatments = treatments;
+  //     console.log(this.treatments.length);
+  //   });
+  // }
 
   onSelect(treatment: Treatment): void {
     this.selectedTreatment = treatment;

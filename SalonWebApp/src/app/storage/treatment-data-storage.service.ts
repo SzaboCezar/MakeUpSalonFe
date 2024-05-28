@@ -20,7 +20,7 @@ export class TreatmentDataStorageService {
     //Just for test is hardcoded
     // Adăugați temporar un token în antetul de autorizare pentru testare
     // Definim antetul cu token-ul JWT
-    const authToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWhhaUBhZG1pbi5jb20iLCJpYXQiOjE3MTY5MTY3OTgsImV4cCI6MTcxNjkxODIzOH0.XYMjV4JT9X4d9hxvdCQhSmK0Hs4yDiEmK9DoTkCGbhg"
+    const authToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWhhaUBhZG1pbi5jb20iLCJpYXQiOjE3MTY5MTkyNTcsImV4cCI6MTcxNjkyMDY5N30.2QBafHLTc_-RqWnSaklYZMMza-UAlj8ADvmVRwrsJAQ";
     ;
 
     const headers = new HttpHeaders({

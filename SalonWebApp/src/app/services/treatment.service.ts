@@ -26,9 +26,10 @@ export class TreatmentService {
     this.treatmentsChanged.next(this.treatments.slice());
   }
 
-  getTreatments(): Observable<Treatment[]> {
-    const treatments = of(this.treatments.slice());
-    return treatments;
+  getTreatments() {
+    // const treatments = of(this.treatments.slice());
+    // return treatments;
+    return this.treatments.slice();
   }
 
   getTreatment(index: number) {
