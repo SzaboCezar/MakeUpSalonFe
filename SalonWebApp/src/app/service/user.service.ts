@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-
-  private userDetails: any;
-
   private getUserByIdUrl = 'http://localhost:8080/api/persons/id/';
   private getUserByEmailUrl = 'http://localhost:8080/api/users/';
+
+  private userDetails: any = null;
+  private personDetails: any = null;
 
   constructor(private http: HttpClient) { }
 
@@ -19,12 +19,19 @@ export class UserService {
     return this.http.get<any>(url, options); // Faceți cererea HTTP folosind HttpClient.get
   }
 
-  setUserDetails(userDetails: any) {
-    this.userDetails = userDetails;
+  setUserDetails(details: any): void {
+    this.userDetails = details;
   }
 
-  getUserDetails() {
+  getUserDetails(): any {
     return this.userDetails;
   }
 
+  setPersonDetails(details: any): void {
+    this.personDetails = details;
+  }
+
+  getPersonDetails(): any {
+    return this.personDetails;
+  }
 }

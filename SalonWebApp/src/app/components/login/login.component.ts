@@ -27,7 +27,18 @@ export class LoginComponent {
           next: (userResponse) => {
             console.log('User details:', userResponse);
             this.userService.setUserDetails(userResponse); // Setarea detaliilor despre utilizator în serviciul UserService
-            this.router.navigate(['/home']);
+
+            // După ce obținem detaliile despre utilizator, solicităm detalii despre persoană
+            this.authService.getPersonDetails().subscribe({
+              next: (personResponse) => {
+                console.log('Person details:', personResponse);
+                // Puteți salva sau utiliza detaliile despre persoană așa cum aveți nevoie
+                this.router.navigate(['/home']);
+              },
+              error: (personError) => {
+                console.error('Error fetching person details:', personError);
+              }
+            });
           },
           error: (userError) => {
             console.error('Error fetching user details:', userError);

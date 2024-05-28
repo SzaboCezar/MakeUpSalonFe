@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RegisterRequestDTOModel} from "../../models/RegisterRequest.DTO.model";
-import {EnrollmentService} from "../../service/enrollment.service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { RegisterRequestDTOModel } from "../../models/RegisterRequest.DTO.model";
+import { EnrollmentService } from "../../service/enrollment.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-enrollment',
@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
   templateUrl: './enrollment.component.html',
   styleUrl: './enrollment.component.css',
 })
-export class EnrollmentComponent implements OnInit{
+export class EnrollmentComponent implements OnInit {
   registerRequest: RegisterRequestDTOModel = {
     firstName: '',
     lastName: '',
@@ -29,7 +29,7 @@ export class EnrollmentComponent implements OnInit{
       'lastName': new FormControl(null, Validators.required),
       'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
-      'confirmPassword':  new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
+      'confirmPassword': new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
       'agreeTerms': new FormControl(false)
     });
   }
