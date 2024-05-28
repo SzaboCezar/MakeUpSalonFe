@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ChangePasswordRequest} from "../models/ChangePasswordRequestDTO.model";
+import {ChangePasswordRequest} from "../shared/models/ChangePasswordRequestDTO.model";
 
 @Injectable({
   providedIn: 'root'

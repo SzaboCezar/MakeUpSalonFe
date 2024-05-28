@@ -21,7 +21,7 @@ export function getRoleDescription(role: Role): string {
 
 //Exmplu de utilizare:
 
-// // example.service.ts
+// // example.services.ts
 // import { Role, getRoleDescription } from './enums/role.enum';
 //
 // function printRoleDescriptions() {

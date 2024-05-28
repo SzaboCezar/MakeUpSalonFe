@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {RegisterRequestDTOModel} from "../models/RegisterRequest.DTO.model";
+import {RegisterRequestDTOModel} from "../shared/models/RegisterRequest.DTO.model";
 
 @Injectable({
   providedIn: 'root'

@@ -1,4 +1,4 @@
-// src/app/service/auth.service.ts
+// src/app/services/auth.services.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';

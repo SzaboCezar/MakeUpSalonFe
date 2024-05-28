@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ResetPasswordService} from "../../service/reset-password.service";
+import {ResetPasswordService} from "../../services/reset-password.service";
 import {Router} from "@angular/router";
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RegisterRequestDTOModel} from "../../models/RegisterRequest.DTO.model";
-import {EnrollmentService} from "../../service/enrollment.service";
+import {RegisterRequestDTOModel} from "../../shared/models/RegisterRequest.DTO.model";
+import {EnrollmentService} from "../../services/enrollment.service";
 import {Router} from "@angular/router";
 
 @Component({
