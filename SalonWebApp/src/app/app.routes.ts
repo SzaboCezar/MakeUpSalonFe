@@ -14,7 +14,7 @@ export const routes: Routes = [
   {
     path: 'treatments',
     component: TreatmentComponent, // Componenta care necesită datele de la resolver
-    resolve: { treatments: TreatmentsResolverService }
+    // resolve: { treatments: TreatmentsResolverService }
   },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Default route

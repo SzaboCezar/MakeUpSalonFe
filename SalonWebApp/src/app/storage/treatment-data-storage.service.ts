@@ -4,6 +4,7 @@ import { TreatmentService } from '../services/treatment.service';
 import { Treatment } from '../shared/models/Treatment.model';
 import { map, tap } from 'rxjs/operators';
 import { Person } from '../shared/models/Person.model';
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +17,11 @@ export class TreatmentDataStorageService {
     private treatmentService: TreatmentService
   ) { }
 
-  fetchTreatments() {
+  fetchTreatments(): Observable<Treatment[]> {
     return this.http.get<Treatment[]>(this.baseUrl).pipe(
-      map(treatments => {
-        return treatments.map(treatment => ({...treatment}));
-      }),
       tap(treatments => {
-        this.treatmentService.setTreatments(treatments);
+        // Aici puteți face ceva cu tratamentul, dacă este necesar
+        console.log(treatments)
       })
     );
   }
@@ -31,6 +30,7 @@ export class TreatmentDataStorageService {
     return this.http.get<Treatment>(`${this.baseUrl}/${id}`).pipe(
       tap(treatment => {
         // Aici puteți face ceva cu tratamentul, dacă este necesar
+        console.log(treatment)
       })
     );
   }
@@ -47,6 +47,7 @@ export class TreatmentDataStorageService {
     return this.http.post<Treatment>(`${this.baseUrl}`, treatment).pipe(
       tap((newTreatment: Treatment) => {
         // Aici puteți actualiza lista de tratamente din TreatmentService, dacă este necesar
+        console.log(treatment)
       })
     );
   }
@@ -55,6 +56,7 @@ export class TreatmentDataStorageService {
     return this.http.put<Treatment>(`${this.baseUrl}/${id}`, treatment).pipe(
       tap((updatedTreatment: Treatment) => {
         // Aici puteți actualiza lista de tratamente din TreatmentService, dacă este necesar
+        console.log(treatment)
       })
     );
   }
@@ -63,6 +65,7 @@ export class TreatmentDataStorageService {
     return this.http.delete(`${this.baseUrl}/${id}`).pipe(
       tap(() => {
         // Aici puteți actualiza lista de tratamente din TreatmentService, dacă este necesar
+        console.log(`Treatment with id ${id} was deleted`);
       })
     );
   }
