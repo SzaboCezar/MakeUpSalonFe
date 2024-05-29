@@ -64,6 +64,7 @@ export class TreatmentDataStorageService {
         console.log('Data storage fetchTreatments() called');
       })
     );
+
   }
 
   getTreatmentById(id: number) {

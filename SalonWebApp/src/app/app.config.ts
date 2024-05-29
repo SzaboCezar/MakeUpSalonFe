@@ -12,7 +12,6 @@ export const appConfig: ApplicationConfig = {
     // Plasează resolver-ul înaintea interceptorului în lista de furnizori
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
-    TreatmentsResolverService // Assure this is before AuthInterceptorService
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
   ]
 };

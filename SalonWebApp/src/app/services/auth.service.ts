@@ -32,9 +32,8 @@ export class AuthService {
       .pipe(
         catchError(this.handleError),
         tap(response => {
-          this.handleAuthentication(response);
+          this.handleAuthentication(response.token);
         })
-
       );
   }
 
@@ -49,15 +48,14 @@ export class AuthService {
   }
 
   private handleAuthentication(token: string) {
-    console.log(token)
 
-    const authToken: AuthenticationResponse  = {
-      token: token
-    }
-
-    const user: User = new User(0, '', '', null, null, false, false, false, false, authToken);
+    const user: User = new User(0, '', '', null, null, false, false, false, false, token);
 
     //Emitem user-ul care s-a logat, cu token-ul în el.
     this.user.next(user);
+    console.log("Emitted user: ")
+    console.log(user)
+
+    localStorage.setItem('userData', JSON.stringify(user));
   }
 }

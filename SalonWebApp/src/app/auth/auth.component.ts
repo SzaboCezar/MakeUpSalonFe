@@ -63,7 +63,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         this.isLoading = false;
 
         //TODO: change again to homepage
-        // this.router.navigate(['/']);
+        this.router.navigate(['/']);
       }, errorMessage => {
         console.log("AuthComponent " + errorMessage);
         this.error = errorMessage;

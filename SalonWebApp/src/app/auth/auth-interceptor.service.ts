@@ -12,32 +12,43 @@ export class AuthInterceptorService implements HttpInterceptor {
 
   //Take preia doar o valoare a acelui observable, după care se dezabonează automat.
   //În cazul de față priea ultuml user și apoi se dezabonează.
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('AuthInterceptorService intercept() called');
 
+  intercept(req: HttpRequest<any>, next: HttpHandler) {
     return this.authService.user.pipe(
       take(1),
       exhaustMap(user => {
-        // Verificăm dacă user-ul există și are un token
         if (!user || !user.token) {
-          // Dacă nu, pur și simplu continuăm cu următoarea cerere în lanț
-          return next.handle(request);
-        }
+          console.log('No user or token in interceptor');
 
-        // Dacă avem un token, clonăm cererea și adăugăm antetul de autorizare
-        const modifiedRequest = request.clone({
-          headers: new HttpHeaders().set('Authorization', `Bearer ${user.token}`)
+          return next.handle(req);
+        }
+        console.log('User in interceptor:', user);
+        console.log('Token in interceptor:', user.token);
+        console.log('Token type in interceptor:', typeof user.token)
+
+
+        // // const userToken: string = user;
+        // console.log('User token in interceptor:', userToken)
+        // console.log("User token type: ", typeof userToken)
+
+
+
+        const modifiedReq = req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${user.token}`
+          }
         });
 
-        console.log('User token:', user.token);
-
-
-        console.log(modifiedRequest.headers);
-
-        // Returnăm cererea modificată pentru a fi procesată mai departe
-        return next.handle(modifiedRequest);
+          console.log('Modified req in interceptor:', modifiedReq);
+          return next.handle(modifiedReq);
       })
     );
   }
+
+
+
+
+
+
 
 }
