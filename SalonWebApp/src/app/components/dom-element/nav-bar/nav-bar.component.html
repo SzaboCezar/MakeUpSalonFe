@@ -48,7 +48,7 @@
 
       <div>
         <a *ngIf="!isAuthenticated" routerLink="/auth" class="btn btn-outline-info">Sign in</a>
-        <a *ngIf="isAuthenticated" routerLink="/auth" class="btn btn-outline-danger">Logout</a>
+        <a *ngIf="isAuthenticated" (click)="onLogout()" routerLink="/auth" class="btn btn-outline-danger">Logout</a>
       </div>
 <!--      <form class="d-flex" role="search">-->
 <!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->

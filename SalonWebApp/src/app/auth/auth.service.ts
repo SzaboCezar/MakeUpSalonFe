@@ -7,6 +7,9 @@ import {RegisterRequest} from "../shared/models/RegisterRequest.model";
 import {AuthenticationResponse} from "../shared/models/AuthenticationResponse.model";
 import {tap} from "rxjs/operators";
 import {User} from "../shared/models/User.model";
+import {Router} from "@angular/router";
+import {Role} from "../shared/models/Enum/Role.enum";
+import {Person} from "../shared/models/Person.model";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +24,7 @@ export class AuthService {
 
   private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // login(email: string, password: string): Observable<any> {
   //   return this.http.post<any>(this.loginUrl, { email, password });
@@ -37,8 +40,46 @@ export class AuthService {
       );
   }
 
+  autoLogin() {
+    const userData: {
+      userId: number,
+      email: string,
+      password: string,
+      role: Role,
+      person: Person,
+      accountNonExpired: boolean,
+      accountNonLocked: boolean,
+      credentialsNonExpired: boolean,
+      enabled: boolean,
+      _token: string
+    } = JSON.parse(localStorage.getItem('userData'));
+
+    if (!userData) {
+      return;
+    }
+
+    console.log("AuthService userData: ", userData)
+
+    const userDataToken = userData._token;
+    console.log("AuthService userDataToken: ", userDataToken)
+
+
+
+    const loadedUser: User
+      = new User(userData.userId, userData.email, userData.password, userData.role, userData.person, userData.accountNonExpired, userData.accountNonLocked, userData.credentialsNonExpired, userData.enabled, userData._token);
+
+    console.log("AuthService loaded user: ", loadedUser)
+
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+    }
+  }
+
+
   logout() {
     this.user.next(null);
+    localStorage.removeItem('userData');
+    this.router.navigate(['/']);
   }
 
 

@@ -16,13 +16,13 @@ export class User {
 
 
       //Need for authentication. The question mark tells TypeScript that this property may be undefined.
-      private _userAuthToken?: string
+      private _token?: string
     ) {}
 
   get token(): string {
-    if (!this._userAuthToken) {
+    if (!this._token) {
       return null;
     }
-    return this._userAuthToken;
+    return this._token;
   }
 }
