@@ -12,6 +12,7 @@ import {User} from "../shared/models/User.model";
   providedIn: 'root'
 })
 export class AuthService {
+  //Emite un user la login sau la logut. Îl folosim pentru a ști dacă userul este logat sau nu.
   user = new BehaviorSubject<User>(null);
 
   private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
@@ -52,6 +53,7 @@ export class AuthService {
 
     const user: User = new User(0, '', '', null, null, false, false, false, false, authToken);
 
-    this.user.next(user); //Îl transmite ca și următorul user pentru behaviorSubject
+    //Emitem user-ul care s-a logat, cu token-ul în el.
+    this.user.next(user);
   }
 }
