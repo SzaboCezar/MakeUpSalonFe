@@ -37,6 +37,10 @@ export class AuthService {
       );
   }
 
+  logout() {
+    this.user.next(null);
+  }
+
 
   singUp(registerRequest: RegisterRequest): Observable<any> {
     return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/register', registerRequest);

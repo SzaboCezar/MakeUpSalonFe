@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subscription} from "rxjs";
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "./auth.service";
 import {Router, RouterLink} from "@angular/router";
 import {FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";

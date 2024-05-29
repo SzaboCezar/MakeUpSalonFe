@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthService} from "../../../services/auth.service";
+import {AuthService} from "../../../auth/auth.service";
 import {Subscription} from "rxjs";
 import {NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";

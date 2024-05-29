@@ -5,7 +5,7 @@ import { Treatment } from '../shared/models/Treatment.model';
 import {exhaustMap, take, tap} from 'rxjs/operators';
 import { Person } from '../shared/models/Person.model';
 import {Observable} from "rxjs";
-import {AuthService} from "../services/auth.service";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({
   providedIn: 'root'
