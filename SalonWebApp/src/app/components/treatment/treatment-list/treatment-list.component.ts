@@ -1,15 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Treatment} from "../../../shared/models/Treatment.model";
-import {TreatmentService} from "../../../services/treatment.service";
-import {CommonModule, DatePipe} from "@angular/common";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Treatment } from "../../../shared/models/Treatment.model";
+import { TreatmentService } from "../../../services/treatment.service";
+import { CommonModule, DatePipe } from "@angular/common";
 import {
   NgbAccordionBody, NgbAccordionButton,
   NgbAccordionCollapse,
   NgbAccordionDirective, NgbAccordionHeader,
   NgbAccordionItem
 } from "@ng-bootstrap/ng-bootstrap";
-import {ActivatedRoute, RouterLink} from "@angular/router";
-import {Subscription} from "rxjs";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-treatment-list',
@@ -39,7 +39,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   // this.getTreatments();
+    // this.getTreatments();
     this.subscription = this.treatmentService.treatmentsChanged
       .subscribe(
         (treatments: Treatment[]) => {

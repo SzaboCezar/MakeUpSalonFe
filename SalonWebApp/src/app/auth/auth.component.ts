@@ -1,11 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subscription} from "rxjs";
-import {AuthService} from "./auth.service";
-import {Router, RouterLink} from "@angular/router";
-import {FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {AuthenticationRequest} from "../shared/models/AuthenticationRequest.model";
-import {LoadingSpinnerComponent} from "../components/dom-element/loading-spinner/loading-spinner.component";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from "rxjs";
+import { AuthService } from "./auth.service";
+import { Router, RouterLink } from "@angular/router";
+import { FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from "@angular/forms";
+import { NgIf } from "@angular/common";
+import { AuthenticationRequest } from "../shared/models/AuthenticationRequest.model";
+import { LoadingSpinnerComponent } from "../components/dom-element/loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-auth',
@@ -34,7 +34,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
@@ -49,7 +49,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     console.log(this.loginForm)
 
     //Daca formularul nu este valid, nu facem nimic
-    if(!this.loginForm.valid) {
+    if (!this.loginForm.valid) {
       return;
     }
 
@@ -63,7 +63,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         this.isLoading = false;
 
         //TODO: change again to homepage
-        this.router.navigate(['/']);
+        this.router.navigate(['/users']);
       }, errorMessage => {
         console.log("AuthComponent " + errorMessage);
         this.error = errorMessage;
