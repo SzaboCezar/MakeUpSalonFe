@@ -13,7 +13,11 @@ import {User} from "../shared/models/User.model";
 })
 export class AuthService {
   //Emite un user la login sau la logut. Îl folosim pentru a ști dacă userul este logat sau nu.
-  user = new BehaviorSubject<User>(null);
+  //BehaviorSubject față de un Subject simplu reține ultima valoare emisă, astfel încât să o poată emite la abonare.
+  //Mia exact, nu trebuie ca userul să se logheze în același timp când face un query pe BE, ci se poate loga înainte de
+  //aceasta (e.g. face log in, dar fetch-ul datelor se face mai târziu).
+  user = new BehaviorSubject<User | null>(null);
+
 
   private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
 

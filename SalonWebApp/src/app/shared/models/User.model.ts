@@ -20,9 +20,9 @@ export class User {
     ) {}
 
   get token() {
-    if (this.token == null) {
+    if (!this._token) {
       return null;
     }
-    return this.token;
+    return this._token;
   }
 }

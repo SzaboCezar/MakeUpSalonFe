@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { TreatmentService } from '../services/treatment.service';
 import { Treatment } from '../shared/models/Treatment.model';
-import { tap } from 'rxjs/operators';
+import {exhaustMap, take, tap} from 'rxjs/operators';
 import { Person } from '../shared/models/Person.model';
 import {Observable} from "rxjs";
+import {AuthService} from "../services/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,36 +15,53 @@ export class TreatmentDataStorageService {
 
   constructor(
     private http: HttpClient,
-    private treatmentService: TreatmentService
+    private treatmentService: TreatmentService,
+    private authService: AuthService
   ) { }
 
+  // fetchTreatments(): Observable<Treatment[]> {
+  //
+  //
+  //
+  //
+  //
+  //   //Just for test is hardcoded
+  //   // Adăugați temporar un token în antetul de autorizare pentru testare
+  //   // Definim antetul cu token-ul JWT
+  //   // const authToken =
+  //   //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MzNAZW1haWwuY29tIiwiaWF0IjoxNzE2OTI2Mzk0LCJleHAiOjE3MTY5Mjc4MzR9.k-JdiVZubBsE7nHoGaNXFnVumfOM8enceor-F6GWWIE";
+  //
+  //   // const headers = new HttpHeaders({
+  //   //   'Authorization': `Bearer ${authToken}`
+  //   // });
+  //
+  //   // // Specificăm antetul în opțiunile de cerere
+  //   // const options = { headers: headers };
+  //
+  //
+  //
+  //
+  //   // return this.http.get<Treatment[]>(this.baseUrl, options).pipe(
+  //
+  //   return this.http.get<Treatment[]>(this.baseUrl).pipe(
+  //     tap(treatments => {
+  //       // Aici puteți face ceva cu tratamentul, dacă este necesar
+  //       this.treatmentService.setTreatments(treatments);
+  //
+  //
+  //
+  //       // console.log(treatments)
+  //       console.log('Data stroage fetchTreatments() called');
+  //
+  //     })
+  //   );
+  // }
+
   fetchTreatments(): Observable<Treatment[]> {
-    //Just for test is hardcoded
-    // Adăugați temporar un token în antetul de autorizare pentru testare
-    // Definim antetul cu token-ul JWT
-    const authToken =
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MzNAZW1haWwuY29tIiwiaWF0IjoxNzE2OTI2Mzk0LCJleHAiOjE3MTY5Mjc4MzR9.k-JdiVZubBsE7nHoGaNXFnVumfOM8enceor-F6GWWIE";
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${authToken}`
-    });
-
-    // Specificăm antetul în opțiunile de cerere
-    const options = { headers: headers };
-
-
-
-
-    return this.http.get<Treatment[]>(this.baseUrl, options).pipe(
+    return this.http.get<Treatment[]>(this.baseUrl).pipe(
       tap(treatments => {
-        // Aici puteți face ceva cu tratamentul, dacă este necesar
         this.treatmentService.setTreatments(treatments);
-
-
-
-        // console.log(treatments)
-        console.log('Data stroage fetchTreatments() called');
-
+        console.log('Data storage fetchTreatments() called');
       })
     );
   }
@@ -57,7 +75,7 @@ export class TreatmentDataStorageService {
     );
   }
 
-  getPersonsByTreatmentId(id: number) {
+  getPersonsByTreatBamentId(id: number) {
     return this.http.get<Person[]>(`${this.baseUrl}/${id}/persons`).pipe(
       tap(persons => {
         // Aici puteți actualiza starea sau face altceva cu persoanele primite
