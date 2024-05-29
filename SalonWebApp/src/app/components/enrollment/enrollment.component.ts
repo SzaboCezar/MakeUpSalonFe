@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RegisterRequestDTOModel} from "../../shared/models/RegisterRequest.DTO.model";
+import {RegisterRequestDTOModel} from "../../shared/models/DTO/RegisterRequest.DTO.model";
 import {EnrollmentService} from "../../services/enrollment.service";
 import {Router} from "@angular/router";
 
@@ -28,8 +28,14 @@ export class EnrollmentComponent implements OnInit{
       'firstName': new FormControl(null, Validators.required),
       'lastName': new FormControl(null, Validators.required),
       'email': new FormControl(null, [Validators.required, Validators.email]),
-      'password': new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
-      'confirmPassword':  new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
+
+      // 'password': new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)])
+      'password': new FormControl(null, [Validators.required]),
+
+      // 'confirmPassword':  new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
+      'confirmPassword': new FormControl(null, [Validators.required]),
+
+
       'agreeTerms': new FormControl(false)
     });
   }
@@ -59,5 +65,8 @@ export class EnrollmentComponent implements OnInit{
       }
     );
 
+
+    //TODO: uncomment this
+    // this.loginForm.reset();
   }
 }

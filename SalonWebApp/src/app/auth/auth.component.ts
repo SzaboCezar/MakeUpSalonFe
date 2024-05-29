@@ -1,9 +1,11 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable, Subscription} from "rxjs";
 import {AuthService} from "../services/auth.service";
 import {Router, RouterLink} from "@angular/router";
-import {FormGroup, FormsModule, NgForm, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";
+import {AuthenticationRequest} from "../shared/models/AuthenticationRequest.model";
+import {LoadingSpinnerComponent} from "../components/dom-element/loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-auth',
@@ -12,37 +14,63 @@ import {NgIf} from "@angular/common";
     FormsModule,
     NgIf,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    LoadingSpinnerComponent
   ],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css'
 })
-export class AuthComponent implements OnDestroy {
-
-  enrollmentForm: FormGroup;
-
-  isLoginMode = true;
+export class AuthComponent implements OnInit, OnDestroy {
   isLoading = false;
   error: string = null;
 
-  private closeSub: Subscription;
+  loginForm: FormGroup;
+
+  authRequest: AuthenticationRequest = {
+    email: '',
+    password: ''
+  }
 
   constructor(
     private authService: AuthService,
     private router: Router,
   ) {}
 
-  onSwitchMode() {
-    this.isLoginMode = !this.isLoginMode;
+  ngOnInit() {
+    this.loginForm = new FormGroup({
+      'email': new FormControl(null, [Validators.required, Validators.email]),
+      // 'password': new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)])
+      'password': new FormControl(null, [Validators.required])
+    });
+
   }
 
-
   onSubmit() {
-    console.log(this.enrollmentForm)
-    // this.registerRequest.firstName = this.enrollmentForm.get('firstName').value;
-    // this.registerRequest.lastName = this.enrollmentForm.get('lastName').value;
-    // this.registerRequest.email = this.enrollmentForm.get('email').value;
-    // this.registerRequest.password = this.enrollmentForm.get('password').value;
+    console.log(this.loginForm)
+
+    //Daca formularul nu este valid, nu facem nimic
+    if(!this.loginForm.valid) {
+      return;
+    }
+
+    this.authRequest = this.loginForm.getRawValue();
+
+    this.isLoading = true;
+
+    this.authService.login(this.authRequest).subscribe(
+      response => {
+        console.log(response);
+        this.isLoading = false;
+      }, errorMessage => {
+        console.log(errorMessage);
+        this.error = errorMessage;
+        this.isLoading = false;
+      }
+    )
+
+
+    //TODO: uncomment this
+    // this.loginForm.reset();
   }
 
   ngOnDestroy() {

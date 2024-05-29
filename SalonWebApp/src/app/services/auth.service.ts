@@ -1,17 +1,57 @@
 // src/app/services/authentification.services.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
+import {AuthenticationRequest} from "../shared/models/AuthenticationRequest.model";
+import {RegisterRequest} from "../shared/models/RegisterRequest.model";
+import {AuthenticationResponse} from "../shared/models/AuthenticationResponse.model";
+import {tap} from "rxjs/operators";
+import {User} from "../shared/models/User.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  user = new BehaviorSubject<User>(null);
+
   private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
 
   constructor(private http: HttpClient) { }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post<any>(this.loginUrl, { email, password });
+  // login(email: string, password: string): Observable<any> {
+  //   return this.http.post<any>(this.loginUrl, { email, password });
+  // }
+
+  login(authenticationRequest: AuthenticationRequest): Observable<any> {
+    return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/login', authenticationRequest)
+      .pipe(
+        catchError(this.handleError),
+        tap(response => {
+          this.handleAuthentication(response);
+        })
+
+      );
+  }
+
+
+  singUp(registerRequest: RegisterRequest): Observable<any> {
+    return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/register', registerRequest);
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An unknown error occurred!';
+    return throwError(errorMessage);
+  }
+
+  private handleAuthentication(token: string) {
+    console.log(token)
+
+    const authToken: AuthenticationResponse  = {
+      token: token
+    }
+
+    const user: User = new User(0, '', '', null, null, false, false, false, false, authToken);
+
+    this.user.next(user); //Îl transmite ca și următorul user pentru behaviorSubject
   }
 }

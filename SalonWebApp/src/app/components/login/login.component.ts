@@ -20,16 +20,16 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
-    this.authService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        console.log('Login successful', response);
-        this.router.navigate(['/home']); // Adjust the route as necessary
-      },
-      error: (err) => {
-        console.error('Login failed', err);
-        this.errorMessage = 'Invalid email or password';
-      }
-    });
+    // this.authService.login(this.email, this.password).subscribe({
+    //   next: (response) => {
+    //     console.log('Login successful', response);
+    //     this.router.navigate(['/home']); // Adjust the route as necessary
+    //   },
+    //   error: (err) => {
+    //     console.error('Login failed', err);
+    //     this.errorMessage = 'Invalid email or password';
+    //   }
+    // });
   }
 
   loginWithGoogle(): void {

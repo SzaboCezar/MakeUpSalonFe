@@ -7,8 +7,16 @@
             <div class="card-body p-4 p-md-5">
               <h2 class="text-uppercase text-center mb-4">Sign in</h2>
 
-              <form [formGroup]="enrollmentForm" (ngSubmit)="onSubmit()">
+              <div *ngIf="error" class="alert alert-danger">
+                <p>{{ error }}</p>
+              </div>
 
+
+              <div *ngIf="isLoading" style="text-align: center">
+                <app-loading-spinner> </app-loading-spinner>
+              </div>
+
+              <form *ngIf="!isLoading" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
                 <div class="form-outline mb-3">
                   <input type="email"
@@ -31,7 +39,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-success btn-block btn-sm gradient-custom-4 text-body">Log in</button>
+                  <button [disabled]="!loginForm.valid" type="submit" class="btn btn-success btn-block btn-sm gradient-custom-4 text-body">Log in</button>
                 </div>
 
                 <p class="text-center text-muted mt-4 mb-0">Do not have an account? <a routerLink="/enrollment"

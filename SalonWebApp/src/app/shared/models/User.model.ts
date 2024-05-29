@@ -1,14 +1,28 @@
 import {Role} from "./Enum/Role.enum";
 import {Person} from "./Person.model";
+import {AuthenticationResponse} from "./AuthenticationResponse.model";
 
-export interface User {
-  userId: number;
-  email: string;
-  password: string;
-  role: Role;
-  person: Person;
-  accountNonExpired: boolean;
-  accountNonLocked: boolean;
-  credentialsNonExpired: boolean;
-  enabled: boolean;
+export class User {
+  constructor(
+      public userId: number,
+      public email: string,
+      public password: string,
+      public role: Role,
+      public person: Person,
+      public accountNonExpired: boolean,
+      public accountNonLocked: boolean,
+      public credentialsNonExpired: boolean,
+      public enabled: boolean,
+
+
+      //Need for authentication. The question mark tells TypeScript that this property may be undefined.
+      private _token?: AuthenticationResponse
+    ) {}
+
+  get token() {
+    if (this.token == null) {
+      return null;
+    }
+    return this.token;
+  }
 }
