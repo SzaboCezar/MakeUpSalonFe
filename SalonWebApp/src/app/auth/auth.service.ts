@@ -21,14 +21,19 @@ export class AuthService {
   //aceasta (e.g. face log in, dar fetch-ul datelor se face mai târziu).
   user = new BehaviorSubject<User | null>(null);
 
+  //BE token expiration function: setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+  tokenExpirationTimer: any;
+  expirationTime: number;
 
   private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
 
+
+
+
+
+
   constructor(private http: HttpClient, private router: Router) { }
 
-  // login(email: string, password: string): Observable<any> {
-  //   return this.http.post<any>(this.loginUrl, { email, password });
-  // }
 
   login(authenticationRequest: AuthenticationRequest): Observable<any> {
     return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/login', authenticationRequest)
@@ -64,7 +69,6 @@ export class AuthService {
     console.log("AuthService userDataToken: ", userDataToken)
 
 
-
     const loadedUser: User
       = new User(userData.userId, userData.email, userData.password, userData.role, userData.person, userData.accountNonExpired, userData.accountNonLocked, userData.credentialsNonExpired, userData.enabled, userData._token);
 
@@ -72,7 +76,14 @@ export class AuthService {
 
     if (loadedUser.token) {
       this.user.next(loadedUser);
+
+      // Calculăm durata rămasă până la expirarea token-ului
+      const expirationDuration = this.expirationTime - new Date().getTime();
+
+      // Inițiem automat logout-ul după expirarea token-ului
+      this.autoLogout(expirationDuration);
     }
+
   }
 
 
@@ -80,6 +91,25 @@ export class AuthService {
     this.user.next(null);
     localStorage.removeItem('userData');
     this.router.navigate(['/']);
+
+    /*
+    * For auto logout.
+    * Dacă user-ul se deloghează manual, trebuie să ștergem timer-ul de logout automat.
+     */
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+  }
+
+  /*
+  * Setează un timer pentru a face logout automat după ce token-ul expiră.
+  * Token-ul expiră pe BE în 24 de minute de la apelarea login-ului.
+   */
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
   }
 
 
@@ -100,6 +130,20 @@ export class AuthService {
     this.user.next(user);
     console.log("Emitted user: ")
     console.log(user)
+
+    //For auto logout
+    // Calculăm timpul la care token-ul va expira
+    const expirationTime = new Date().getTime() + 1000 * 60 * 20; // Token-ul expiră în 20 minute
+
+    // Salvăm timpul de expirare în proprietatea expirationTime
+    this.expirationTime = expirationTime;
+
+    // Calculăm durata până la expirare
+    const expirationDuration = expirationTime - new Date().getTime();
+
+    // Setăm un timer pentru a face logout automat după ce token-ul expiră
+    this.autoLogout(expirationDuration);
+
 
     localStorage.setItem('userData', JSON.stringify(user));
   }
