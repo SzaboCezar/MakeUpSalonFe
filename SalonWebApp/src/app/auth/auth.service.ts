@@ -147,11 +147,11 @@ export class AuthService {
     console.log(user)
 
     //For auto logout
-    // Calculăm timpul la care token-ul va expira
+    // Calculăm timpul la care token-ul va expira în cazul autoLogIn, din local storage.
     const expirationTime = new Date().getTime() + 1000 * 60 * 20; // Token-ul expiră în 20 minute
 
-    // Calculăm durata până la expirare
-    const expirationDuration = +expirationTime - new Date().getTime();
+    // Calculăm durata până la expirare pentru logIn făcut de user.
+    const expirationDuration = expirationTime - new Date().getTime();
 
     // Setăm un timer pentru a face logout automat după ce token-ul expiră
     this.autoLogout(expirationDuration);

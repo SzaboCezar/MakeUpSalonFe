@@ -7,6 +7,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
 import {TreatmentListComponent} from "./components/treatment/treatment-list/treatment-list.component";
 import {AuthComponent} from "./auth/auth.component";
+import {AuthGuard} from "./auth/auth.guard";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent }, // Home route
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'enrollment', component: EnrollmentComponent },
   {
     path: 'treatments',
+    canActivate: [AuthGuard], // Guardul care protejează ruta
     component: TreatmentListComponent, // Componenta care necesită datele de la resolver
     resolve: { treatments: TreatmentsResolverService }
   },
