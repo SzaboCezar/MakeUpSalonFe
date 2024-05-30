@@ -23,16 +23,13 @@ export class AuthService {
 
   //BE token expiration function: setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
   tokenExpirationTimer: any;
-  expirationTime: number;
-
   private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
 
 
-
-
-
-
   constructor(private http: HttpClient, private router: Router) { }
+
+
+
 
 
   login(authenticationRequest: AuthenticationRequest): Observable<any> {
@@ -45,6 +42,9 @@ export class AuthService {
       );
   }
 
+
+
+
   autoLogin() {
     const userData: {
       userId: number,
@@ -56,7 +56,8 @@ export class AuthService {
       accountNonLocked: boolean,
       credentialsNonExpired: boolean,
       enabled: boolean,
-      _token: string
+      _token: string,
+      expirationTime: number
     } = JSON.parse(localStorage.getItem('userData'));
 
     if (!userData) {
@@ -78,12 +79,12 @@ export class AuthService {
       this.user.next(loadedUser);
 
       // Calculăm durata rămasă până la expirarea token-ului
-      const expirationDuration = this.expirationTime - new Date().getTime();
+      const expirationDuration: number = userData.expirationTime - new Date().getTime();
+      console.log("Expiration duration autoLogOut: ", expirationDuration)
 
       // Inițiem automat logout-ul după expirarea token-ului
       this.autoLogout(expirationDuration);
     }
-
   }
 
 
@@ -102,25 +103,39 @@ export class AuthService {
     this.tokenExpirationTimer = null;
   }
 
+
+
+
+
   /*
   * Setează un timer pentru a face logout automat după ce token-ul expiră.
   * Token-ul expiră pe BE în 24 de minute de la apelarea login-ului.
    */
   autoLogout(expirationDuration: number) {
+    console.log("Expiration duration: ", expirationDuration)
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
   }
 
 
+
+
+
   singUp(registerRequest: RegisterRequest): Observable<any> {
     return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/register', registerRequest);
   }
+
+
+
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';
     return throwError(errorMessage);
   }
+
+
+
 
   private handleAuthentication(token: string) {
 
@@ -135,16 +150,13 @@ export class AuthService {
     // Calculăm timpul la care token-ul va expira
     const expirationTime = new Date().getTime() + 1000 * 60 * 20; // Token-ul expiră în 20 minute
 
-    // Salvăm timpul de expirare în proprietatea expirationTime
-    this.expirationTime = expirationTime;
-
     // Calculăm durata până la expirare
-    const expirationDuration = expirationTime - new Date().getTime();
+    const expirationDuration = +expirationTime - new Date().getTime();
 
     // Setăm un timer pentru a face logout automat după ce token-ul expiră
     this.autoLogout(expirationDuration);
 
-
-    localStorage.setItem('userData', JSON.stringify(user));
+    //Trimitem user-ul în localStorage pentru a-l putea folosi și după refresh
+    localStorage.setItem('userData', JSON.stringify({...user, expirationTime}));
   }
 }
