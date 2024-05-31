@@ -1,0 +1,15 @@
+<div *ngIf="logsService.logs.length" class="text-center">
+
+  <div class="container-fluid title">
+    <h3 class="d-flex justify-content-center">
+      <i>Messages</i>
+    </h3>
+  </div>
+
+  <div class="border rounded-3 mt-2 mx-auto" *ngFor='let message of logsService.logs'> {{message}} </div>
+
+  <button type="button" class="btn btn-outline-danger mt-2" (click)="logsService.clear(); onBack()">
+    Clear logs
+  </button>
+
+</div>

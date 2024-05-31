@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Subject} from 'rxjs';
+import {Observable, of, Subject} from 'rxjs';
 import { Treatment } from '../shared/models/Treatment.model';
 import { AppointmentService } from './appointment.service';
+import {LogsService} from "../logs/logs.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,8 @@ export class TreatmentService {
 
   constructor(
     private appointmentService: AppointmentService,
-    // private treatmentDataStorageService: TreatmentDataStorageService
+    private logService: LogsService
   ) {
-    // this.treatmentDataStorageService.fetchTreatments().subscribe((treatments: Treatment[]) => {
-    //   this.setTreatments(treatments);
-    // });
   }
 
   setTreatments(treatments: Treatment[]) {
@@ -39,9 +37,34 @@ export class TreatmentService {
     this.appointmentService.addTreatments(treatments);
   }
 
-  addTreatment(treatment: Treatment) {
+  addTreatment(treatment: Treatment): Observable<Treatment> {
+    if (!treatment || !treatment.treatmentID || treatment.treatmentID <= 0) {
+      this.logService.add(
+        `TreatmentService | Treatment Add: treatment is undefined - ${Date.now()}`
+      );
+      throw new Error('Treatment is undefined');
+    }
+
+    //Converting the id to a number, in case it is a string.
+    //It is very helpful because the API could send us a string gormat.
+    treatment.treatmentID = +treatment.treatmentID;
+
+    //ID check to be unique.
+    if (this.treatments.find((h) => h.treatmentID === treatment.treatmentID)) {
+      this.logService.add(
+        `TreatmentService | Treatment Add: treatment with id=${treatment.treatmentID} already exists - ${Date.now()}`
+      );
+      throw new Error('Treatment with this id already exists');
+    }
+
     this.treatments.push(treatment);
     this.treatmentsChanged.next(this.treatments.slice());
+
+    this.logService.add(
+      `TreatmentService | Treatment Add: added ${treatment.treatmentID}`
+    );
+
+    return of(treatment);
   }
 
   updateTreatment(index: number, newTreatment: Treatment) {
