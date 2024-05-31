@@ -11,6 +11,7 @@ import {AuthService} from "./auth/auth.service";
   imports: [RouterModule]
 })
 export class AppComponent implements OnInit {
+  title = 'SalonWebApp';
 
   constructor(private authService: AuthService) {}
 
