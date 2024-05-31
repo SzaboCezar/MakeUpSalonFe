@@ -20,7 +20,7 @@ import {LoadingSpinnerComponent} from "../components/dom-element/loading-spinner
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.css'
 })
-export class AuthComponent implements OnInit, OnDestroy {
+export class AuthComponent implements OnInit {
   isLoading = false;
   error: string = null;
 
@@ -76,6 +76,4 @@ export class AuthComponent implements OnInit, OnDestroy {
     // this.loginForm.reset();
   }
 
-  ngOnDestroy() {
-  }
 }

@@ -123,7 +123,13 @@ export class AuthService {
 
 
   singUp(registerRequest: RegisterRequest): Observable<any> {
-    return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/register', registerRequest);
+    return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/register', registerRequest)
+      .pipe(
+        catchError(this.handleError),
+        tap(response => {
+          this.handleAuthentication(response.token);
+        })
+      );
   }
 
 

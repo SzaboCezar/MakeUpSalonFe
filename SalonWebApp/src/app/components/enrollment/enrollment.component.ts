@@ -3,6 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {RegisterRequestDTOModel} from "../../shared/models/DTO/RegisterRequest.DTO.model";
 import {EnrollmentService} from "../../services/enrollment.service";
 import {Router} from "@angular/router";
+import {RegisterRequest} from "../../shared/models/RegisterRequest.model";
 
 @Component({
   selector: 'app-enrollment',
@@ -12,11 +13,15 @@ import {Router} from "@angular/router";
   styleUrl: './enrollment.component.css',
 })
 export class EnrollmentComponent implements OnInit{
-  registerRequest: RegisterRequestDTOModel = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
+  registerRequest: RegisterRequest = {
+    firstName: null,
+    lastName: null,
+    email: null,
+    password: null,
+    phoneNumber: null,
+    dateOfBirth: null,
+    address: null,
+    pictureURL: null
   };
   enrollmentForm: FormGroup;
 
@@ -57,7 +62,7 @@ export class EnrollmentComponent implements OnInit{
     this.enrollmentService.enroll(this.registerRequest).subscribe(
       data => {
         console.log(data);
-        this.router.navigate(['/login']); // Adjust the route as necessary
+        this.router.navigate(['/']); // Adjust the route as necessary
       },
       error => {
         console.log(error);
