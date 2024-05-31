@@ -67,11 +67,14 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-success btn-block btn-sm gradient-custom-4 text-body">Register</button>
+                  <button [disabled]="!enrollmentForm.valid" type="submit" class="btn btn-success btn-block btn-sm gradient-custom-4 text-body">Register</button>
                 </div>
 
-                <p class="text-center text-muted mt-4 mb-0">Already have an account? <a href="#!"
+                <p class="text-center text-muted mt-4 mb-0">Already have an account? <a routerLink="/auth"
                                                                                         class="fw-bold text-body"><u>Login here</u></a></p>
+
+                <p class="text-center text-muted small mt-1 mb-0"> <a routerLink="/"
+                                                                      class="fw-bold text-body">Home</a></p>
               </form>
 
             </div>

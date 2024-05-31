@@ -2,13 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RegisterRequestDTOModel} from "../../shared/models/DTO/RegisterRequest.DTO.model";
 import {EnrollmentService} from "../../services/enrollment.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {RegisterRequest} from "../../shared/models/RegisterRequest.model";
 
 @Component({
   selector: 'app-enrollment',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './enrollment.component.html',
   styleUrl: './enrollment.component.css',
 })
