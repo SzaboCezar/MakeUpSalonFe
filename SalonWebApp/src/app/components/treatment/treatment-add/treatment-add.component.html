@@ -1,0 +1,96 @@
+<div *ngIf="plantCare">
+
+  <div class="container-fluid title">
+    <h3 class="d-flex justify-content-center">
+      <i><h2>Adding new plant care</h2></i>
+    </h3>
+  </div>
+
+  <main class="container-fluid">
+
+    <div class="row">
+      <div class="col">
+        <label for="plantCare-id">Plant care id: </label>
+        <input class="form-control" type="number" min="1" id="plantCare-id" [(ngModel)]="plantCare.id"
+               placeholder="Plant care id"
+               aria-label="Plant care id"
+               ngbTooltip="Enter a positive number">
+      </div>
+      <div class="col"></div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label for="plantCare-plantID">Plant id: </label>
+        <select id="plantCare-plantID"
+                class="form-control"
+                [(ngModel)]="plantCare.plantID"
+                aria-label="Plant id"
+                ngbTooltip="Please select from the list">
+          <option value="" disabled selected>Please select a Plant ID from the list: </option>
+          <option *ngFor="let plantID of plantsID" value="{{plantID}}">{{plantID}}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label for="plantCare-isWatered">Was watered ? </label>
+        <select id="plantCare-isWatered" class="form-control" [(ngModel)]="plantCare.isWatered" aria-label="watering">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label for="plantCare-isFertilized">Was fertilized ? </label>
+        <select id="plantCare-isFertilized" class="form-control" [(ngModel)]="plantCare.isFertilized"
+                aria-label="fertilizing">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col">
+        <label for="plantCare-hasSpecialTreatment">Dose it need special treatment ? </label>
+        <select id="plantCare-hasSpecialTreatment" class="form-control"
+                [(ngModel)]="plantCare.hasSpecialTreatment"
+                aria-label="hasSpecialTreatment">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col">
+      <label for="plant-inFamilySince">Care date: </label>
+      <input id="plant-inFamilySince" class="form-control" type="date" [(ngModel)]="plantCare.careDate">
+    </div>
+
+
+    <div class="d-flex justify-content-end mt-2">
+      <!--Checking if the fields are entered.-->
+      <button
+        [disabled]=" plantCare.id <= 0 ||
+                     plantCare.plantID <= 0 ||
+                     plantCare.isFertilized === undefined ||
+                     plantCare.hasSpecialTreatment === undefined"
+        id="AddPlantCareButton"
+        class="btn btn-outline-success me-2"
+        type="button"
+        routerLink="/plantCare"
+        (click)="onAdd()">
+        Add
+      </button>
+
+      <button id="GoBackButton" class="btn btn-outline-secondary" type="button" (click)="onBack()">
+        Back
+      </button>
+    </div>
+  </main>
+</div>
