@@ -58,6 +58,7 @@ export class TreatmentService {
     }
 
     this.treatments.push(treatment);
+    console.log("Treatment Service | Treatment Add: added treatment", treatment);
     this.treatmentsChanged.next(this.treatments.slice());
 
     this.logService.add(

@@ -1,30 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {Treatment} from "../../../shared/models/Treatment.model";
-import {ActivatedRoute, RouterLink} from "@angular/router";
-import {TreatmentService} from "../../../services/treatment.service";
-import {LogsService} from "../../../logs/logs.service";
-import {Location, NgForOf, NgIf} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {EmployeeTreatment} from "../../../shared/models/EmployeeTreatment.model";
-import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
-import {LoadingSpinnerComponent} from "../../dom-element/loading-spinner/loading-spinner.component";
+import { Component, OnInit } from '@angular/core';
+import { Treatment } from "../../../shared/models/Treatment.model";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { TreatmentService } from "../../../services/treatment.service";
+import { LogsService } from "../../../logs/logs.service";
+import { Location, NgForOf, NgIf } from '@angular/common';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { EmployeeTreatment } from "../../../shared/models/EmployeeTreatment.model";
+import { LoadingSpinnerComponent } from "../../dom-element/loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-treatment-add',
+  styleUrls: ['./treatment-add.component.css'],
   standalone: true,
   imports: [
-    FormsModule,
-    NgIf,
-    NgForOf,
-    NgbTooltip,
-    LoadingSpinnerComponent,
     ReactiveFormsModule,
-    RouterLink
+    LoadingSpinnerComponent,
+    NgIf,
+    NgForOf
   ],
-  templateUrl: './treatment-add.component.html',
-  styleUrl: './treatment-add.component.css'
+  templateUrl: './treatment-add.component.html'
 })
-export class TreatmentAddComponent {
+export class TreatmentAddComponent implements OnInit {
+  isLoading = false;
   treatment?: Treatment = {
     treatmentID: null,
     name: null,
@@ -35,6 +32,7 @@ export class TreatmentAddComponent {
     employeeTreatments: null
   };
 
+  addTreatmentForm: FormGroup;
   employeeTreatments?: EmployeeTreatment[];
 
   constructor(
@@ -44,18 +42,43 @@ export class TreatmentAddComponent {
     private location: Location
   ) {}
 
+  ngOnInit() {
+    this.addTreatmentForm = new FormGroup({
+      'treatmentID': new FormControl(null, [Validators.required]),
+      'name': new FormControl(null, [Validators.required]),
+      'description': new FormControl(null, [Validators.required]),
+      'estimatedDuration': new FormControl(null, [Validators.required]),
+      'price': new FormControl(null, [Validators.required]),
+      'pictureURL': new FormControl(null, [Validators.required]),
+      'employeeTreatments': new FormControl(null)
+    });
+  }
+
   onAdd(): void {
-    try {
-      this.treatmentService.addTreatment(this.treatment).subscribe(() => {
+    if (this.addTreatmentForm.invalid) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.treatment = this.addTreatmentForm.getRawValue();
+
+    this.treatmentService.addTreatment(this.treatment).subscribe(
+      () => {
+        console.log("TreatmentAddComponent: added ", this.treatment);
         this.logService.add(
           `TreatmentAddComponent: added ${this.treatment?.treatmentID}`
         );
-      });
-    } catch (error) {
-      this.logService.add(
-        `TreatmentAddComponent: error adding ${this.treatment?.treatmentID}`
-      );
-    }
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error("Error while adding treatment:", error);
+        this.logService.add(
+          `TreatmentAddComponent: error adding ${this.treatment?.treatmentID}`
+        );
+        this.isLoading = false;
+      }
+    );
   }
 
   onBack(): void {
