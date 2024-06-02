@@ -57,15 +57,15 @@ export class TreatmentDataStorageService {
   //   );
   // }
 
-  fetchTreatments(): Observable<Treatment[]> {
-    return this.http.get<Treatment[]>(this.baseUrl).pipe(
-      tap(treatments => {
-        this.treatmentService.setTreatments(treatments);
-        console.log('Data storage fetchTreatments() called');
-      })
-    );
-
-  }
+  // fetchTreatments(): Observable<Treatment[]> {
+  //   return this.http.get<Treatment[]>(this.baseUrl).pipe(
+  //     tap(treatments => {
+  //       this.treatmentService.setTreatments(treatments);
+  //       console.log('Data storage fetchTreatments() called');
+  //     })
+  //   );
+  //
+  // }
 
   getTreatmentById(id: number) {
     return this.http.get<Treatment>(`${this.baseUrl}/${id}`).pipe(

@@ -1,24 +1,44 @@
 import { Injectable } from '@angular/core';
-import {Observable, of, Subject} from 'rxjs';
+import {catchError, Observable, of, Subject} from 'rxjs';
 import { Treatment } from '../shared/models/Treatment.model';
 import { AppointmentService } from './appointment.service';
 import {LogsService} from "../logs/logs.service";
+import {tap} from "rxjs/operators";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TreatmentService {
+  private baseUrl: string = 'http://localhost:8080/api/treatments';
+
   treatmentsChanged = new Subject<Treatment[]>();
 
   private treatments: Treatment[] = [];
 
   constructor(
     private appointmentService: AppointmentService,
-    private logService: LogsService
+    private logService: LogsService,
+    private http: HttpClient
+
   ) {
   }
 
-  setTreatments(treatments: Treatment[]) {
+
+  /*
+  * Fetches the treatments from the API and sets the treatments in memory array.
+   */
+   fetchTreatments(): Observable<Treatment[]> {
+    return this.http.get<Treatment[]>(this.baseUrl).pipe(
+      tap(treatments => {
+        this.setTreatments(treatments);
+        console.log('TreatmentService → fetchTreatments() called');
+      })
+    );
+  }
+
+
+    setTreatments(treatments: Treatment[]) {
     this.treatments = treatments;
     this.treatmentsChanged.next(this.treatments.slice());
   }
@@ -45,11 +65,8 @@ export class TreatmentService {
       throw new Error('Treatment is undefined');
     }
 
-    //Converting the id to a number, in case it is a string.
-    //It is very helpful because the API could send us a string gormat.
     treatment.treatmentID = +treatment.treatmentID;
 
-    //ID check to be unique.
     if (this.treatments.find((h) => h.treatmentID === treatment.treatmentID)) {
       this.logService.add(
         `TreatmentService | Treatment Add: treatment with id=${treatment.treatmentID} already exists - ${Date.now()}`
@@ -57,16 +74,25 @@ export class TreatmentService {
       throw new Error('Treatment with this id already exists');
     }
 
-    this.treatments.push(treatment);
-    console.log("Treatment Service | Treatment Add: added treatment", treatment);
-    this.treatmentsChanged.next(this.treatments.slice());
-
-    this.logService.add(
-      `TreatmentService | Treatment Add: added ${treatment.treatmentID}`
+    return this.http.post<Treatment>(`${this.baseUrl}`, treatment).pipe(
+      tap((newTreatment: Treatment) => {
+        console.log("Treatment Service | Treatment Add | Post new treatment: ", newTreatment);
+        this.treatments.push(newTreatment);
+        this.treatmentsChanged.next(this.treatments.slice());
+        this.logService.add(
+          `TreatmentService | Treatment Add: added ${treatment.treatmentID}`
+        );
+      }),
+      catchError(error => {
+        console.error("Error while adding treatment:", error);
+        this.logService.add(
+          `TreatmentService | Treatment Add: error adding ${treatment.treatmentID}`
+        );
+        throw error;
+      })
     );
-
-    return of(treatment);
   }
+
 
   updateTreatment(index: number, newTreatment: Treatment) {
     this.treatments[index] = newTreatment;

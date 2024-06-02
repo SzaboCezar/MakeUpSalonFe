@@ -10,7 +10,6 @@ import {TreatmentDataStorageService} from "../storage/treatment-data-storage.ser
 export class TreatmentsResolverService implements Resolve<Treatment[]>{
 
   constructor(
-    private treatmentDataStorageService: TreatmentDataStorageService,
     private treatmentsService: TreatmentService
   ) { }
 
@@ -35,7 +34,7 @@ export class TreatmentsResolverService implements Resolve<Treatment[]>{
 
     if (treatments.length === 0) {
       console.log('Resolver fetchTreatments() called');
-      return this.treatmentDataStorageService.fetchTreatments();
+      return this.treatmentsService.fetchTreatments();
     } else {
       return treatments;
     }
