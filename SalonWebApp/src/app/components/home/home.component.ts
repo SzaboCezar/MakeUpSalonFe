@@ -14,17 +14,14 @@ import {MapComponent} from "./map/map.component";
   styleUrls:  ['./Bootstrap/bootstrap.min.css', './Bootstrap/carousel.css', './home.component.css']
 })
 export class HomeComponent {
+  isAuthenticated: boolean = false; // Variabila pentru a stoca starea de autentificare
+
+
+
   constructor(private router: Router) {}
 
-  navigateToLogin(): void {
-    this.router.navigate(['/login']);
-  }
 
-  navigateToSchedule(): void {
-    this.router.navigate(['/schedule']); // Assuming you have a schedule route
-  }
-
-  navigateToAccount(): void {
-    this.router.navigate(['/account']); // Assuming you have an account route
+  onAuthenticationChange(isAuthenticated: boolean) {
+    this.isAuthenticated = isAuthenticated;
   }
 }

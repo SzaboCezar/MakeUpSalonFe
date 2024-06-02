@@ -1,4 +1,4 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar (isAuthenticatedChange)="onAuthenticationChange($event)"></app-nav-bar>
 
 <body>
 
@@ -27,8 +27,10 @@
                   <p class="catchy-text mb-5">
                     It's Up to you to choose the best... It's Up to us to be the rest
                   </p>
-                  <button type="button" class="btn btn-responsive btn-primary me-3" routerLink="/auth">Sign in</button>
-                  <button type="button" class="btn btn-responsive btn-outline-info" routerLink="/enrollment">Register</button>
+                  <button  *ngIf="!isAuthenticated" type="button" class="btn btn-responsive btn-primary me-3" routerLink="/auth">Sign in</button>
+                  <button  *ngIf="!isAuthenticated" type="button" class="btn btn-responsive btn-outline-info" routerLink="/enrollment">Register</button>
+                  <button  *ngIf="isAuthenticated" type="button" class="btn btn-responsive btn-outline-primary me-3" routerLink="/treatments">Treatments</button>
+
                 </div>
               </div>
             </div>

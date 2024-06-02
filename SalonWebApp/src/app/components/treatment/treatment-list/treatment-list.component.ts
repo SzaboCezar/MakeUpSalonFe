@@ -6,10 +6,11 @@ import {
   NgbAccordionBody, NgbAccordionButton,
   NgbAccordionCollapse,
   NgbAccordionDirective, NgbAccordionHeader,
-  NgbAccordionItem
+  NgbAccordionItem, NgbTooltip
 } from "@ng-bootstrap/ng-bootstrap";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Subscription} from "rxjs";
+import {NavBarComponent} from "../../dom-element/nav-bar/nav-bar.component";
 
 @Component({
   selector: 'app-treatment-list',
@@ -23,7 +24,9 @@ import {Subscription} from "rxjs";
     NgbAccordionBody,
     NgbAccordionCollapse,
     NgbAccordionButton,
-    NgbAccordionHeader
+    NgbAccordionHeader,
+    NavBarComponent,
+    NgbTooltip
   ],
   templateUrl: './treatment-list.component.html',
   styleUrl: './treatment-list.component.scss'

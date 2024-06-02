@@ -13,6 +13,14 @@
   max-width: 50%;
 }
 
+.btn-outline-primary {
+  background: #F2E5BD;
+  color: #3F858C;
+  border-color: #3F858C;
+  max-width: 50%;
+}
+
+
 .btn-outline-info {
   color: #F2A285;
   border-color: #F2A285;
@@ -32,6 +40,14 @@
   background: #F2E5BD;
   border-color: #3F858C;
 }
+
+
+.btn.btn-outline-primary:hover{
+  color: #F2E5BD;
+  background: #3F858C;
+  border-color: #F2E5BD;
+}
+
 
 .btn-outline-info:hover{
   color: #F2E5BD;

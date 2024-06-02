@@ -25,9 +25,8 @@ export const routes: Routes = [
     resolve: { treatments: TreatmentsResolverService }
   },
   {
-    path: 'add-treatment',
-    //TODO: uncomment the guard
-    // canActivate: [AuthGuard], // Guardul care protejează ruta
+    path: 'treatment/add',
+    canActivate: [AuthGuard], // Guardul care protejează ruta
     component: TreatmentAddComponent,
     resolve: { treatments: TreatmentsResolverService }
   },

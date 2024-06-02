@@ -40,12 +40,6 @@
         </li>
       </ul>
 
-
-      <div>
-        <a routerLink="/treatments" class="btn btn-outline-primary">Treatments</a>
-      </div>
-
-
       <div>
         <a *ngIf="!isAuthenticated" routerLink="/auth" class="btn btn-outline-info">Sign in</a>
         <a *ngIf="isAuthenticated" (click)="onLogout()" routerLink="/auth" class="btn btn-outline-danger">Logout</a>

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {AuthService} from "../../../auth/auth.service";
 import {Subscription} from "rxjs";
 import {NgIf} from "@angular/common";
@@ -17,6 +17,7 @@ import {RouterLink} from "@angular/router";
 export class NavBarComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   private userSub: Subscription;
+  @Output() isAuthenticatedChange: EventEmitter<boolean> = new EventEmitter<boolean>(); // Emit evenimentul atunci când starea de autentificare se schimbă
 
 
   constructor(private authService: AuthService) { }
@@ -30,6 +31,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
         Poate fi scris mai simplu scis ca mai jos, care va da true, când există un user și false când nu.
          */
         this.isAuthenticated = !!user;
+        this.isAuthenticatedChange.emit(this.isAuthenticated); // Emit evenimentul cu noua valoare a stării de autentificare
       }
     )
   }
