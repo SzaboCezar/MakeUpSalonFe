@@ -1,96 +1,112 @@
-<div *ngIf="plantCare">
-
-  <div class="container-fluid title">
-    <h3 class="d-flex justify-content-center">
-      <i><h2>Adding new plant care</h2></i>
-    </h3>
+<section class="vh-100 bg-image" style="background-image: url('./assets/img/Enrollment/Enrollment_Wallpaper.jpg');">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+              <h2 class="text-center mb-4">Add Treatment</h2>
+              <form>
+                <div class="container-fluid">
+                  <div class="row row-cols-2">
+                    <div class="col col-6">
+                      <div class="form-outline mb-3">
+                        <label class="form-label text-nowrap" for="treatment-id">Treatment ID:</label>
+                        <input type="number"
+                               id="treatment-id"
+                               formControlName="treatmentID"
+                               placeholder="Treatment id"
+                               class="form-control form-control-sm" />
+                      </div>
+                    </div>
+                    <div class="col col-6">
+                      <div class="form-outline mb-3">
+                        <label class="form-label text-nowrap" for="treatment-name">Treatment Name:</label>
+                        <input type="text"
+                               id="treatment-name"
+                               formControlName="name"
+                               placeholder="Treatment name"
+                               class="form-control form-control-sm" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col col-sm-12">
+                      <label for="treatment-description" class="form-label text-nowrap">Treatment description:</label>
+                      <textarea id="treatment-description" type="text" class="form-control" [(ngModel)]="treatment.description"
+                                placeholder="Description" aria-label="Description"></textarea>
+                    </div>
+                  </div>
+                  <div class="row row-cols-2">
+                    <div class="col col-6">
+                      <div class="form-outline mb-3">
+                        <label class="form-label text-nowrap" for="estimatedDuration">Estimated Duration:</label>
+                        <input type="number"
+                               id="estimatedDuration"
+                               formControlName="estimatedDuration"
+                               placeholder="Estimated Duration"
+                               class="form-control form-control-sm" />
+                      </div>
+                    </div>
+                    <div class="col col-6">
+                      <div class="form-outline mb-3">
+                        <label class="form-label text-nowrap" for="price">Price:</label>
+                        <input type="number"
+                               id="price"
+                               formControlName="price"
+                               placeholder="Price"
+                               class="form-control form-control-sm" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row row-cols-2">
+                    <div class="col col-sm-12">
+                      <div class="form-outline mb-3">
+                        <label class="form-label text-nowrap" for="pictureURL">Picture URL:</label>
+                        <input type="url"
+                               id="pictureURL"
+                               formControlName="pictureURL"
+                               placeholder="Picture URL"
+                               class="form-control form-control-sm" />
+                      </div>
+                    </div>
+                    <div class="col col-sm-12">
+                      <div class="form-outline mb-3">
+                        <label class="form-label text-nowrap" for="treatment-employeeTreatmentsID">Employee treatment id:</label>
+                        <select id="treatment-employeeTreatmentsID"
+                                class="form-control"
+                                [(ngModel)]="employeeTreatments"
+                                aria-label="Treatment id"
+                                ngbTooltip="Please select from the list">
+                          <option value="" disabled selected>Please select an Employee Treatment ID from the list:</option>
+                          <option *ngFor="let employeeTreatment of employeeTreatments" value="{{employeeTreatment.employeeTreatmentsID}}">{{employeeTreatment.employeeTreatmentsID}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <button
+                    id="addTreatmentButton"
+                    [disabled]="treatment.treatmentID <= 0 ||
+                      treatment.name == undefined ||
+                      treatment.description.trim() === '' ||
+                      treatment.estimatedDuration <= 0"
+                    class="btn btn-outline-success"
+                    type="button"
+                    (click)="onAdd();"
+                    routerLink="/treatments">
+                    Add
+                  </button>
+                </div>
+                <p id="goBackButton" class="text-center text-muted small mt-1 mb-0" (click)="onBack()">
+                  <a class="fw-bold text-body" style="cursor: pointer;">Back</a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <main class="container-fluid">
-
-    <div class="row">
-      <div class="col">
-        <label for="plantCare-id">Plant care id: </label>
-        <input class="form-control" type="number" min="1" id="plantCare-id" [(ngModel)]="plantCare.id"
-               placeholder="Plant care id"
-               aria-label="Plant care id"
-               ngbTooltip="Enter a positive number">
-      </div>
-      <div class="col"></div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label for="plantCare-plantID">Plant id: </label>
-        <select id="plantCare-plantID"
-                class="form-control"
-                [(ngModel)]="plantCare.plantID"
-                aria-label="Plant id"
-                ngbTooltip="Please select from the list">
-          <option value="" disabled selected>Please select a Plant ID from the list: </option>
-          <option *ngFor="let plantID of plantsID" value="{{plantID}}">{{plantID}}</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label for="plantCare-isWatered">Was watered ? </label>
-        <select id="plantCare-isWatered" class="form-control" [(ngModel)]="plantCare.isWatered" aria-label="watering">
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label for="plantCare-isFertilized">Was fertilized ? </label>
-        <select id="plantCare-isFertilized" class="form-control" [(ngModel)]="plantCare.isFertilized"
-                aria-label="fertilizing">
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-    </div>
-
-
-    <div class="row">
-      <div class="col">
-        <label for="plantCare-hasSpecialTreatment">Dose it need special treatment ? </label>
-        <select id="plantCare-hasSpecialTreatment" class="form-control"
-                [(ngModel)]="plantCare.hasSpecialTreatment"
-                aria-label="hasSpecialTreatment">
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="col">
-      <label for="plant-inFamilySince">Care date: </label>
-      <input id="plant-inFamilySince" class="form-control" type="date" [(ngModel)]="plantCare.careDate">
-    </div>
-
-
-    <div class="d-flex justify-content-end mt-2">
-      <!--Checking if the fields are entered.-->
-      <button
-        [disabled]=" plantCare.id <= 0 ||
-                     plantCare.plantID <= 0 ||
-                     plantCare.isFertilized === undefined ||
-                     plantCare.hasSpecialTreatment === undefined"
-        id="AddPlantCareButton"
-        class="btn btn-outline-success me-2"
-        type="button"
-        routerLink="/plantCare"
-        (click)="onAdd()">
-        Add
-      </button>
-
-      <button id="GoBackButton" class="btn btn-outline-secondary" type="button" (click)="onBack()">
-        Back
-      </button>
-    </div>
-  </main>
-</div>
+</section>
