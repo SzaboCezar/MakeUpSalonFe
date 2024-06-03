@@ -49,8 +49,12 @@ export class TreatmentService {
     return this.treatments.slice();
   }
 
-  getTreatment(index: number) {
-    return this.treatments[index];
+  getTreatment(id: number): Observable<Treatment> {
+     const treatment = this.treatments.find((h) => h.treatmentID === id) as Treatment;
+      this.logService.add(
+        `TreatmentService | getTreatment: fetched treatment with id=${id}`
+      );
+      return of(treatment);
   }
 
   addTreatmentsToAppointment(treatments: Treatment[]) {
@@ -99,46 +103,24 @@ export class TreatmentService {
     this.treatmentsChanged.next(this.treatments.slice());
   }
 
-  deleteTreatment(index: number) {
-    this.treatments.splice(index, 1);
-    this.treatmentsChanged.next(this.treatments.slice());
+  deleteTreatment(id: number): Observable<any> {
+    const treatmentIndex = this.treatments.findIndex(t => t.treatmentID === id);
+    if (treatmentIndex === -1) {
+      this.logService.add(`TreatmentService | Treatment Delete: treatment with id=${id} not found`);
+      throw new Error('Treatment with this id does not exist');
+    }
+
+    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
+      tap(() => {
+        this.treatments.splice(treatmentIndex, 1);
+        this.treatmentsChanged.next(this.treatments.slice());
+        console.log(`TreatmentService | Treatment Delete: deleted treatment with id=${id}`);
+      }),
+      catchError(error => {
+        console.error("Error while deleting treatment:", error);
+        this.logService.add(`TreatmentService | Treatment Delete: error deleting ${id}`);
+        throw error;
+      })
+    );
   }
-
-
-
-
-
-  //Old methods that I might use later
-  // fetchTreatments() {
-  //   this.treatmentDataStorageService.fetchTreatments().subscribe((treatments: Treatment[]) => {
-  //     this.setTreatments(treatments);
-  //   });
-  // }
-
-  // addTreatment(treatment: Treatment) {
-  //   this.treatmentDataStorageService.addTreatment(treatment).subscribe((newTreatment: Treatment) => {
-  //     this.treatments.push(newTreatment);
-  //     this.treatmentsChanged.next(this.treatments.slice());
-  //   });
-  // }
-  //
-  // updateTreatment(id: number, newTreatment: Treatment) {
-  //   this.treatmentDataStorageService.updateTreatment(id, newTreatment).subscribe((updatedTreatment: Treatment) => {
-  //     const index = this.treatments.findIndex(t => t.treatmentID === id);
-  //     if (index !== -1) {
-  //       this.treatments[index] = updatedTreatment;
-  //       this.treatmentsChanged.next(this.treatments.slice());
-  //     }
-  //   });
-  // }
-  //
-  // deleteTreatment(id: number) {
-  //   this.treatmentDataStorageService.deleteTreatment(id).subscribe(() => {
-  //     const index = this.treatments.findIndex(t => t.treatmentID === id);
-  //     if (index !== -1) {
-  //       this.treatments.splice(index, 1);
-  //       this.treatmentsChanged.next(this.treatments.slice());
-  //     }
-  //   });
-  // }
 }

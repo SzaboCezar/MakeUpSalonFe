@@ -21,7 +21,6 @@ import { LoadingSpinnerComponent } from "../../dom-element/loading-spinner/loadi
   templateUrl: './treatment-add.component.html'
 })
 export class TreatmentAddComponent implements OnInit {
-  isLoading = false;
   treatment?: Treatment = {
     treatmentID: null,
     name: null,
@@ -59,8 +58,6 @@ export class TreatmentAddComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
-
     this.treatment = this.addTreatmentForm.getRawValue();
 
     this.treatmentService.addTreatment(this.treatment).subscribe(
@@ -69,14 +66,13 @@ export class TreatmentAddComponent implements OnInit {
         this.logService.add(
           `TreatmentAddComponent: added ${this.treatment?.treatmentID}`
         );
-        this.isLoading = false;
+        this.location.back();
       },
       (error) => {
         console.error("Error while adding treatment:", error);
         this.logService.add(
           `TreatmentAddComponent: error adding ${this.treatment?.treatmentID}`
         );
-        this.isLoading = false;
       }
     );
   }

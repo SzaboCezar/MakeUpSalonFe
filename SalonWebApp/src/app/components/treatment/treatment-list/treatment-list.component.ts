@@ -12,6 +12,7 @@ import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Subscription} from "rxjs";
 import {NavBarComponent} from "../../dom-element/nav-bar/nav-bar.component";
 import {LoadingSpinnerComponent} from "../../dom-element/loading-spinner/loading-spinner.component";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-treatment-list',
@@ -43,7 +44,8 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
 
   constructor(
     private treatmentService: TreatmentService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private location: Location) {
   }
 
   ngOnInit(): void {
@@ -73,4 +75,9 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.treatmentSubscription.unsubscribe();
   }
+
+  deletePath(id: string) {
+    this.location.replaceState('/treatment/delete/' + id);
+  }
+
 }

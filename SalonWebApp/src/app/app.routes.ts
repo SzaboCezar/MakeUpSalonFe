@@ -9,6 +9,7 @@ import {TreatmentListComponent} from "./components/treatment/treatment-list/trea
 import {AuthComponent} from "./auth/auth.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {TreatmentAddComponent} from "./components/treatment/treatment-add/treatment-add.component";
+import {TreatmentDeleteComponent} from "./components/treatment/treatment-delete/treatment-delete.component";
 
 export const routes: Routes = [
   //General routes
@@ -28,8 +29,14 @@ export const routes: Routes = [
     path: 'treatment/add',
     canActivate: [AuthGuard], // Guardul care protejează ruta
     component: TreatmentAddComponent,
+  },
+  {
+    path: 'treatment/delete/:id',
+    canActivate: [AuthGuard], // Guardul care protejează ruta
+    component: TreatmentDeleteComponent,
     resolve: { treatments: TreatmentsResolverService }
   },
+
 
 
 

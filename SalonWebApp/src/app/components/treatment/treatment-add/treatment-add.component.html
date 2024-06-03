@@ -7,15 +7,7 @@
             <div class="card-body p-4 p-md-5">
               <h2 class="text-center mb-4">Add Treatment</h2>
 
-
-
-              <div *ngIf="isLoading" class="text-center">
-                <app-loading-spinner></app-loading-spinner>
-              </div>
-
-
-
-              <form  *ngIf="!isLoading" [formGroup]="addTreatmentForm">
+              <form [formGroup]="addTreatmentForm">
                 <div class="container-fluid">
                   <div class="row row-cols-2">
                     <div class="col col-6">
