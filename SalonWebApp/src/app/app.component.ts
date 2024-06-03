@@ -1,22 +1,41 @@
 // src/app/app.component.ts
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {AuthService} from "./auth/auth.service";
+import {LoadingSpinnerComponent} from "./components/dom-element/loading-spinner/loading-spinner.component";
+import {NgIf} from "@angular/common";
+import {LoadingService} from "./services/loading.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  imports: [RouterModule]
+  imports: [RouterModule, LoadingSpinnerComponent, NgIf]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'SalonWebApp';
 
-  constructor(private authService: AuthService) {}
+  loadingSubscription: Subscription;
+  isLoading = false;
+
+  constructor(
+    private authService: AuthService,
+    private loadingService: LoadingService
+  ) {}
 
   ngOnInit() {
     this.authService.autoLogin();
+    this.loadingSubscription = this.loadingService.loading$.subscribe(
+      (isLoading) => {
+        this.isLoading = isLoading;
+      }
+    )
+  }
+
+  ngOnDestroy() {
+    this.loadingSubscription.unsubscribe();
   }
 
 }

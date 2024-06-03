@@ -11,6 +11,7 @@ import {
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Subscription} from "rxjs";
 import {NavBarComponent} from "../../dom-element/nav-bar/nav-bar.component";
+import {LoadingSpinnerComponent} from "../../dom-element/loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-treatment-list',
@@ -26,24 +27,28 @@ import {NavBarComponent} from "../../dom-element/nav-bar/nav-bar.component";
     NgbAccordionButton,
     NgbAccordionHeader,
     NavBarComponent,
-    NgbTooltip
+    NgbTooltip,
+    LoadingSpinnerComponent
   ],
   templateUrl: './treatment-list.component.html',
   styleUrl: './treatment-list.component.scss'
 })
 export class TreatmentListComponent implements OnInit, OnDestroy {
 
-  subscription: Subscription;
+
+  treatmentSubscription: Subscription;
   selectedTreatment?: Treatment;
   treatments: Treatment[];
 
-  constructor(private treatmentService: TreatmentService, private route: ActivatedRoute) {
 
+  constructor(
+    private treatmentService: TreatmentService,
+    private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-   // this.getTreatments();
-    this.subscription = this.treatmentService.treatmentsChanged
+    // this.getTreatments();
+    this.treatmentSubscription = this.treatmentService.treatmentsChanged
       .subscribe(
         (treatments: Treatment[]) => {
           this.treatments = treatments;
@@ -66,6 +71,6 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.treatmentSubscription.unsubscribe();
   }
 }

@@ -3,6 +3,8 @@ import {TreatmentService} from "../services/treatment.service";
 import {Treatment} from "../shared/models/Treatment.model";
 import {Resolve, ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
 import {TreatmentDataStorageService} from "../storage/treatment-data-storage.service";
+import {LoadingService} from "../services/loading.service";
+import {tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,8 @@ import {TreatmentDataStorageService} from "../storage/treatment-data-storage.ser
 export class TreatmentsResolverService implements Resolve<Treatment[]>{
 
   constructor(
-    private treatmentsService: TreatmentService
+    private treatmentsService: TreatmentService,
+    private loadingService: LoadingService
   ) { }
 
 
@@ -30,11 +33,16 @@ export class TreatmentsResolverService implements Resolve<Treatment[]>{
   // }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const treatments = this.treatmentsService.getTreatments();
 
+    const treatments = this.treatmentsService.getTreatments();
     if (treatments.length === 0) {
+      this.loadingService.setLoading(true);
       console.log('Resolver fetchTreatments() called');
-      return this.treatmentsService.fetchTreatments();
+      return this.treatmentsService.fetchTreatments().pipe(
+        tap(treatments => {
+          this.loadingService.setLoading(false);
+        })
+      );
     } else {
       return treatments;
     }

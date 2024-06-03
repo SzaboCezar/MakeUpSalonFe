@@ -6,6 +6,7 @@ import {FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Valida
 import {NgIf} from "@angular/common";
 import {AuthenticationRequest} from "../shared/models/AuthenticationRequest.model";
 import {LoadingSpinnerComponent} from "../components/dom-element/loading-spinner/loading-spinner.component";
+import {LoadingService} from "../services/loading.service";
 
 @Component({
   selector: 'app-auth',
@@ -46,7 +47,7 @@ export class AuthComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.loginForm)
+    console.log(this.loginForm);
 
     //Daca formularul nu este valid, nu facem nimic
     if(!this.loginForm.valid) {

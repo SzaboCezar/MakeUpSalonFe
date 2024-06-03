@@ -5,13 +5,14 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptorService } from "./auth/auth-interceptor.service";
-import {TreatmentsResolverService} from "./resolvers/treatments-resolver.service";
+import {LoadingInterceptor} from "./services/loading-interceptor.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     // Plasează resolver-ul înaintea interceptorului în lista de furnizori
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
   ]
 };
