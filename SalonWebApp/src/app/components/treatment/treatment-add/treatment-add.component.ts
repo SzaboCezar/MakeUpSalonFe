@@ -49,6 +49,7 @@ export class TreatmentAddComponent implements OnInit {
       'estimatedDuration': new FormControl(null, [Validators.required]),
       'price': new FormControl(null, [Validators.required]),
       'pictureURL': new FormControl(null, [Validators.required]),
+      //TODO: make it required after we have the employeeTreatments
       'employeeTreatments': new FormControl(null)
     });
   }

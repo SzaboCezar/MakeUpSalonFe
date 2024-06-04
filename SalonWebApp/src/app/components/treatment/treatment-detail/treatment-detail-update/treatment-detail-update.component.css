@@ -1,0 +1,38 @@
+.form-control{
+  background-color: rgba(203, 227, 216, 0.33);
+}
+
+.card {
+  max-width: 100%; /* Asigură că cardul nu depășește lățimea containerului */
+  border-radius: 15px;
+}
+
+.card-body {
+  padding: 2rem; /* Ajustează padding-ul */
+}
+
+.form-control {
+  font-size: 0.875rem; /* Diminuiește dimensiunea fontului */
+  padding: 0.5rem; /* Reduce padding-ul inputurilor */
+}
+
+.btn {
+  font-size: 0.875rem; /* Diminuiește dimensiunea fontului butonului */
+  padding: 0.5rem 1rem; /* Reduce padding-ul butonului */
+}
+
+.bg-image {
+  background-size: cover;
+  background-position: center;
+}
+
+.gradient-custom-3 {
+  background: rgba(0, 0, 0, 0.5); /* Adaugă o mască gradient */
+}
+
+
+@media (max-width: 576px) {
+  .form-label {
+    font-size: 0.8rem;
+  }
+}

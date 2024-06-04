@@ -1,7 +1,6 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
 import { EnrollmentComponent } from './components/enrollment/enrollment.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
@@ -10,11 +9,13 @@ import {AuthComponent} from "./auth/auth.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {TreatmentAddComponent} from "./components/treatment/treatment-add/treatment-add.component";
 import {TreatmentDeleteComponent} from "./components/treatment/treatment-delete/treatment-delete.component";
+import {
+  TreatmentDetailUpdateComponent
+} from "./components/treatment/treatment-detail/treatment-detail-update/treatment-detail-update.component";
 
 export const routes: Routes = [
   //General routes
   { path: '', component: HomeComponent }, // Home route
-  { path: 'login', component: LoginComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'enrollment', component: EnrollmentComponent },
 
@@ -29,6 +30,12 @@ export const routes: Routes = [
     path: 'treatment/add',
     canActivate: [AuthGuard], // Guardul care protejează ruta
     component: TreatmentAddComponent,
+  },
+  {
+    path: 'treatment/detail/update/:id',
+    canActivate: [AuthGuard], // Guardul care protejează ruta
+    component: TreatmentDetailUpdateComponent,
+    resolve: { treatments: TreatmentsResolverService }
   },
   {
     path: 'treatment/delete/:id',

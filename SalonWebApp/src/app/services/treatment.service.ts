@@ -98,9 +98,44 @@ export class TreatmentService {
   }
 
 
-  updateTreatment(index: number, newTreatment: Treatment) {
-    this.treatments[index] = newTreatment;
-    this.treatmentsChanged.next(this.treatments.slice());
+  updateTreatment(treatmentToBeUpdated: Treatment): Observable<Treatment> {
+    if (!treatmentToBeUpdated){
+      this.logService.add(
+        `TreatmentService | Treatment Update: treatment is undefined - ${Date.now()}`
+      );
+      throw new Error('Treatment is undefined');
+    }
+
+    treatmentToBeUpdated.treatmentID = +treatmentToBeUpdated.treatmentID;
+
+    const treatmentIndex = this.treatments.findIndex((foundedTreatment) => foundedTreatment.treatmentID === treatmentToBeUpdated.treatmentID);
+    console.log("TreatmentService | Treatment Update: treatmentIndex: ", treatmentIndex);
+
+    //Check if the treatment exists in the array
+    if (treatmentIndex === -1) {
+      this.logService.add(
+        `TreatmentService | Treatment Update: treatment with id=${treatmentToBeUpdated.treatmentID} not found`
+      );
+      throw new Error('Treatment with this id does not exist');
+    }
+
+    return this.http.put<Treatment>(`${this.baseUrl}/${treatmentIndex}`, treatmentToBeUpdated).pipe(
+      tap((updatedTreatment: Treatment) => {
+        console.log("TreatmentService | Treatment Update: updated treatment: ", updatedTreatment);
+        this.treatments[treatmentIndex] = treatmentToBeUpdated;
+        this.treatmentsChanged.next(this.treatments.slice());
+        this.logService.add(
+          `TreatmentService | Treatment Update: updated ${treatmentToBeUpdated.treatmentID}`
+        );
+      }),
+      catchError(error => {
+        console.error("Error while updating treatment:", error);
+        this.logService.add(
+          `TreatmentService | Treatment Update: error updating ${treatmentToBeUpdated.treatmentID}`
+        );
+        throw error;
+      })
+    );
   }
 
   deleteTreatment(id: number): Observable<any> {
