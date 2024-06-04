@@ -38,6 +38,8 @@ export class TreatmentService {
   }
 
 
+
+
     setTreatments(treatments: Treatment[]) {
     this.treatments = treatments;
     this.treatmentsChanged.next(this.treatments.slice());

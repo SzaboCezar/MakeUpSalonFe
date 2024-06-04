@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {TreatmentService} from "../services/treatment.service";
 import {Treatment} from "../shared/models/Treatment.model";
 import {Resolve, ActivatedRouteSnapshot, RouterStateSnapshot} from "@angular/router";
-import {TreatmentDataStorageService} from "../storage/treatment-data-storage.service";
 import {LoadingService} from "../services/loading.service";
 import {tap} from "rxjs/operators";
 
