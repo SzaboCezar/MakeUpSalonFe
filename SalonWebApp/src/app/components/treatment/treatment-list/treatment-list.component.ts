@@ -12,6 +12,7 @@ import {ActivatedRoute, RouterLink} from "@angular/router";
 import {Subscription} from "rxjs";
 import {NavBarComponent} from "../../dom-element/nav-bar/nav-bar.component";
 import {LoadingSpinnerComponent} from "../../dom-element/loading-spinner/loading-spinner.component";
+import {EmployeeTreatment} from "../../../shared/models/EmployeeTreatment.model";
 
 @Component({
   selector: 'app-treatment-list',
@@ -39,6 +40,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   treatmentSubscription: Subscription;
   selectedTreatment?: Treatment;
   treatments: Treatment[];
+  selectedEmployeeTreatments: EmployeeTreatment[];
 
 
   constructor(
@@ -67,11 +69,14 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
 
   onSelect(treatment: Treatment): void {
     this.selectedTreatment = treatment;
+    this.selectedEmployeeTreatments = treatment.employeeTreatments;
     this.treatmentService.getTreatment(treatment.treatmentID);
   }
 
   ngOnDestroy() {
     this.treatmentSubscription.unsubscribe();
   }
+
+
 
 }

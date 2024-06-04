@@ -12,7 +12,7 @@
   </h3>
 
   <div *ngFor="let treatment of treatments">
-    <div ngbAccordion (shown)="onSelect(treatment)">
+    <div ngbAccordion (shown)="onSelect(treatment)" [closeOthers]="true">
       <div ngbAccordionItem="{{treatment.treatmentID}}">
         <h2 ngbAccordionHeader>
           <button ngbAccordionButton>
@@ -21,7 +21,7 @@
           </button>
         </h2>
         <div ngbAccordionCollapse>
-          <div ngbAccordionBody>
+          <div ngbAccordionBody >
 
             <ng-template>
 
@@ -31,7 +31,13 @@
                 <span class="text-primary-emphasis">Treatment estimated duration: </span> {{treatment.estimatedDuration}}
                 <br>
                 <span  class="text-success">Treatment price: </span>  {{treatment.price}}
+                <br>
+                <span *ngFor="let employeeTreatments of selectedEmployeeTreatments"  class="text-success">Treatment id: {{employeeTreatments.employee.firstName}}</span>
+
+
               </p>
+
+
 
               <!--Details, edit and delete buttons.-->
               <div class="d-flex justify-content-end mx-auto">
