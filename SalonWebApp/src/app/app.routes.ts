@@ -4,14 +4,13 @@ import { HomeComponent } from './components/home/home.component';
 import { EnrollmentComponent } from './components/enrollment/enrollment.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
-import {TreatmentListComponent} from "./components/treatment/treatment-list/treatment-list.component";
-import {AuthComponent} from "./auth/auth.component";
-import {AuthGuard} from "./auth/auth.guard";
-import {TreatmentAddComponent} from "./components/treatment/treatment-add/treatment-add.component";
-import {TreatmentDeleteComponent} from "./components/treatment/treatment-delete/treatment-delete.component";
-import {
-  TreatmentDetailUpdateComponent
-} from "./components/treatment/treatment-detail/treatment-detail-update/treatment-detail-update.component";
+import { TreatmentListComponent } from './components/treatment/treatment-list/treatment-list.component';
+import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth.guard';
+import { TreatmentAddComponent } from './components/treatment/treatment-add/treatment-add.component';
+import { TreatmentDeleteComponent } from './components/treatment/treatment-delete/treatment-delete.component';
+import { TreatmentDetailUpdateComponent } from './components/treatment/treatment-detail/treatment-detail-update/treatment-detail-update.component';
+import { AppointmentAddComponent } from './components/appointment/appointment-add/appointment-add.component';
 
 export const routes: Routes = [
   //General routes
@@ -24,7 +23,7 @@ export const routes: Routes = [
     path: 'treatments',
     canActivate: [AuthGuard], // Guardul care protejează ruta
     component: TreatmentListComponent, // Componenta care necesită datele de la resolver
-    resolve: { treatments: TreatmentsResolverService }
+    resolve: { treatments: TreatmentsResolverService },
   },
   {
     path: 'treatment/add',
@@ -35,19 +34,23 @@ export const routes: Routes = [
     path: 'treatment/detail/update/:id',
     canActivate: [AuthGuard], // Guardul care protejează ruta
     component: TreatmentDetailUpdateComponent,
-    resolve: { treatments: TreatmentsResolverService }
+    resolve: { treatments: TreatmentsResolverService },
   },
   {
     path: 'treatment/delete/:id',
     canActivate: [AuthGuard], // Guardul care protejează ruta
     component: TreatmentDeleteComponent,
-    resolve: { treatments: TreatmentsResolverService }
+    resolve: { treatments: TreatmentsResolverService },
   },
 
-
-
+  //Book
+  {
+    path: 'book',
+    canActivate: [AuthGuard],
+    component: AppointmentAddComponent,
+  },
 
   //General routes
   { path: 'reset-password', component: ResetPasswordComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' } // Default route
+  { path: '**', redirectTo: '', pathMatch: 'full' }, // Default route
 ];
