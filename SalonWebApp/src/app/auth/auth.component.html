@@ -17,19 +17,20 @@
 
               <form *ngIf="!isLoading" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <div class="form-outline mb-3">
-                  <input type="email" id="email" formControlName="email" placeholder="john.doe@email.com" autocomplete="new-email" class="form-control form-control-lg" />
                   <label class="form-label" for="email">Email</label>
+                  <input type="email" id="email" formControlName="email" placeholder="john.doe@email.com" autocomplete="new-email" class="form-control form-control-lg" />
                 </div>
 
-                <div class="form-outline mb-3">
-                  <input type="password" id="password" formControlName="password" placeholder="Password1!" autocomplete="new-password" class="form-control form-control-lg" />
+                <div class="form-outline">
                   <label class="form-label" for="password">Password</label>
+                  <input type="password" id="password" formControlName="password" placeholder="Password1!" autocomplete="new-password" class="form-control form-control-lg" />
                 </div>
+                <p class="text-left text-muted small mt-2 mb-3 mb-0"> <a style="text-decoration: none; color: #0c5460" routerLink="/reset-password" > Forgot password?</a></p>
+
 
                 <div class="d-flex justify-content-center">
                   <button [disabled]="!loginForm.valid" type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Log in</button>
                 </div>
-
                 <p class="text-center text-muted mt-4 mb-0">Do not have an account? <a routerLink="/enrollment" class="fw-bold text-body"><u>Sign up here</u></a></p>
                 <p class="text-center text-muted small mt-1 mb-0"><a routerLink="/" class="fw-bold text-body">Home</a></p>
               </form>

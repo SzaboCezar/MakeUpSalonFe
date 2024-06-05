@@ -2,7 +2,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { EnrollmentComponent } from './components/enrollment/enrollment.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
 import {TreatmentListComponent} from "./components/treatment/treatment-list/treatment-list.component";
 import {AuthComponent} from "./auth/auth.component";
@@ -12,6 +12,7 @@ import {TreatmentDeleteComponent} from "./components/treatment/treatment-delete/
 import {
   TreatmentDetailUpdateComponent
 } from "./components/treatment/treatment-detail/treatment-detail-update/treatment-detail-update.component";
+import {ResetPasswordEmailComponent} from "./auth/reset-password/reset-password-email/reset-password-email.component";
 
 export const routes: Routes = [
   //General routes
@@ -48,6 +49,7 @@ export const routes: Routes = [
 
 
   //General routes
-  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordEmailComponent },
+  { path: 'reset-password/:token', component: ResetPasswordComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Default route
 ];
