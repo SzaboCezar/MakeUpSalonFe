@@ -3,6 +3,6 @@ import {Treatment} from "./Treatment.model";
 
 export interface EmployeeTreatment {
   employeeTreatmentsID: number;
-  gemployee: Person;
+  employee: Person;
   treatment: Treatment;
 }
