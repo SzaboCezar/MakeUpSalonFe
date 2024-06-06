@@ -93,12 +93,31 @@
                       id="appointmentfor"
                       formControlName="appointmentFor"
                       class="form-control"
+                      (change)="onSelectTreatment($event)"
                     >
                       <option
                         *ngFor="let treatment of treatments"
                         [value]="treatment.treatmentID"
                       >
                         {{ treatment.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="control-label" for="employee">Employee</label>
+                    <select
+                      id="employee"
+                      formControlName="employee"
+                      class="form-control"
+                      (change)="onSelectEmployee($event)"
+                    >
+                      <option
+                        *ngFor="let employee of selectedEmployeeTreatments"
+                        [value]="employee.personId"
+                      >
+                        {{ employee.firstName }} {{ employee.lastName }}
                       </option>
                     </select>
                   </div>

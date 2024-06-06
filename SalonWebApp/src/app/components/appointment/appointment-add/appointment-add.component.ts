@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -14,8 +14,10 @@ import { TreatmentService } from '../../../services/treatment.service';
 import { Subscription } from 'rxjs';
 import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loading-spinner.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-
-// declare var moment: any;
+import { EmployeeTreatment } from '../../../shared/models/EmployeeTreatment.model';
+import { Person } from '../../../shared/models/Person.model';
+import { PersonService } from '../../../services/person.service';
+import { IntervalDTO } from '../../../shared/models/DTO/IntervalDTO.model';
 
 @Component({
   selector: 'app-appointment-add',
@@ -31,20 +33,23 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   styleUrls: ['./appointment-add.component.css'],
 })
 export class AppointmentAddComponent implements OnInit, OnDestroy {
-  treatmentSubscription: Subscription;
   appointmentForm: FormGroup;
-  unavailableTimes = [
-    { start: '2024-06-10T10:00:00', end: '2024-06-10T11:00:00' },
-    { start: '2024-06-11T14:00:00', end: '2024-06-11T15:30:00' },
-  ];
-  treatments: Treatment[];
 
+  treatmentSubscription: Subscription;
+  unavailableSubscription: Subscription;
+  treatments: Treatment[];
+  selectedEmployeeTreatments: Person[] = [];
+  employeeTreatments: EmployeeTreatment[] = [];
+  unavailableTimes: IntervalDTO[] = [];
   availableTimes: string[] = [];
+  isLoading = true;
 
   constructor(
     private fb: FormBuilder,
     private treatmentService: TreatmentService,
-    private route: ActivatedRoute
+    private personService: PersonService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -54,29 +59,76 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
       date: ['', Validators.required],
       time: ['', Validators.required],
       appointmentFor: ['', Validators.required],
+      employee: ['', Validators.required],
     });
 
     this.appointmentForm.get('date')?.valueChanges.subscribe((date) => {
       this.availableTimes = this.getAvailableTimes(date);
     });
 
-    this.treatmentSubscription =
-      this.treatmentService.treatmentsChanged.subscribe(
-        (treatments: Treatment[]) => {
-          this.treatments = treatments;
-          console.log('treatments: ', this.treatments); // Ensure treatments are logged correctly
-        }
-      );
+    this.appointmentForm
+      .get('appointmentFor')
+      ?.valueChanges.subscribe((treatmentID) => {
+        this.updateEmployeeDropdown(treatmentID);
+      });
 
-    // Fetch treatments from the API and set the initial treatments
-    this.treatmentService.fetchTreatments().subscribe({
-      next: (treatments) => {
-        console.log('Fetched treatments:', treatments);
-      },
-      error: (error) => {
-        console.error('Error fetching treatments:', error);
-      },
-    });
+    this.fetchAllTreatments();
+  }
+
+  fetchAllTreatments(): void {
+    this.treatmentSubscription = this.treatmentService
+      .fetchTreatments()
+      .subscribe({
+        next: (treatments) => {
+          this.treatments = treatments;
+          this.extractEmployeeTreatments(treatments);
+          this.isLoading = false; // Update loading state
+          this.cdr.detectChanges(); // Manually trigger change detection
+          console.log('Fetched treatments:', treatments);
+        },
+        error: (error) => {
+          console.error('Error fetching treatments:', error);
+        },
+      });
+  }
+
+  fetchUnavailableTimes(employeeId: number): void {
+    this.unavailableSubscription = this.personService
+      .getUnavailableTimes(employeeId)
+      .subscribe({
+        next: (intervals: IntervalDTO[]) => {
+          this.unavailableTimes = intervals.map((interval) => ({
+            start: new Date(interval.start),
+            end: new Date(interval.end),
+          }));
+          console.log('Fetched unavailable times:', this.unavailableTimes); // Debugging log
+          this.cdr.detectChanges(); // Manually trigger change detection
+        },
+        error: (error) => {
+          console.error('Error fetching unavailable times:', error);
+        },
+      });
+  }
+
+  extractEmployeeTreatments(treatments: Treatment[]): void {
+    this.employeeTreatments = treatments.flatMap(
+      (treatment) => treatment.employeeTreatments
+    );
+    console.log('Extracted employee treatments:', this.employeeTreatments);
+  }
+
+  updateEmployeeDropdown(treatmentId: number): void {
+    const selectedTreatment = this.treatments.find(
+      (treatment) => treatment.treatmentID === treatmentId
+    );
+    if (selectedTreatment) {
+      this.selectedEmployeeTreatments =
+        selectedTreatment.employeeTreatments.map((et) => et.employee);
+      console.log('Selected employees:', this.selectedEmployeeTreatments);
+    } else {
+      this.selectedEmployeeTreatments = [];
+    }
+    this.cdr.detectChanges();
   }
 
   isTimeUnavailable(time: string, date: string): boolean {
@@ -102,6 +154,18 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
     return times;
   }
 
+  onSelectTreatment(event: Event): void {
+    const treatmentId = (event.target as HTMLSelectElement).value;
+    console.log('Selected Treatment ID:', treatmentId); // Debugging log
+    this.updateEmployeeDropdown(+treatmentId);
+  }
+
+  onSelectEmployee(event: Event): void {
+    const employeeId = (event.target as HTMLSelectElement).value;
+    console.log('Selected Employee ID:', employeeId); // Debugging log
+    this.fetchUnavailableTimes(+employeeId);
+  }
+
   onSubmit(): void {
     if (this.appointmentForm.valid) {
       console.log(this.appointmentForm.value);
@@ -112,6 +176,11 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.treatmentSubscription.unsubscribe();
+    if (this.treatmentSubscription) {
+      this.treatmentSubscription.unsubscribe();
+    }
+    if (this.unavailableSubscription) {
+      this.unavailableSubscription.unsubscribe();
+    }
   }
 }

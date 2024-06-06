@@ -1,17 +1,52 @@
 import { Injectable } from '@angular/core';
-import {Treatment} from "../shared/models/Treatment.model";
+import { catchError, Observable, of, Subject } from 'rxjs';
+import { Appointment } from '../shared/models/Appointment.model';
+import { LogsService } from '../logs/logs.service';
+import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppointmentService {
+  private baseUrl: string = 'http://localhost:8080/api/appointments';
 
-  //TODO: Implement the appointment services
+  appointmentsChanged = new Subject<Appointment[]>();
 
-  constructor() { }
+  private appointments: Appointment[] = [];
 
+  constructor(private logService: LogsService, private http: HttpClient) {}
 
-  addTreatments(treatments: Treatment[]) {
+  /*
+   * Fetches the appointments from the API and sets the appointments in memory array.
+   */
+  fetchAppointments(): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(this.baseUrl).pipe(
+      tap((appointments) => {
+        this.setAppointments(appointments);
+        console.log('AppointmentService → fetchAppointments() called');
+      })
+    );
+  }
 
+  setAppointments(appointments: Appointment[]) {
+    this.appointments = appointments;
+    this.appointmentsChanged.next(this.appointments.slice());
+  }
+
+  getAppointments() {
+    // const appointments = of(this.appointments.slice());
+    // return appointments;
+    return this.appointments.slice();
+  }
+
+  getAppointment(id: number): Observable<Appointment> {
+    const appointment = this.appointments.find(
+      (h) => h.appointmentID === id
+    ) as Appointment;
+    this.logService.add(
+      `AppointmentService | getAppointment: fetched appointment with id=${id}`
+    );
+    return of(appointment);
   }
 }
