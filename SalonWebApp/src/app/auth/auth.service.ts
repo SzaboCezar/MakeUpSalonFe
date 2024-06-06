@@ -136,7 +136,7 @@ export class AuthService {
 
 
   private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'An unknown error occurred!';
+    let errorMessage = 'Invalid email or password!';
     return throwError(errorMessage);
   }
 

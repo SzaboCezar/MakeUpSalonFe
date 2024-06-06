@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ResetPasswordService} from "../../../services/reset-password.service";
 import {Router, RouterLink} from "@angular/router";
-import emailjs from '@emailjs/browser';
+import cryptoRandomString from 'crypto-random-string';
+import {ResetPasswordEmailService} from "./reset-password-email.service";
+import {NgIf} from "@angular/common";
+
 
 @Component({
   selector: 'app-reset-password-email',
@@ -10,15 +12,19 @@ import emailjs from '@emailjs/browser';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   templateUrl: './reset-password-email.component.html',
   styleUrl: './reset-password-email.component.css'
 })
 export class ResetPasswordEmailComponent implements OnInit {
   resetForm: FormGroup;
+  emailSent: boolean = false;
 
-  constructor(private resetPasswordService: ResetPasswordService, private router: Router) {}
+  constructor(
+    private resetPasswordEmailService: ResetPasswordEmailService,
+    private router: Router) {}
 
   ngOnInit(): void {
     this.resetForm = new FormGroup({
@@ -26,28 +32,23 @@ export class ResetPasswordEmailComponent implements OnInit {
     });
   }
 
-  onSubmit() {
-    console.log(this.resetForm);
+ async onSubmit() {
+    // console.log(this.resetForm);
+    const userEmail: string = this.resetForm.value.user_email;
+    const result = await this.resetPasswordEmailService.sendResetEmail(userEmail);
 
-    emailjs.init("68ldqLgvn1qddeLWF");
-    emailjs.send("service_dedcvkg","template_yfp8hxq",{
-      user_name: "",
-      reset_link: "test_link",
-      user_email: this.resetForm.value.user_email,
-    });
 
-    alert("Email sent!")
-    console.log(this.resetForm.value.user_email);
-    this.resetForm.reset();
-    // this.resetPasswordService.resetPassword(this.resetForm.getRawValue()).subscribe(
-    //   data => {
-    //     console.log(data);
-    //     this.router.navigate(['/login']); // Adjust the route as necessary
-    //   },
-    //   error => {
-    //     console.log(error);
-    //     window.alert("Error: password was not reset!")
-    //   }
-    // );
+    if (result.success) {
+     // Handle success (e.g., show a success message)
+     console.log(result.message);
+
+      //TODO: Handle success (e.g., show a success message)
+      this.emailSent = true;
+
+      this.resetForm.reset();
+    } else {
+     // Handle failure (e.g., show an error message)
+     console.log(result.message);
+   }
   }
 }

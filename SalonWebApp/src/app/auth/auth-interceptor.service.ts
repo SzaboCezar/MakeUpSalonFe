@@ -14,6 +14,11 @@ export class AuthInterceptorService implements HttpInterceptor {
   //În cazul de față priea ultuml user și apoi se dezabonează.
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
+    if (req.url.includes('/password') || req.url.includes('/auth') || req.url.includes('/enrollment')) {
+      return next.handle(req);
+    }
+
+
     return this.authService.user.pipe(
       take(1),
       exhaustMap(user => {

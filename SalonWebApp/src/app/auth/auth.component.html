@@ -7,8 +7,9 @@
             <div class="card-body p-4 p-md-5">
               <h2 class="text-uppercase text-center mb-4">Sign in</h2>
 
-              <div *ngIf="error" class="alert alert-danger">
+              <div *ngIf="error" class="alert alert-danger text-center">
                 <p>{{ error }}</p>
+                <p class="text-muted small mt-3 mb-3 mb-0"> <a style="text-decoration: none; color: inherit" routerLink="/reset-password" >Forgot password?</a></p>
               </div>
 
               <div *ngIf="isLoading" class="text-center">
@@ -25,7 +26,8 @@
                   <label class="form-label" for="password">Password</label>
                   <input type="password" id="password" formControlName="password" placeholder="Password1!" autocomplete="new-password" class="form-control form-control-lg" />
                 </div>
-                <p class="text-left text-muted small mt-2 mb-3 mb-0"> <a style="text-decoration: none; color: #0c5460" routerLink="/reset-password" > Forgot password?</a></p>
+
+                <p class="text-left text-muted small mt-3 mb-3 mb-0"> <a style="text-decoration: none; color: #bf817b" routerLink="/reset-password" >Forgot password?</a></p>
 
 
                 <div class="d-flex justify-content-center">

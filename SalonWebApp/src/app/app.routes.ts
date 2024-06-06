@@ -50,6 +50,6 @@ export const routes: Routes = [
 
   //General routes
   { path: 'reset-password', component: ResetPasswordEmailComponent },
-  { path: 'reset-password/:token', component: ResetPasswordComponent },
+  { path: 'reset-password/:emailAndToken', component: ResetPasswordComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' } // Default route
 ];
