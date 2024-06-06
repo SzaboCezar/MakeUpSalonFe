@@ -37,12 +37,15 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
 
   treatmentSubscription: Subscription;
   unavailableSubscription: Subscription;
+  personSubscription: Subscription;
   treatments: Treatment[];
   selectedEmployeeTreatments: Person[] = [];
   employeeTreatments: EmployeeTreatment[] = [];
   unavailableTimes: IntervalDTO[] = [];
   availableTimes: string[] = [];
   isLoading = true;
+  person: Person | null = null;
+  email: String = '';
 
   constructor(
     private fb: FormBuilder,
@@ -54,8 +57,11 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.appointmentForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      name: [{ value: '', disabled: true }, Validators.required],
+      email: [
+        { value: '', disabled: true },
+        [Validators.required, Validators.email],
+      ],
       date: ['', Validators.required],
       time: ['', Validators.required],
       appointmentFor: ['', Validators.required],
@@ -73,6 +79,8 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
       });
 
     this.fetchAllTreatments();
+
+    this.fetchPersonFromLocalStorage();
   }
 
   fetchAllTreatments(): void {
@@ -164,6 +172,39 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
     const employeeId = (event.target as HTMLSelectElement).value;
     console.log('Selected Employee ID:', employeeId); // Debugging log
     this.fetchUnavailableTimes(+employeeId);
+  }
+
+  async fetchPersonFromLocalStorage(): Promise<void> {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      const userId = parsedUserData.userId;
+      this.email = parsedUserData.email;
+      this.personSubscription = this.personService
+        .getPersonById(userId)
+        .subscribe({
+          next: (person: Person) => {
+            this.person = person;
+            console.log('Fetched person:', this.person); // Debugging log
+            this.setFormValues();
+            this.cdr.detectChanges(); // Manually trigger change detection
+          },
+          error: (error) => {
+            console.error('Error fetching person:', error);
+          },
+        });
+    } else {
+      console.error('No user data found in local storage');
+    }
+  }
+
+  setFormValues(): void {
+    if (this.person) {
+      this.appointmentForm
+        .get('name')
+        ?.setValue(`${this.person.firstName} ${this.person.lastName}`);
+      this.appointmentForm.get('email')?.setValue(this.email);
+    }
   }
 
   onSubmit(): void {

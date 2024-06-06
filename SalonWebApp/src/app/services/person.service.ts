@@ -122,4 +122,9 @@ export class PersonService {
     this.treatments = treatments;
     this.treatmentChanged.next(this.treatments.slice());
   }
+
+  getPersonById(id: number): Observable<Person> {
+    const url = `${this.baseUrl}/id/${id}`;
+    return this.http.get<Person>(url);
+  }
 }
