@@ -18,6 +18,7 @@ import { EmployeeTreatment } from '../../../shared/models/EmployeeTreatment.mode
 import { Person } from '../../../shared/models/Person.model';
 import { PersonService } from '../../../services/person.service';
 import { IntervalDTO } from '../../../shared/models/DTO/IntervalDTO.model';
+import { AppointmentService } from '../../../services/appointment.service';
 
 @Component({
   selector: 'app-appointment-add',
@@ -46,11 +47,13 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
   isLoading = true;
   person: Person | null = null;
   email: String = '';
+  successMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
     private treatmentService: TreatmentService,
     private personService: PersonService,
+    private appointmentService: AppointmentService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
@@ -210,7 +213,38 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.appointmentForm.valid) {
       console.log(this.appointmentForm.value);
-      // Perform your form submission logic here
+      const userData = localStorage.getItem('userData');
+      if (userData) {
+        const parsedUserData = JSON.parse(userData);
+        const customerId = parsedUserData.userId;
+        const startDate = this.appointmentForm.get('date')?.value;
+        const startTime = this.appointmentForm.get('time')?.value;
+        const startDateTime = `${startDate}T${startTime}:00`;
+        const employeeId = this.appointmentForm.get('employee')?.value;
+        const treatmentId = this.appointmentForm.get('appointmentFor')?.value;
+
+        const appointment = {
+          customerId,
+          startDateTime,
+          employeeId: +employeeId,
+          treatmentId: +treatmentId,
+        };
+
+        this.appointmentService.addAppointment(appointment).subscribe({
+          next: (response) => {
+            console.log('Appointment added successfully:', response);
+            this.successMessage = 'Appointment added successfully!';
+            // Reset form fields except name and email
+            this.appointmentForm.reset({
+              name: this.appointmentForm.get('name')?.value,
+              email: this.appointmentForm.get('email')?.value,
+            });
+          },
+          error: (error) => {
+            console.error('Error adding appointment:', error);
+          },
+        });
+      }
     } else {
       console.log('Form is invalid');
     }
@@ -222,6 +256,9 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
     }
     if (this.unavailableSubscription) {
       this.unavailableSubscription.unsubscribe();
+    }
+    if (this.personSubscription) {
+      this.personSubscription.unsubscribe();
     }
   }
 }

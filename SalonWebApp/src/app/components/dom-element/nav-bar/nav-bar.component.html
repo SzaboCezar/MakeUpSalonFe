@@ -57,20 +57,49 @@
           <a class="nav-link" href="/book">Book Now</a>
         </li>
       </ul>
-      <div>
+      <div class="dropdown ms-auto">
         <a
-          *ngIf="!isAuthenticated"
-          routerLink="/auth"
-          class="btn btn-outline-info"
-          >Sign in</a
+          class="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          role="button"
+          id="dropdownMenuButton"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
         >
-        <a
-          *ngIf="isAuthenticated"
-          (click)="onLogout()"
-          routerLink="/auth"
-          class="btn btn-outline-danger"
-          >Logout</a
+          <i class="bi bi-person-circle me-2"></i>
+          <span>My account</span>
+        </a>
+        <ul
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="dropdownMenuButton"
         >
+          <li>
+            <a
+              class="dropdown-item text-end"
+              href="#"
+              routerLink="/my-appointments"
+              >My appointments</a
+            >
+          </li>
+          <li>
+            <a class="dropdown-item text-end" href="#">Approve appointments</a>
+          </li>
+          <li class="text-end">
+            <a
+              *ngIf="!isAuthenticated"
+              routerLink="/auth"
+              class="btn btn-outline-info w-100 my-1"
+              >Sign in</a
+            >
+            <a
+              *ngIf="isAuthenticated"
+              (click)="onLogout()"
+              routerLink="/auth"
+              class="btn btn-outline-danger w-100 my-1"
+              >Logout</a
+            >
+          </li>
+        </ul>
       </div>
       <!--      <form class="d-flex" role="search">-->
       <!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->

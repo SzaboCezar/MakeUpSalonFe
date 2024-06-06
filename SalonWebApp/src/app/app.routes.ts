@@ -11,6 +11,8 @@ import { TreatmentAddComponent } from './components/treatment/treatment-add/trea
 import { TreatmentDeleteComponent } from './components/treatment/treatment-delete/treatment-delete.component';
 import { TreatmentDetailUpdateComponent } from './components/treatment/treatment-detail/treatment-detail-update/treatment-detail-update.component';
 import { AppointmentAddComponent } from './components/appointment/appointment-add/appointment-add.component';
+import { AppointmentListComponent } from './components/appointment/appointment-list/appointment-list.component';
+import { AppointmentsResolverService } from './resolvers/appointments-resolver.service';
 
 export const routes: Routes = [
   //General routes
@@ -48,6 +50,14 @@ export const routes: Routes = [
     path: 'book',
     canActivate: [AuthGuard],
     component: AppointmentAddComponent,
+  },
+
+  //Appointment
+  {
+    path: 'my-appointments',
+    canActivate: [AuthGuard],
+    component: AppointmentListComponent,
+    resolve: { treatments: AppointmentsResolverService },
   },
 
   //General routes

@@ -11,6 +11,9 @@
             </div>
             <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
               <div class="row">
+                <div *ngIf="successMessage" class="alert alert-success">
+                  {{ successMessage }}
+                </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="control-label" for="name">Name</label>
@@ -48,6 +51,7 @@
                       formControlName="appointmentFor"
                       class="form-control"
                       (change)="onSelectTreatment($event)"
+                      required
                     >
                       <option
                         *ngFor="let treatment of treatments"
@@ -66,6 +70,7 @@
                       formControlName="employee"
                       class="form-control"
                       (change)="onSelectEmployee($event)"
+                      required
                     >
                       <option
                         *ngFor="let employee of selectedEmployeeTreatments"
@@ -87,6 +92,7 @@
                       type="date"
                       placeholder="Preferred Date"
                       class="form-control input-md"
+                      required
                     />
                     <div
                       *ngIf="
@@ -107,6 +113,7 @@
                       id="time"
                       formControlName="time"
                       class="form-control"
+                      required
                     >
                       <option
                         *ngFor="let time of availableTimes"
@@ -125,12 +132,13 @@
                     </div>
                   </div>
                 </div>
+                <br />
                 <div class="col-md-12">
                   <div class="form-group">
                     <button
                       id="singlebutton"
                       name="singlebutton"
-                      class="btn btn-default"
+                      class="btn btn-outline-success"
                     >
                       Make An Appointment
                     </button>

@@ -49,4 +49,13 @@ export class AppointmentService {
     );
     return of(appointment);
   }
+
+  addAppointment(appointment: {
+    customerId: number;
+    startDateTime: string;
+    employeeId: number;
+    treatmentId: number;
+  }): Observable<any> {
+    return this.http.post<any>(this.baseUrl, appointment);
+  }
 }
