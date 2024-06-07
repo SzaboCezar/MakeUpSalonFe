@@ -57,7 +57,10 @@ export const routes: Routes = [
     path: 'my-appointments',
     canActivate: [AuthGuard],
     component: AppointmentListComponent,
-    resolve: { treatments: AppointmentsResolverService },
+    resolve: {
+      treatments: AppointmentsResolverService,
+      TreatmentsResolverService,
+    },
   },
 
   //General routes

@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavBarComponent } from '../../dom-element/nav-bar/nav-bar.component';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin, of } from 'rxjs';
 import { Appointment } from '../../../shared/models/Appointment.model';
 import { AppointmentService } from '../../../services/appointment.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { map, catchError } from 'rxjs/operators';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   NgbAccordionBody,
@@ -15,6 +16,8 @@ import {
   NgbTooltip,
 } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loading-spinner.component';
+import { Treatment } from '../../../shared/models/Treatment.model';
+import { TreatmentService } from '../../../services/treatment.service';
 
 @Component({
   selector: 'app-appointment-list',
@@ -38,12 +41,16 @@ import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loadi
 })
 export class AppointmentListComponent implements OnInit, OnDestroy {
   appointmentSubscription: Subscription;
+  treatmentSubscription: Subscription;
   selectedAppointment?: Appointment;
   appointments: Appointment[];
   filteredAppointments: Appointment[] = [];
+  treatments: Treatment[];
+  treatment: Treatment;
 
   constructor(
     private appointmentService: AppointmentService,
+    private treatmentService: TreatmentService,
     private route: ActivatedRoute
   ) {}
 
@@ -51,37 +58,44 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.appointmentSubscription =
       this.appointmentService.appointmentsChanged.subscribe(
         (appointments: Appointment[]) => {
-          this.appointments = appointments;
-          this.filterAppointmentsByCustomerId();
+          this.loadAppointmentsWithTreatments(appointments);
         }
       );
 
-    this.appointments = this.appointmentService.getAppointments();
-    console.log('Appointments: ' + this.appointments);
-    this.filterAppointmentsByCustomerId();
+    this.loadAppointmentsWithTreatments(
+      this.appointmentService.getAppointments()
+    );
   }
 
-  filterAppointmentsByCustomerId(): void {
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      const parsedUserData = JSON.parse(userData);
-      const userId = parsedUserData.userId;
-      this.filteredAppointments = this.appointments.filter(
-        (appointment) => appointment.customer.personId === userId
-      );
-      console.log('Filtered appointments:', this.filteredAppointments); // Debugging log
-    } else {
-      console.error('No user data found in local storage');
-    }
+  loadAppointmentsWithTreatments(appointments: Appointment[]): void {
+    // Map over each appointment to create an observable that fetches the treatment
+    const appointmentsWithTreatments = appointments.map((appointment) =>
+      this.treatmentService.getTreatment(appointment.treatmentID).pipe(
+        map((treatment) => ({
+          ...appointment,
+          treatmentName: treatment.name,
+          treatmentDescription: treatment.description,
+          treatmentPrice: treatment.price,
+        })),
+        catchError((error) => {
+          console.error('Error fetching treatment', error);
+          return of({ ...appointment }); // Return the appointment without treatment details on error
+        })
+      )
+    );
+
+    // Combine all observables to ensure all treatments are fetched before updating the view
+    forkJoin(appointmentsWithTreatments).subscribe((combinedAppointments) => {
+      this.filteredAppointments = combinedAppointments;
+    });
   }
 
   onSelect(appointment: Appointment): void {
     this.selectedAppointment = appointment;
-    // this.selectedEmployeeTreatments = treatment.employeeTreatments;
-    this.appointmentService.getAppointment(appointment.appointmentID);
   }
 
   ngOnDestroy() {
     this.appointmentSubscription.unsubscribe();
+    this.treatmentSubscription.unsubscribe();
   }
 }

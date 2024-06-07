@@ -13,17 +13,19 @@
               appointment.appointmentID
             }}</span>
             <span class="p-2 border rounded-end-2"
-              >Appointment id: {{ appointment.appointmentID }}</span
+              >Treatment name: {{ appointment.treatmentName }}</span
             >
           </button>
         </h2>
         <div ngbAccordionCollapse>
           <div ngbAccordionBody>
             <ng-template>
-              <p><strong>Treatment name </strong> <em>To be implemented</em></p>
               <p>
                 <strong>Treatment description </strong>
-                <em>To be implemented</em>
+                <em>{{ appointment.treatmentDescription }}</em>
+                <br />
+                <strong>Treatment price </strong>
+                <em>{{ appointment.treatmentPrice }}</em>
                 <br />
                 <span class="text-primary-emphasis"
                   >Treatment date and time:
@@ -31,9 +33,7 @@
                 On {{ appointment.startDateTime | date : "yyyy-MM-dd" }} from
                 {{ appointment.startDateTime | date : "HH:mm" }} to
                 {{ appointment.endDateTime | date : "HH:mm" }}
-                <br />
-                <span class="text-success">Treatment price: </span>
-                To be implemented
+
                 <br />
                 <span class="text-success">Treatment status: </span>
                 {{ appointment.approvalStatus }}
