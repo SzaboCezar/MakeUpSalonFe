@@ -41,7 +41,6 @@ import { TreatmentService } from '../../../services/treatment.service';
 })
 export class AppointmentListComponent implements OnInit, OnDestroy {
   appointmentSubscription: Subscription;
-  treatmentSubscription: Subscription;
   selectedAppointment?: Appointment;
   appointments: Appointment[];
   filteredAppointments: Appointment[] = [];
@@ -68,26 +67,37 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   }
 
   loadAppointmentsWithTreatments(appointments: Appointment[]): void {
-    // Map over each appointment to create an observable that fetches the treatment
-    const appointmentsWithTreatments = appointments.map((appointment) =>
-      this.treatmentService.getTreatment(appointment.treatmentID).pipe(
-        map((treatment) => ({
-          ...appointment,
-          treatmentName: treatment.name,
-          treatmentDescription: treatment.description,
-          treatmentPrice: treatment.price,
-        })),
-        catchError((error) => {
-          console.error('Error fetching treatment', error);
-          return of({ ...appointment }); // Return the appointment without treatment details on error
-        })
-      )
-    );
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      const userId = parsedUserData.userId;
 
-    // Combine all observables to ensure all treatments are fetched before updating the view
-    forkJoin(appointmentsWithTreatments).subscribe((combinedAppointments) => {
-      this.filteredAppointments = combinedAppointments;
-    });
+      const relevantAppointments = appointments.filter(
+        (appointment) => appointment.customer.personId === userId
+      );
+
+      // Map over each appointment to create an observable that fetches the treatment
+      const appointmentsWithTreatments = relevantAppointments.map(
+        (appointment) =>
+          this.treatmentService.getTreatment(appointment.treatmentID).pipe(
+            map((treatment) => ({
+              ...appointment,
+              treatmentName: treatment.name,
+              treatmentDescription: treatment.description,
+              treatmentPrice: treatment.price,
+            })),
+            catchError((error) => {
+              console.error('Error fetching treatment', error);
+              return of({ ...appointment }); // Return the appointment without treatment details on error
+            })
+          )
+      );
+
+      // Combine all observables to ensure all treatments are fetched before updating the view
+      forkJoin(appointmentsWithTreatments).subscribe((combinedAppointments) => {
+        this.filteredAppointments = combinedAppointments;
+      });
+    }
   }
 
   onSelect(appointment: Appointment): void {
@@ -96,6 +106,5 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.appointmentSubscription.unsubscribe();
-    this.treatmentSubscription.unsubscribe();
   }
 }
