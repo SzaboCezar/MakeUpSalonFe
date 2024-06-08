@@ -41,8 +41,7 @@ export class PasswordService {
   changePassword(changePasswordRequest: ChangePasswordRequest): Observable<any> {
     console.log("Change Password Service | changePasswordRequest: ", changePasswordRequest);
 // Obține valoarea din local storage asociată cheii "userData" și parsează-o direct pentru a prelua ID-ul utilizatorului
-//     var userId = JSON.parse(localStorage.getItem("userData")).userId;
-    var userId = 19;
+    var userId = JSON.parse(localStorage.getItem("userData")).userId;
 
 // Verifică dacă userId există și afișează-l în consolă
     if (userId !== undefined && userId > 0) {

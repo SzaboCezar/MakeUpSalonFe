@@ -28,37 +28,16 @@
         <li class="nav-item">
           <a class="nav-link" href="#services">Services</a>
         </li>
-        <!--        <li class="nav-item">-->
-        <!--          <a class="nav-link" href="#portfolio">Portfolio</a>-->
-        <!--        </li>-->
-        <!--        <li class="nav-item">-->
-        <!--          <a class="nav-link" href="#team">Team</a>-->
-        <!--        </li>-->
-        <!--        <li class="nav-item">-->
-        <!--          <a class="nav-link" href="/scheduler">Scheduler</a>-->
-        <!--        </li>-->
-        <!--        <li class="nav-item dropdown">-->
-        <!--          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-        <!--            More-->
-        <!--          </a>-->
-        <!--          <ul class="dropdown-menu">-->
-        <!--            <li><a class="dropdown-item" href="#">Hair Styling</a></li>-->
-        <!--            <li><a class="dropdown-item" href="#">Nail Art</a></li>-->
-        <!--            <li>-->
-        <!--              <hr class="dropdown-divider">-->
-        <!--            </li>-->
-        <!--            <li><a class="dropdown-item" href="#">Facials</a></li>-->
-        <!--          </ul>-->
-        <!--        </li>-->
+
         <li class="nav-item">
           <a class="nav-link" href="/#Contact">Contact</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/book">Book Now</a>
+          <a class="nav-link" routerLink="/book">Book Now</a>
         </li>
       </ul>
 
-      <div class="dropdown ms-auto">
+      <div class="dropdown-center ms-auto">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center"
           href="#"
@@ -72,18 +51,20 @@
         </a>
         <ul
           class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="dropdownMenuButton"
-        >
+          aria-labelledby="dropdownMenuButton">
+          <li>
+            <a *ngIf="isAuthenticated" class="dropdown-item text-start" routerLink="/change-password">Change Password</a>
+          </li>
           <li>
             <a
-              class="dropdown-item text-end"
+              class="dropdown-item text-start"
               href="#"
               routerLink="/my-appointments"
               >My appointments</a
             >
           </li>
           <li>
-            <a class="dropdown-item text-end" href="#">Approve appointments</a>
+            <a class="dropdown-item text-start" href="#">Approve appointments</a>
           </li>
         </ul>
       </div>
@@ -91,10 +72,6 @@
         <a *ngIf="!isAuthenticated" id="signin" routerLink="/auth" class="btn btn-outline-info small-button">Login</a>
         <a *ngIf="isAuthenticated" id="logout" (click)="onLogout()" routerLink="/auth" class="btn btn-outline-danger small-button">Logout</a>
       </div>
-      <!--      <form class="d-flex" role="search">-->
-      <!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-      <!--        <button class="btn btn-outline-success" type="submit">Search</button>-->
-      <!--      </form>-->
     </div>
   </div>
 </nav>
