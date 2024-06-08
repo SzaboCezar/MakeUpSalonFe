@@ -57,6 +57,7 @@
           <a class="nav-link" href="/book">Book Now</a>
         </li>
       </ul>
+
       <div class="dropdown ms-auto">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center"
@@ -84,22 +85,11 @@
           <li>
             <a class="dropdown-item text-end" href="#">Approve appointments</a>
           </li>
-          <li class="text-end">
-            <a
-              *ngIf="!isAuthenticated"
-              routerLink="/auth"
-              class="btn btn-outline-info w-100 my-1"
-              >Sign in</a
-            >
-            <a
-              *ngIf="isAuthenticated"
-              (click)="onLogout()"
-              routerLink="/auth"
-              class="btn btn-outline-danger w-100 my-1"
-              >Logout</a
-            >
-          </li>
         </ul>
+      </div>
+      <div class="ms-3">
+        <a *ngIf="!isAuthenticated" id="signin" routerLink="/auth" class="btn btn-outline-info small-button">Login</a>
+        <a *ngIf="isAuthenticated" id="logout" (click)="onLogout()" routerLink="/auth" class="btn btn-outline-danger small-button">Logout</a>
       </div>
       <!--      <form class="d-flex" role="search">-->
       <!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->

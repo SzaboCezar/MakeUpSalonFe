@@ -63,14 +63,12 @@ export class PasswordService {
 
 
   checkUserId(): boolean {
-    // var userId = JSON.parse(localStorage.getItem("userData")).userId;
-    // if (userId !== undefined && userId > 0) {
-    //   return true;
-    // } else {
-    //   return false;
-    // }
-    //TODO: uncomment the above code and remove the following line.
-    return true;
+    const userId = JSON.parse(localStorage.getItem("userData")).userId;
+    if (userId !== undefined && userId > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 

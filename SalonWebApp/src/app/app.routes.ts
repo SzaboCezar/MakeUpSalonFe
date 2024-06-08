@@ -2,7 +2,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { EnrollmentComponent } from './components/enrollment/enrollment.component';
-import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
 import {TreatmentListComponent} from "./components/treatment/treatment-list/treatment-list.component";
 import {AuthComponent} from "./auth/auth.component";
@@ -12,6 +11,14 @@ import {TreatmentDeleteComponent} from "./components/treatment/treatment-delete/
 import {
   TreatmentDetailUpdateComponent
 } from "./components/treatment/treatment-detail/treatment-detail-update/treatment-detail-update.component";
+import {AppointmentAddComponent} from "./components/appointment/appointment-add/appointment-add.component";
+import {AppointmentListComponent} from "./components/appointment/appointment-list/appointment-list.component";
+import {AppointmentsResolverService} from "./resolvers/appointments-resolver.service";
+import {ChangePasswordComponent} from "./auth/password/change-password/change-password.component";
+import {
+  ResetPasswordEmailComponent
+} from "./auth/password/reset-password/reset-password-email/reset-password-email.component";
+import {ResetPasswordComponent} from "./auth/password/reset-password/reset-password.component";
 
 export const routes: Routes = [
   //General routes

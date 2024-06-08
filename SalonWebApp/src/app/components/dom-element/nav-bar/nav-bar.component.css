@@ -1,0 +1,17 @@
+.small-button {
+  font-size: 0.8em; /* Ajustează dimensiunea fontului */
+  padding: 0.25em 0.3em; /* Ajustează padding-ul */
+}
+
+
+#signin:hover{
+  background: #3F858C;
+  color: #f6f7f8;
+  border-color: #3F858C;
+}
+
+#signin{
+  color: #3F858C;
+  background: #f6f7f8;
+  border-color: #3F858C;
+}
