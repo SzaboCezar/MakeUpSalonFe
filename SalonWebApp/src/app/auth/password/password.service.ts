@@ -8,7 +8,7 @@ import {ResetPasswordRequest} from "../../shared/models/ResetPasswordRequest.mod
 @Injectable({
   providedIn: 'root'
 })
-export class ResetPasswordService {
+export class PasswordService {
 
   private resetPasswordURL = 'http://localhost:8080/api/users/recover-password/email/';
 

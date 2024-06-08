@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {ResetPasswordService} from "./reset-password.service";
+import {PasswordService} from "../password.service";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {ResetPasswordEmailService} from "./reset-password-email/reset-password-email.service";
-import {ResetPasswordRequest} from "../../shared/models/ResetPasswordRequest.model";
+import {ResetPasswordRequest} from "../../../shared/models/ResetPasswordRequest.model";
 
 
 @Component({
@@ -22,7 +22,7 @@ export class ResetPasswordComponent implements OnInit {
   error: string = null;
 
   constructor(
-    private resetPasswordService: ResetPasswordService,
+    private resetPasswordService: PasswordService,
     private resetPasswordEmailService: ResetPasswordEmailService,
     private router: Router,
     private route: ActivatedRoute) {}
