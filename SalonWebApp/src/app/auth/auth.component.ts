@@ -70,10 +70,7 @@ export class AuthComponent implements OnInit {
         this.isLoading = false;
       }
     )
-
-
-    //TODO: uncomment this
-    // this.loginForm.reset();
+    this.loginForm.reset();
   }
 
 }

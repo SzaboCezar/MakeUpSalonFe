@@ -19,9 +19,6 @@ export class PasswordService {
   resetPassword(resetPasswordRequest: ResetPasswordRequest, email: string): Observable<any> {
     const url = `${this.resetPasswordURL}${email}`; // Construiește URL-ul complet cu adresa de email
 
-
-
-
     console.log("Reset Password Service | resetPasswordRequest: ", resetPasswordRequest);
     localStorage.removeItem('emailToken');
 

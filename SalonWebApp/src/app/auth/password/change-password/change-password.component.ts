@@ -62,8 +62,6 @@ export class ChangePasswordComponent {
     );
   }
 
-
-
   onCancel(): void {
     this.location.back();
   }

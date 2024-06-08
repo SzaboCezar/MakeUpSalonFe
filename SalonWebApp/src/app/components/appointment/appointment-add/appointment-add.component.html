@@ -1,193 +1,167 @@
 <app-nav-bar></app-nav-bar>
-<body>
-  <main role="main">
-    <br />
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="well-block">
-            <div class="well-title">
-              <h2>Questions? Book an Appointment</h2>
-            </div>
-            <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
-              <div class="row">
-                <div *ngIf="successMessage" class="alert alert-success">
-                  {{ successMessage }}
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
-                    <input
-                      id="name"
-                      formControlName="name"
-                      type="text"
-                      placeholder="Name"
-                      class="form-control input-md"
-                      [disabled]="true"
-                    />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="control-label" for="email">Email</label>
-                    <input
-                      id="email"
-                      formControlName="email"
-                      type="text"
-                      placeholder="E-Mail"
-                      class="form-control input-md"
-                      [disabled]="true"
-                    />
-                  </div>
-                </div>
 
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="control-label" for="appointmentfor"
-                      >Appointment For</label
-                    >
-                    <select
-                      id="appointmentfor"
-                      formControlName="appointmentFor"
-                      class="form-control"
-                      (change)="onSelectTreatment($event)"
-                      required
-                    >
-                      <option
-                        *ngFor="let treatment of treatments"
-                        [value]="treatment.treatmentID"
-                      >
-                        {{ treatment.name }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <label class="control-label" for="employee">Employee</label>
-                    <select
-                      id="employee"
-                      formControlName="employee"
-                      class="form-control"
-                      (change)="onSelectEmployee($event)"
-                      required
-                    >
-                      <option
-                        *ngFor="let employee of selectedEmployeeTreatments"
-                        [value]="employee.personId"
-                      >
-                        {{ employee.firstName }} {{ employee.lastName }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="control-label" for="date"
-                      >Preferred Date</label
-                    >
-                    <input
-                      id="date"
-                      formControlName="date"
-                      type="date"
-                      placeholder="Preferred Date"
-                      class="form-control input-md"
-                      required
-                    />
-                    <div
-                      *ngIf="
-                        appointmentForm.get('date').invalid &&
-                        appointmentForm.get('date').touched
-                      "
-                    >
-                      Date is required.
+<section class="vh-100 bg-image" style="background-image: url('./assets/img/Enrollment/Enrollment_Wallpaper.jpg');">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-10 col-lg-10 col-xl-10">
+          <div class="row">
+            <!-- Form Section -->
+            <div class="col-md-6 mb-4 order-2 order-md-1">
+              <div class="card" style="border-radius: 15px;">
+                <div class="card-body p-4 p-md-5">
+                  <h2 class="text-uppercase text-center mb-4">Questions? Book an Appointment</h2>
+                  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                      <div *ngIf="successMessage" class="alert alert-success">
+                        {{ successMessage }}
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label" for="name">Name</label>
+                          <input
+                            id="name"
+                            formControlName="name"
+                            type="text"
+                            placeholder="Name"
+                            class="form-control input-md"
+                            [disabled]="true"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label" for="email">Email</label>
+                          <input
+                            id="email"
+                            formControlName="email"
+                            type="text"
+                            placeholder="E-Mail"
+                            class="form-control input-md"
+                            [disabled]="true"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label" for="appointmentfor">Appointment For</label>
+                          <select
+                            id="appointmentfor"
+                            formControlName="appointmentFor"
+                            class="form-control"
+                            (change)="onSelectTreatment($event)"
+                            required
+                          >
+                            <option *ngFor="let treatment of treatments" [value]="treatment.treatmentID">
+                              {{ treatment.name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label" for="employee">Employee</label>
+                          <select
+                            id="employee"
+                            formControlName="employee"
+                            class="form-control"
+                            (change)="onSelectEmployee($event)"
+                            required
+                          >
+                            <option *ngFor="let employee of selectedEmployeeTreatments" [value]="employee.personId">
+                              {{ employee.firstName }} {{ employee.lastName }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="control-label" for="date">Preferred Date</label>
+                          <input
+                            id="date"
+                            formControlName="date"
+                            type="date"
+                            placeholder="Preferred Date"
+                            class="form-control input-md"
+                            required
+                          />
+                          <div *ngIf="appointmentForm.get('date').invalid && appointmentForm.get('date').touched">
+                            Date is required.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="control-label" for="time">Preferred Time</label>
+                          <select
+                            id="time"
+                            formControlName="time"
+                            class="form-control"
+                            required
+                          >
+                            <option *ngFor="let time of availableTimes" [value]="time">
+                              {{ time }}
+                            </option>
+                          </select>
+                          <div *ngIf="appointmentForm.get('time').invalid && appointmentForm.get('time').touched">
+                            Time is required.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <button id="singlebutton" name="singlebutton" class="btn btn-outline-success btn-lg btn-block">
+                            Make An Appointment
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label class="control-label" for="time"
-                      >Preferred Time</label
-                    >
-                    <select
-                      id="time"
-                      formControlName="time"
-                      class="form-control"
-                      required
-                    >
-                      <option
-                        *ngFor="let time of availableTimes"
-                        [value]="time"
-                      >
-                        {{ time }}
-                      </option>
-                    </select>
-                    <div
-                      *ngIf="
-                        appointmentForm.get('time').invalid &&
-                        appointmentForm.get('time').touched
-                      "
-                    >
-                      Time is required.
-                    </div>
-                  </div>
-                </div>
-                <br />
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <button
-                      id="singlebutton"
-                      name="singlebutton"
-                      class="btn btn-outline-success"
-                    >
-                      Make An Appointment
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="well-block">
-            <div class="well-title">
-              <h2>Why Appointment with Us</h2>
-            </div>
-            <div class="feature-block">
-              <div class="feature feature-blurb-text">
-                <h4 class="feature-title">24/7 Hours Available</h4>
-                <div class="feature-content">
-                  <p>
-                    Integer nec nisi sed mi hendrerit mattis. Vestibulum mi
-                    nunc, ultricies quis vehicula et, iaculis in magnestibulum.
-                  </p>
-                </div>
-              </div>
-              <div class="feature feature-blurb-text">
-                <h4 class="feature-title">Experienced Staff Available</h4>
-                <div class="feature-content">
-                  <p>
-                    Aliquam sit amet mi eu libero fermentum bibendum pulvinar a
-                    turpis. Vestibulum quis feugiat risus.
-                  </p>
-                </div>
-              </div>
-              <div class="feature feature-blurb-text">
-                <h4 class="feature-title">Low Price & Fees</h4>
-                <div class="feature-content">
-                  <p>
-                    Praesent eu sollicitudin nunc. Cras malesuada vel nisi
-                    consequat pretium. Integer auctor elementum nulla suscipit
-                    in.
-                  </p>
+                  </form>
                 </div>
               </div>
             </div>
+
+            <!-- Information Section -->
+            <div class="col-md-6 mb-4 order-1 order-md-2">
+              <div class="card" style="border-radius: 15px;">
+                <div class="card-body p-4 p-md-5">
+                  <h2 class="text-uppercase text-center mb-4">Why Appointment with Us</h2>
+                  <div class="feature-block">
+                    <div class="feature feature-blurb-text">
+                      <h4 class="feature-title">24/7 Hours Available</h4>
+                      <div class="feature-content">
+                        <p>
+                          Integer nec nisi sed mi hendrerit mattis. Vestibulum mi nunc, ultricies quis vehicula et,
+                          iaculis in magnestibulum.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="feature feature-blurb-text">
+                      <h4 class="feature-title">Experienced Staff Available</h4>
+                      <div class="feature-content">
+                        <p>
+                          Aliquam sit amet mi eu libero fermentum bibendum pulvinar a turpis. Vestibulum quis feugiat risus.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="feature feature-blurb-text">
+                      <h4 class="feature-title">Low Price & Fees</h4>
+                      <div class="feature-content">
+                        <p>
+                          Praesent eu sollicitudin nunc. Cras malesuada vel nisi consequat pretium. Integer auctor elementum
+                          nulla suscipit in.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-    <br />
-  </main>
-</body>
-<script src="node_modules/moment/moment.js"></script>
+  </div>
+</section>
+<!--<script src="node_modules/moment/moment.js"></script>-->

@@ -72,7 +72,7 @@ export const routes: Routes = [
   //General routes
   { path: 'change-password',
     component: ChangePasswordComponent,
-    // canActivate: [AuthGuard], // Guardul care protejează ruta
+    canActivate: [AuthGuard], // Guardul care protejează ruta
   },
   { path: 'reset-password', component: ResetPasswordEmailComponent },
   { path: 'reset-password/:emailAndToken', component: ResetPasswordComponent },
