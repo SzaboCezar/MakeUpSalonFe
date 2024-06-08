@@ -2,7 +2,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { EnrollmentComponent } from './components/enrollment/enrollment.component';
-import { ResetPasswordComponent } from './auth/password/reset-password/reset-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TreatmentsResolverService } from './resolvers/treatments-resolver.service';
 import {TreatmentListComponent} from "./components/treatment/treatment-list/treatment-list.component";
 import {AuthComponent} from "./auth/auth.component";
@@ -12,8 +12,6 @@ import {TreatmentDeleteComponent} from "./components/treatment/treatment-delete/
 import {
   TreatmentDetailUpdateComponent
 } from "./components/treatment/treatment-detail/treatment-detail-update/treatment-detail-update.component";
-import {ResetPasswordEmailComponent} from "./auth/password/reset-password/reset-password-email/reset-password-email.component";
-import {ChangePasswordComponent} from "./auth/password/change-password/change-password.component";
 
 export const routes: Routes = [
   //General routes
@@ -46,8 +44,23 @@ export const routes: Routes = [
     resolve: { treatments: TreatmentsResolverService }
   },
 
+  //Book
+  {
+    path: 'book',
+    canActivate: [AuthGuard],
+    component: AppointmentAddComponent,
+  },
 
-
+  //Appointment
+  {
+    path: 'my-appointments',
+    canActivate: [AuthGuard],
+    component: AppointmentListComponent,
+    resolve: {
+      treatments: AppointmentsResolverService,
+      TreatmentsResolverService,
+    },
+  },
 
   //General routes
   { path: 'change-password',

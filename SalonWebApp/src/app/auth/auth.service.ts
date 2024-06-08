@@ -1,18 +1,20 @@
 // src/app/services/authentification.services.ts
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
-import {AuthenticationRequest} from "../shared/models/AuthenticationRequest.model";
-import {RegisterRequest} from "../shared/models/RegisterRequest.model";
-import {AuthenticationResponse} from "../shared/models/AuthenticationResponse.model";
-import {tap} from "rxjs/operators";
-import {User} from "../shared/models/User.model";
-import {Router} from "@angular/router";
-import {Role} from "../shared/models/Enum/Role.enum";
-import {Person} from "../shared/models/Person.model";
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import { AuthenticationRequest } from '../shared/models/AuthenticationRequest.model';
+import { RegisterRequest } from '../shared/models/RegisterRequest.model';
+import { AuthenticationResponse } from '../shared/models/AuthenticationResponse.model';
+import { tap } from 'rxjs/operators';
+import { User } from '../shared/models/User.model';
+import { Router } from '@angular/router';
+import { Role } from '../shared/models/Enum/Role.enum';
+import { Person } from '../shared/models/Person.model';
+import { em, ex } from '@fullcalendar/core/internal-common';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   //Emite un user la login sau la logut. Îl folosim pentru a ști dacă userul este logat sau nu.
@@ -25,68 +27,73 @@ export class AuthService {
   tokenExpirationTimer: any;
   private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
 
-
-  constructor(private http: HttpClient, private router: Router) { }
-
-
-
-
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(authenticationRequest: AuthenticationRequest): Observable<any> {
-    return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/login', authenticationRequest)
+    return this.http
+      .post<AuthenticationResponse>(
+        'http://localhost:8080/api/users/login',
+        authenticationRequest
+      )
       .pipe(
         catchError(this.handleError),
-        tap(response => {
+        tap((response) => {
           this.handleAuthentication(response.token);
         })
       );
   }
 
-
-
-
   autoLogin() {
     const userData: {
-      userId: number,
-      email: string,
-      password: string,
-      role: Role,
-      person: Person,
-      accountNonExpired: boolean,
-      accountNonLocked: boolean,
-      credentialsNonExpired: boolean,
-      enabled: boolean,
-      _token: string,
-      expirationTime: number
+      userId: number;
+      email: string;
+      password: string;
+      role: Role;
+      person: Person;
+      accountNonExpired: boolean;
+      accountNonLocked: boolean;
+      credentialsNonExpired: boolean;
+      enabled: boolean;
+      _token: string;
+      expirationTime: number;
     } = JSON.parse(localStorage.getItem('userData'));
 
     if (!userData) {
       return;
     }
 
-    console.log("AuthService userData: ", userData)
+    console.log('AuthService userData: ', userData);
 
     const userDataToken = userData._token;
-    console.log("AuthService userDataToken: ", userDataToken)
+    console.log('AuthService userDataToken: ', userDataToken);
 
+    const loadedUser: User = new User(
+      userData.userId,
+      userData.email,
+      userData.password,
+      userData.role,
+      userData.person,
+      userData.accountNonExpired,
+      userData.accountNonLocked,
+      userData.credentialsNonExpired,
+      userData.enabled,
+      userData._token
+    );
 
-    const loadedUser: User
-      = new User(userData.userId, userData.email, userData.password, userData.role, userData.person, userData.accountNonExpired, userData.accountNonLocked, userData.credentialsNonExpired, userData.enabled, userData._token);
-
-    console.log("AuthService loaded user: ", loadedUser)
+    console.log('AuthService loaded user: ', loadedUser);
 
     if (loadedUser.token) {
       this.user.next(loadedUser);
 
       // Calculăm durata rămasă până la expirarea token-ului
-      const expirationDuration: number = userData.expirationTime - new Date().getTime();
-      console.log("Expiration duration autoLogOut: ", expirationDuration)
+      const expirationDuration: number =
+        userData.expirationTime - new Date().getTime();
+      console.log('Expiration duration autoLogOut: ', expirationDuration);
 
       // Inițiem automat logout-ul după expirarea token-ului
       this.autoLogout(expirationDuration);
     }
   }
-
 
   logout() {
     this.user.next(null);
@@ -94,8 +101,8 @@ export class AuthService {
     this.router.navigate(['/']);
 
     /*
-    * For auto logout.
-    * Dacă user-ul se deloghează manual, trebuie să ștergem timer-ul de logout automat.
+     * For auto logout.
+     * Dacă user-ul se deloghează manual, trebuie să ștergem timer-ul de logout automat.
      */
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
@@ -103,54 +110,67 @@ export class AuthService {
     this.tokenExpirationTimer = null;
   }
 
-
-
-
-
   /*
-  * Setează un timer pentru a face logout automat după ce token-ul expiră.
-  * Token-ul expiră pe BE în 24 de minute de la apelarea login-ului.
+   * Setează un timer pentru a face logout automat după ce token-ul expiră.
+   * Token-ul expiră pe BE în 24 de minute de la apelarea login-ului.
    */
   autoLogout(expirationDuration: number) {
-    console.log("Expiration duration: ", expirationDuration)
+    console.log('Expiration duration: ', expirationDuration);
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
   }
 
-
-
-
-
   singUp(registerRequest: RegisterRequest): Observable<any> {
-    return this.http.post<AuthenticationResponse>('http://localhost:8080/api/users/register', registerRequest)
+    return this.http
+      .post<AuthenticationResponse>(
+        'http://localhost:8080/api/users/register',
+        registerRequest
+      )
       .pipe(
         catchError(this.handleError),
-        tap(response => {
+        tap((response) => {
           this.handleAuthentication(response.token);
         })
       );
   }
-
-
-
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Invalid email or password!';
     return throwError(errorMessage);
   }
 
-
-
-
-  private handleAuthentication(token: string) {
-
-    const user: User = new User(0, '', '', null, null, false, false, false, false, token);
+  private async handleAuthentication(token: string) {
+    const user: User = new User(
+      0,
+      '',
+      '',
+      null,
+      null,
+      false,
+      false,
+      false,
+      false,
+      token
+    );
 
     //Emitem user-ul care s-a logat, cu token-ul în el.
     this.user.next(user);
-    console.log("Emitted user: ")
-    console.log(user)
+
+    const email = this.extractEmailFromToken(token);
+    const fetchedUser = await this.fetchUserByEmail(email);
+
+    user.userId = fetchedUser.userId;
+    user.email = fetchedUser.email;
+    user.role = fetchedUser.role;
+    user.person = fetchedUser.person;
+    user.accountNonExpired = fetchedUser.accountNonExpired;
+    user.accountNonLocked = fetchedUser.accountNonLocked;
+    user.credentialsNonExpired = fetchedUser.credentialsNonExpired;
+    user.enabled = fetchedUser.enabled;
+
+    console.log('Emitted user: ');
+    console.log(user);
 
     //For auto logout
     // Calculăm timpul la care token-ul va expira în cazul autoLogIn, din local storage.
@@ -163,6 +183,39 @@ export class AuthService {
     this.autoLogout(expirationDuration);
 
     //Trimitem user-ul în localStorage pentru a-l putea folosi și după refresh
-    localStorage.setItem('userData', JSON.stringify({...user, expirationTime}));
+    localStorage.setItem(
+      'userData',
+      JSON.stringify({ ...user, expirationTime })
+    );
+  }
+
+  private extractEmailFromToken(token: string): string {
+    // Split the token into its three parts
+    const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+      throw new Error('Invalid JWT token format');
+    }
+
+    // Decode the payload part
+    const payload = tokenParts[1];
+    const decodedPayload = atob(payload);
+    const payloadObj = JSON.parse(decodedPayload);
+
+    // Extract and return the email
+    return payloadObj.sub;
+  }
+
+  private getUserByEmail(email: string): Observable<User> {
+    const url = `http://localhost:8080/api/users/${email}`;
+    return this.http.get<User>(url);
+  }
+
+  private async fetchUserByEmail(email: string): Promise<User> {
+    try {
+      return await firstValueFrom(this.getUserByEmail(email));
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      throw error;
+    }
   }
 }

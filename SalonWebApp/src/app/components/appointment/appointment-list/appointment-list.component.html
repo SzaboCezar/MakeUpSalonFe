@@ -1,0 +1,72 @@
+<app-nav-bar></app-nav-bar>
+<main>
+  <h3 class="d-flex justify-content-between">
+    <i>My appointments</i>
+  </h3>
+
+  <div *ngFor="let appointment of filteredAppointments">
+    <div ngbAccordion (shown)="onSelect(appointment)" [closeOthers]="true">
+      <div ngbAccordionItem="{{ appointment.appointmentID }}">
+        <h2 ngbAccordionHeader>
+          <button ngbAccordionButton>
+            <span class="p-2 border rounded-start-2">{{
+              appointment.appointmentID
+            }}</span>
+            <span class="p-2 border rounded-end-2"
+              >Treatment name: {{ appointment.treatmentName }}</span
+            >
+          </button>
+        </h2>
+        <div ngbAccordionCollapse>
+          <div ngbAccordionBody>
+            <ng-template>
+              <p>
+                <strong>Treatment description </strong>
+                <em>{{ appointment.treatmentDescription }}</em>
+                <br />
+                <strong>Treatment price </strong>
+                <em>{{ appointment.treatmentPrice }}</em>
+                <br />
+                <span class="text-primary-emphasis"
+                  >Treatment date and time:
+                </span>
+                On {{ appointment.startDateTime | date : "yyyy-MM-dd" }} from
+                {{ appointment.startDateTime | date : "HH:mm" }} to
+                {{ appointment.endDateTime | date : "HH:mm" }}
+
+                <br />
+                <span class="text-success">Treatment status: </span>
+                {{ appointment.approvalStatus }}
+              </p>
+
+              <!--Details, edit and delete buttons.-->
+              <div class="d-flex justify-content-end mx-auto">
+                <!--                <a class="mt-2 me-2" routerLink="/treatment/detail/{{treatment.treatmentID}}">-->
+                <!--                  <button type="button" class="btn btn-outline-secondary bi-sun" ngbTooltip="READ">-->
+                <!--                    Details</button>-->
+                <!--                </a>-->
+
+                <a class="mt-2 me-2" routerLink="/treatment/detail/update/">
+                  <button
+                    type="button"
+                    class="btn btn-outline-success bi-gear"
+                    ngbTooltip="UPDATE"
+                    disabled
+                  >
+                    Edit
+                  </button>
+                </a>
+
+                <a class="mt-2 me-2" routerLink="/treatment/delete/">
+                  <button type="button" class="btn btn-outline-danger" disabled>
+                    Delete
+                  </button>
+                </a>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

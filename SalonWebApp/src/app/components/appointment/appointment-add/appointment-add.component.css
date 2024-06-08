@@ -1,0 +1,171 @@
+.well-block {
+  background-color: #fff;
+  border: 1px solid #e9e6e8;
+  padding: 40px;
+}
+
+.well-title {
+  margin-bottom: 40px;
+}
+
+.fc-event {
+  background-color: red !important;
+  border-color: red !important;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+full-calendar {
+  margin-top: 20px;
+}
+
+.catchy-text {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #333333;
+  font-size: max(14pt);
+  font-style: italic;
+}
+
+.btn-primary {
+  background: #3f858c;
+  color: #f2e5bd;
+  border-color: #f2e5bd;
+  max-width: 50%;
+}
+
+.btn-outline-primary {
+  background: #f2e5bd;
+  color: #3f858c;
+  border-color: #3f858c;
+  max-width: 50%;
+}
+
+.btn-outline-info {
+  color: #f2a285;
+  border-color: #f2a285;
+  max-width: 50%;
+}
+
+.btn-outline-light {
+  color: #30505f;
+  border-color: #30505f;
+  max-width: 50%;
+}
+
+.btn.btn-primary:hover {
+  color: #3f858c;
+  background: #f2e5bd;
+  border-color: #3f858c;
+}
+
+.btn.btn-outline-primary:hover {
+  color: #f2e5bd;
+  background: #3f858c;
+  border-color: #f2e5bd;
+}
+
+.btn-outline-info:hover {
+  color: #f2e5bd;
+  background: #f2a285;
+  border-color: #f2e5bd;
+}
+
+.btn-outline-light:hover {
+  color: #f2e5bd;
+  background: #30505f;
+  border-color: #f2e5bd;
+}
+
+.btn-secondary:hover {
+  background: #f2e5bd;
+  color: #333333;
+  border-color: #333333;
+}
+
+#firstCarousel {
+  background: linear-gradient(to right, #f2e5bd, #f2e5bd, #f2e5bd, #f2b56b);
+}
+
+#secondCarousel {
+  background: linear-gradient(to right, #eadbcc, #eadbcc, #eadbcc, #bf7e78);
+}
+
+#thirdCarousel {
+  background: linear-gradient(
+    to right,
+    #f2e4f2,
+    #f2e4f2,
+    #f2e4f2,
+    rgba(242, 162, 155, 0.89)
+  );
+}
+
+#firstCarouselSecondRow {
+  margin-top: 10vh;
+}
+
+#secondCarouselSecondRow {
+  margin-top: 10vh;
+}
+
+.carousel-caption {
+  color: #333333;
+}
+
+.carousel-item .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.firstCarouselImg {
+  max-height: 1vh;
+}
+
+#secondCarousellImg {
+  max-height: 1vh;
+}
+
+#thirdCarouselImg {
+  max-height: 1vh;
+}
+
+#firstCarouselText {
+  max-width: 80%;
+}
+
+.blue-text {
+  color: #30505f;
+}
+
+.CarouselImg {
+  max-height: 1vh;
+}
+
+@media (max-width: 758px) {
+  .carousel-item img {
+    opacity: 0.07;
+  }
+
+  .btn-responsive {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .btn-outline-light {
+    padding-bottom: 1vh;
+  }
+
+  .text-responsive {
+    font-size: 4vh;
+  }
+
+  .catchy-text {
+    font-style: normal;
+    font-size: 3vh;
+  }
+}
