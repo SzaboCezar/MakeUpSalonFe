@@ -19,6 +19,7 @@ import { Person } from '../../../shared/models/Person.model';
 import { PersonService } from '../../../services/person.service';
 import { IntervalDTO } from '../../../shared/models/DTO/IntervalDTO.model';
 import { AppointmentService } from '../../../services/appointment.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-appointment-add',
@@ -54,6 +55,7 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
     private treatmentService: TreatmentService,
     private personService: PersonService,
     private appointmentService: AppointmentService,
+    private location: Location,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {}
@@ -261,4 +263,10 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
       this.personSubscription.unsubscribe();
     }
   }
+
+
+  onCancel(): void {
+    this.location.back();
+  }
+
 }

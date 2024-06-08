@@ -10,7 +10,7 @@
             <div class="col-md-6 mb-4 order-2 order-md-1">
               <div class="card" style="border-radius: 15px;">
                 <div class="card-body p-4 p-md-5">
-                  <h2 class="text-uppercase text-center mb-4">Questions? Book an Appointment</h2>
+                  <h2 class="text-center mb-4">Book an appointment</h2>
                   <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
                     <div class="row">
                       <div *ngIf="successMessage" class="alert alert-success">
@@ -108,10 +108,15 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-12">
+                      <div class="col-md-12 mt-2 d-flex justify-content-between">
                         <div class="form-group">
-                          <button id="singlebutton" name="singlebutton" class="btn btn-outline-success btn-lg btn-block">
-                            Make An Appointment
+                          <button id="singlebutton" name="singlebutton" class="btn btn-outline-success btn-lg">
+                            Make an appointment
+                          </button>
+                        </div>
+                        <div class="form-group">
+                          <button id="backButton" name="backButton" class="btn btn-outline-secondary btn-lg" (click)="onCancel()">
+                            Back
                           </button>
                         </div>
                       </div>
@@ -125,14 +130,13 @@
             <div class="col-md-6 mb-4 order-1 order-md-2">
               <div class="card" style="border-radius: 15px;">
                 <div class="card-body p-4 p-md-5">
-                  <h2 class="text-uppercase text-center mb-4">Why Appointment with Us</h2>
+                  <h2 class="text-center mb-4">Why us?</h2>
                   <div class="feature-block">
                     <div class="feature feature-blurb-text">
                       <h4 class="feature-title">24/7 Hours Available</h4>
                       <div class="feature-content">
                         <p>
-                          Integer nec nisi sed mi hendrerit mattis. Vestibulum mi nunc, ultricies quis vehicula et,
-                          iaculis in magnestibulum.
+                          Our services are available round the clock, ensuring you get the care you need whenever you need it.
                         </p>
                       </div>
                     </div>
@@ -140,16 +144,14 @@
                       <h4 class="feature-title">Experienced Staff Available</h4>
                       <div class="feature-content">
                         <p>
-                          Aliquam sit amet mi eu libero fermentum bibendum pulvinar a turpis. Vestibulum quis feugiat risus.
-                        </p>
+                          Our team comprises experienced professionals dedicated to providing top-notch care tailored to your needs.                        </p>
                       </div>
                     </div>
                     <div class="feature feature-blurb-text">
                       <h4 class="feature-title">Low Price & Fees</h4>
                       <div class="feature-content">
                         <p>
-                          Praesent eu sollicitudin nunc. Cras malesuada vel nisi consequat pretium. Integer auctor elementum
-                          nulla suscipit in.
+                          We offer high-quality makeup services at affordable rates, ensuring you receive excellent care without breaking the bank.
                         </p>
                       </div>
                     </div>
