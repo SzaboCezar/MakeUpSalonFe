@@ -1,102 +1,48 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar class="mb-3"></app-nav-bar>
+<main class="container-fluid pt-3 pb-5">
+  <div class="row mb-3">
+    <div class="col mt-3">
+      <h3>Treatment list</h3>
+    </div>
+    <div class="col"></div> <!-- Această coloană goală poate fi utilizată pentru a forța alinierea butonului la dreapta -->
+    <div class="col"></div> <!-- Această coloană goală poate fi utilizată pentru a forța alinierea butonului la dreapta -->
+    <div class="col"></div> <!-- Această coloană goală poate fi utilizată pentru a forța alinierea butonului la dreapta -->
+    <div class="col-auto mt-3 me-4 text-end">
+      <a routerLink="/treatment/add" class="me-2">
+        <button class="btn btn-outline-primary bi-patch-plus">
+          Add treatment
+        </button>
+      </a>
+    </div>
+  </div>
 
-<main class="container-fluid pt-3 vh-100">
-  <h3 class="d-flex justify-content-between">
-    <i>Treatment list</i>
-    <a routerLink="/treatment/add">
-      <button class="btn btn-outline-primary bi-patch-plus">
-        Add treatment
-      </button>
-    </a>
-  </h3>
 
-  <div *ngFor="let treatment of treatments">
-    <div ngbAccordion (shown)="onSelect(treatment)" [closeOthers]="true">
-      <div ngbAccordionItem="{{ treatment.treatmentID }}">
-        <h2 ngbAccordionHeader>
-          <button ngbAccordionButton>
-            <span class="p-2 border rounded-start-2">{{
-              treatment.treatmentID
-            }}</span>
-            <span class="p-2 border rounded-end-2"
-              >Treatment id: {{ treatment.treatmentID }}</span
-            >
-          </button>
-        </h2>
-        <div ngbAccordionCollapse>
-          <div ngbAccordionBody>
-            <ng-template>
-              <p>
-                <strong>Treatment name </strong> <em>{{ treatment.name }}</em>
-              </p>
-              <p>
-                <strong>Treatment description </strong>
-                <em>{{ treatment.description }}</em>
-                <br />
-                <span class="text-primary-emphasis"
-                  >Treatment estimated duration:
-                </span>
-                {{ treatment.estimatedDuration }}
-                <br />
-                <span class="text-success">Treatment price: </span>
-                {{ treatment.price }}
-                <br />
-                <ng-container
-                  *ngIf="
-                    selectedEmployeeTreatments[treatment.treatmentID]?.length >
-                      0;
-                    else noEmployeeTreatments
-                  "
-                >
-                  <div
-                    *ngFor="
-                      let employee of selectedEmployeeTreatments[
-                        treatment.treatmentID
-                      ]
-                    "
-                    class="text-success"
-                  >
-                    Employee: {{ employee.firstName }}
-                  </div>
-                </ng-container>
-                <ng-template #noEmployeeTreatments>
-                  <div>No employee treatments available.</div>
-                </ng-template>
-              </p>
+  <div class="row me-3 ms-3">
+    <div *ngFor="let treatment of treatments" class="col mb-3">
+      <div class="card h-100">
+        <img [src]="treatment.pictureUrl || 'assets/img/HomePage/Home.gif'" class="card-img-top" alt="Treatment image">
 
-              <!--Details, edit and delete buttons.-->
-              <div class="d-flex justify-content-end mx-auto">
-                <!--                <a class="mt-2 me-2" routerLink="/treatment/detail/{{treatment.treatmentID}}">-->
-                <!--                  <button type="button" class="btn btn-outline-secondary bi-sun" ngbTooltip="READ">-->
-                <!--                    Details</button>-->
-                <!--                </a>-->
-
-                <a
-                  class="mt-2 me-2"
-                  routerLink="/treatment/detail/update/{{
-                    treatment.treatmentID
-                  }}"
-                >
-                  <button
-                    type="button"
-                    class="btn btn-outline-success bi-gear"
-                    ngbTooltip="UPDATE"
-                  >
-                    Edit
-                  </button>
-                </a>
-
-                <a
-                  class="mt-2 me-2"
-                  routerLink="/treatment/delete/{{ treatment.treatmentID }}"
-                >
-                  <button type="button" class="btn btn-outline-danger">
-                    Delete
-                  </button>
-                </a>
-              </div>
-            </ng-template>
+        <div class="card-body">
+          <h6 class="card-title">{{ treatment.name }}</h6>
+          <p class="card-text text-muted">{{ treatment.description }}</p>
+          <p class="card-text"><strong>Estimated duration:</strong> {{ treatment.estimatedDuration }}</p>
+          <p class="card-text"><strong>Price:</strong> {{ treatment.price }}</p>
+          <div *ngIf="selectedEmployeeTreatments[treatment.treatmentID]?.length > 0; else noEmployeeTreatments">
+            <div *ngFor="let employee of selectedEmployeeTreatments[treatment.treatmentID]" class="text-success">
+              Employee: {{ employee.firstName }}
+            </div>
           </div>
+          <ng-template #noEmployeeTreatments>
+            <div>No employee treatments available.</div>
+          </ng-template>
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+          <a routerLink="/treatment/detail/update/{{ treatment.treatmentID }}" class="me-2">
+            <button type="button" class="btn btn-outline-success btn-sm" ngbTooltip="UPDATE">Edit</button>
+          </a>
+          <a routerLink="/treatment/delete/{{ treatment.treatmentID }}">
+            <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
+          </a>
         </div>
       </div>
     </div>
