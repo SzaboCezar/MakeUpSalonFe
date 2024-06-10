@@ -25,14 +25,13 @@ export class AuthService {
 
   //BE token expiration function: setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
   tokenExpirationTimer: any;
-  private loginUrl = 'http://localhost:8080/api/users/login'; // Replace with your backend login URL
 
   constructor(private http: HttpClient, private router: Router) {}
 
   login(authenticationRequest: AuthenticationRequest): Observable<any> {
     return this.http
       .post<AuthenticationResponse>(
-        'http://localhost:8080/api/users/login',
+        'http://localhost:8080/api/auth/login',
         authenticationRequest
       )
       .pipe(
