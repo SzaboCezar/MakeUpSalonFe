@@ -11,7 +11,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import moment from 'moment';
 import { Treatment } from '../../../shared/models/Treatment.model';
 import { TreatmentService } from '../../../services/treatment.service';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loading-spinner.component';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { EmployeeTreatment } from '../../../shared/models/EmployeeTreatment.model';
@@ -42,7 +42,7 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
   personSubscription: Subscription;
   treatments: Treatment[];
   selectedEmployeeTreatments: Person[] = [];
-  employeeTreatments: EmployeeTreatment[] = [];
+  employeeTreatments: any[] = [];
   unavailableTimes: IntervalDTO[] = [];
   availableTimes: string[] = [];
   isLoading = true;
@@ -124,8 +124,11 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
   }
 
   extractEmployeeTreatments(treatments: Treatment[]): void {
-    this.employeeTreatments = treatments.flatMap(
-      (treatment) => treatment.employeeTreatments
+    this.employeeTreatments = treatments.flatMap((treatment) =>
+      treatment.employeeIds.map((id) => ({
+        treatmentID: treatment.treatmentID,
+        employeeID: id,
+      }))
     );
     console.log('Extracted employee treatments:', this.employeeTreatments);
   }
@@ -135,13 +138,26 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
       (treatment) => treatment.treatmentID === treatmentId
     );
     if (selectedTreatment) {
-      this.selectedEmployeeTreatments =
-        selectedTreatment.employeeTreatments.map((et) => et.employee);
-      console.log('Selected employees:', this.selectedEmployeeTreatments);
+      const employeeObservables = selectedTreatment.employeeIds.map((id) =>
+        this.personService.getPersonById(id)
+      );
+
+      forkJoin(employeeObservables).subscribe(
+        (employees: Person[]) => {
+          this.selectedEmployeeTreatments = employees;
+          console.log('Selected employees:', this.selectedEmployeeTreatments);
+          this.cdr.detectChanges();
+        },
+        (error) => {
+          console.error('Error fetching employee details', error);
+          this.selectedEmployeeTreatments = [];
+          this.cdr.detectChanges();
+        }
+      );
     } else {
       this.selectedEmployeeTreatments = [];
+      this.cdr.detectChanges();
     }
-    this.cdr.detectChanges();
   }
 
   isTimeUnavailable(time: string, date: string): boolean {
@@ -264,9 +280,7 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
     }
   }
 
-
   onCancel(): void {
     this.location.back();
   }
-
 }

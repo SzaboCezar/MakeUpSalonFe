@@ -43,18 +43,20 @@
                 <br />
                 <ng-container
                   *ngIf="
-                    treatment.employeeTreatments &&
-                      treatment.employeeTreatments.length > 0;
+                    selectedEmployeeTreatments[treatment.treatmentID]?.length >
+                      0;
                     else noEmployeeTreatments
                   "
                 >
                   <div
                     *ngFor="
-                      let employeeTreatment of treatment.employeeTreatments
+                      let employee of selectedEmployeeTreatments[
+                        treatment.treatmentID
+                      ]
                     "
                     class="text-success"
                   >
-                    Employee: {{ employeeTreatment.employee.firstName }}
+                    Employee: {{ employee.firstName }}
                   </div>
                 </ng-container>
                 <ng-template #noEmployeeTreatments>
