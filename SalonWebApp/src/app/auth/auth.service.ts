@@ -1,11 +1,11 @@
 // src/app/services/authentification.services.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import {BehaviorSubject, catchError, Observable, of, switchMap, throwError} from 'rxjs';
 import { AuthenticationRequest } from '../shared/models/AuthenticationRequest.model';
 import { RegisterRequest } from '../shared/models/RegisterRequest.model';
 import { AuthenticationResponse } from '../shared/models/AuthenticationResponse.model';
-import { tap } from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import { User } from '../shared/models/User.model';
 import { Router } from '@angular/router';
 import { Role } from '../shared/models/Enum/Role.enum';
@@ -120,19 +120,28 @@ export class AuthService {
       this.logout();
     }, expirationDuration);
   }
-
   singUp(registerRequest: RegisterRequest): Observable<any> {
-    return this.http
-      .post<AuthenticationResponse>(
-        'http://localhost:8080/api/users/register',
-        registerRequest
-      )
-      .pipe(
-        catchError(this.handleError),
-        tap((response) => {
-          this.handleAuthentication(response.token);
-        })
-      );
+    return this.checkUserExists(registerRequest.email).pipe(
+      switchMap((userExists) => {
+        if (userExists) {
+          console.log('User already exists!');
+          throw new Error('The email is already in use'); // Mesajul de eroare personalizat pentru eroarea de la înregistrare
+        } else {
+          return this.http.post<AuthenticationResponse>(
+            'http://localhost:8080/api/auth/register',
+            registerRequest
+          ).pipe(
+            catchError(error => {
+              console.error('An error occurred during registration:', error);
+              throw new Error('Registration failed, please try again later.'); // Mesajul de eroare personalizat pentru eroarea de la înregistrare
+            }),
+            tap((response) => {
+              this.handleAuthentication(response.token);
+            })
+          );
+        }
+      })
+    );
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -218,4 +227,22 @@ export class AuthService {
       throw error;
     }
   }
+
+  private checkUserExists(email: string): Observable<boolean> {
+    return this.getUserByEmail(email).pipe(
+      map(user => true), // If we get a user, return true
+      catchError(error => {
+        if (error.status === 404) {
+          // If we receive a 404 status (Not Found), it means the user does not exist
+          return of(false);
+        } else {
+          // Otherwise, handle the error without rethrowing it
+          throw new Error('An error occurred while verifying the user', error);
+          // You can do anything else necessary with the error here
+        }
+      })
+    );
+  }
+
+
 }

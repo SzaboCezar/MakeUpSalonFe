@@ -9,7 +9,7 @@ import {RegisterRequest} from "../shared/models/RegisterRequest.model";
   providedIn: 'root'
 })
 export class EnrollmentService {
-  private enrollmentURL = 'http://localhost:8080/api/users/register'; // Replace with your backend login URL
+  // private enrollmentURL = 'http://localhost:8080/api/login/register'; // Replace with your backend login URL
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
