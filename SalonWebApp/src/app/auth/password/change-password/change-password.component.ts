@@ -28,16 +28,15 @@ export class ChangePasswordComponent {
     private router: Router,
     private route: ActivatedRoute) {}
 
-  //TODO: enable validators.
   ngOnInit(): void {
 
     if(this.passwordService.checkUserId()) {
       console.log("Change Password Component | ngOnInit() | userId: ", this.passwordService.checkUserId());
       this.changeForm = new FormGroup({
-        // newPassword: new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
-        newPassword: new FormControl(null, Validators.required),
-        // confirmPassword: new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)])
-        confirmationPassword: new FormControl(null, Validators.required)
+        newPassword: new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
+        // newPassword: new FormControl(null, Validators.required),
+        confirmPassword: new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)])
+        // confirmationPassword: new FormControl(null, Validators.required)
       });
     } else {
       //Dacă nu există un ID de utilizator, navighează înapoi la pagina de autentificare pentru a evita eventual errori.
@@ -46,6 +45,11 @@ export class ChangePasswordComponent {
   }
 
   onSubmit() {
+    if (this.changeForm.get('newPassword').value !== this.changeForm.get('confirmationPassword').value) {
+      this.error = 'Passwords do not match!';
+      return;
+    }
+
     console.log(this.changeForm);
     const changePasswordRequest: ChangePasswordRequest = this.changeForm.getRawValue();
     console.log("Change Password Component | changePasswordRequest: ", changePasswordRequest);
