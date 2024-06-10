@@ -60,7 +60,7 @@ export class TreatmentService {
   // }
 
   addTreatment(treatment: Treatment): Observable<Treatment> {
-    if (!treatment || !treatment.treatmentID || treatment.treatmentID <= 0) {
+    if (!treatment) {
       this.logService.add(
         `TreatmentService | Treatment Add: treatment is undefined - ${Date.now()}`
       );

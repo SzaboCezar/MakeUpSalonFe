@@ -1,9 +1,14 @@
-<section class="vh-100 bg-image" style="background-image: url('./assets/img/Enrollment/Enrollment_Wallpaper.jpg');">
+<section
+  class="vh-100 bg-image"
+  style="
+    background-image: url('./assets/img/Enrollment/Enrollment_Wallpaper.jpg');
+  "
+>
   <div class="mask d-flex align-items-center h-100 gradient-custom-3">
     <div class="container">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-          <div class="card" style="border-radius: 15px;">
+          <div class="card" style="border-radius: 15px">
             <div class="card-body p-4 p-md-5">
               <h2 class="text-center mb-4">Add Treatment</h2>
 
@@ -12,60 +17,141 @@
                   <div class="row row-cols-2">
                     <div class="col col-6">
                       <div class="form-outline mb-3">
-                        <label class="form-label text-nowrap" for="treatmentID">Treatment ID:</label>
-                        <input type="number" id="treatmentID" formControlName="treatmentID" placeholder="Treatment id" class="form-control form-control-sm" />
+                        <label class="form-label text-nowrap" for="treatmentID"
+                          >Treatment ID:</label
+                        >
+                        <input
+                          type="number"
+                          id="treatmentID"
+                          formControlName="treatmentID"
+                          placeholder="Treatment id"
+                          class="form-control form-control-sm"
+                        />
                       </div>
                     </div>
                     <div class="col col-6">
                       <div class="form-outline mb-3">
-                        <label class="form-label text-nowrap" for="treatment-name">Treatment Name:</label>
-                        <input type="text" id="treatment-name" formControlName="name" placeholder="Treatment name" class="form-control form-control-sm" />
+                        <label
+                          class="form-label text-nowrap"
+                          for="treatment-name"
+                          >Treatment Name:</label
+                        >
+                        <input
+                          type="text"
+                          id="treatment-name"
+                          formControlName="name"
+                          placeholder="Treatment name"
+                          class="form-control form-control-sm"
+                        />
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col col-sm-12">
-                      <label for="treatment-description" class="form-label text-nowrap">Treatment description:</label>
-                      <textarea id="treatment-description" formControlName="description" class="form-control" placeholder="Description" aria-label="Description"></textarea>
+                      <label
+                        for="treatment-description"
+                        class="form-label text-nowrap"
+                        >Treatment description:</label
+                      >
+                      <textarea
+                        id="treatment-description"
+                        formControlName="description"
+                        class="form-control"
+                        placeholder="Description"
+                        aria-label="Description"
+                      ></textarea>
                     </div>
                   </div>
                   <div class="row row-cols-2 mt-3">
                     <div class="col col-6">
                       <div class="form-outline mb-3">
-                        <label class="form-label text-nowrap" for="estimatedDuration">Estimated Duration:</label>
-                        <input type="number" id="estimatedDuration" formControlName="estimatedDuration" placeholder="Estimated Duration" class="form-control form-control-sm" />
+                        <label
+                          class="form-label text-nowrap"
+                          for="estimatedDuration"
+                          >Estimated Duration:</label
+                        >
+                        <input
+                          type="number"
+                          id="estimatedDuration"
+                          formControlName="estimatedDuration"
+                          placeholder="Estimated Duration"
+                          class="form-control form-control-sm"
+                        />
                       </div>
                     </div>
                     <div class="col col-6">
                       <div class="form-outline mb-3">
-                        <label class="form-label text-nowrap" for="price">Price:</label>
-                        <input type="number" id="price" formControlName="price" placeholder="Price" class="form-control form-control-sm" />
+                        <label class="form-label text-nowrap" for="price"
+                          >Price:</label
+                        >
+                        <input
+                          type="number"
+                          id="price"
+                          formControlName="price"
+                          placeholder="Price"
+                          class="form-control form-control-sm"
+                        />
                       </div>
                     </div>
                   </div>
                   <div class="row row-cols-2">
                     <div class="col col-sm-12">
                       <div class="form-outline mb-3">
-                        <label class="form-label text-nowrap" for="pictureURL">Picture URL:</label>
-                        <input type="url" id="pictureURL" formControlName="pictureURL" placeholder="Picture URL" class="form-control form-control-sm" />
+                        <label class="form-label text-nowrap" for="pictureUrl"
+                          >Picture URL:</label
+                        >
+                        <input
+                          type="url"
+                          id="pictureUrl"
+                          formControlName="pictureUrl"
+                          placeholder="Picture URL"
+                          class="form-control form-control-sm"
+                        />
                       </div>
                     </div>
                     <div class="col col-sm-12">
                       <div class="form-outline mb-3">
-                        <label class="form-label text-nowrap" for="treatment-employeeTreatmentsID">Employee treatment id:</label>
-                        <select id="treatment-employeeTreatmentsID" class="form-control" formControlName="employeeTreatments" aria-label="Treatment id" ngbTooltip="Please select from the list">
-                          <option value="" disabled selected>Please select an Employee Treatment ID from the list:</option>
-                          <option *ngFor="let employeeTreatment of employeeTreatments" [value]="employeeTreatment.employeeTreatmentsID">{{employeeTreatment.employeeTreatmentsID}}</option>
+                        <label class="form-label text-nowrap" for="employeeId"
+                          >Employee:</label
+                        >
+                        <select
+                          id="employeeId"
+                          class="form-control"
+                          formControlName="employeeId"
+                          aria-label="Employee ID"
+                          ngbTooltip="Please select from the list"
+                        >
+                          <option value="" disabled selected>
+                            Please select an Employee from the list:
+                          </option>
+                          <option
+                            *ngFor="let employee of employees"
+                            [value]="employee.personId"
+                          >
+                            {{ employee.firstName }} {{ employee.lastName }}
+                          </option>
                         </select>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                  <button [disabled]="!addTreatmentForm.valid" id="addTreatmentButton" class="btn btn-outline-success" type="button" (click)="onAdd();" routerLink="/treatments">Add</button>
+                  <button
+                    id="addTreatmentButton"
+                    class="btn btn-outline-success"
+                    type="button"
+                    (click)="onAdd()"
+                    routerLink="/treatments"
+                  >
+                    Add
+                  </button>
                 </div>
-                <p id="goBackButton" class="text-center text-muted small mt-1 mb-0" (click)="onBack()">
-                  <a class="fw-bold text-body" style="cursor: pointer;">Back</a>
+                <p
+                  id="goBackButton"
+                  class="text-center text-muted small mt-1 mb-0"
+                  (click)="onBack()"
+                >
+                  <a class="fw-bold text-body" style="cursor: pointer">Back</a>
                 </p>
               </form>
             </div>
