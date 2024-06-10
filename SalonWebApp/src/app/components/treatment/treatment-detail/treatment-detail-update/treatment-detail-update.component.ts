@@ -47,7 +47,7 @@ export class TreatmentDetailUpdateComponent implements OnInit {
         Validators.required,
       ]),
       price: new FormControl(this.treatment.price, [Validators.required]),
-      pictureURL: new FormControl(this.treatment.pictureURL, [
+      pictureUrl: new FormControl(this.treatment.pictureUrl, [
         Validators.required,
       ]),
       //TODO: make it required after we have the employeeTreatments
