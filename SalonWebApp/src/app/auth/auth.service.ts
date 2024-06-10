@@ -226,7 +226,7 @@ export class AuthService {
     }
   }
 
-  private checkUserExists(email: string): Observable<boolean> {
+  public checkUserExists(email: string): Observable<boolean> {
     return this.getUserByEmail(email).pipe(
       map(user => true), // If we get a user, return true
       catchError(error => {
