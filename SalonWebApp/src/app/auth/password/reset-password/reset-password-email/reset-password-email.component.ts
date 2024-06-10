@@ -1,10 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Router, RouterLink} from "@angular/router";
-import cryptoRandomString from 'crypto-random-string';
-import {ResetPasswordEmailService} from "./reset-password-email.service";
-import {NgIf} from "@angular/common";
-
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
+import { ResetPasswordEmailService } from "./reset-password-email.service";
+import { NgIf } from "@angular/common";
 
 @Component({
   selector: 'app-reset-password-email',
@@ -21,6 +19,7 @@ import {NgIf} from "@angular/common";
 export class ResetPasswordEmailComponent implements OnInit {
   resetForm: FormGroup;
   emailSent: boolean = false;
+  error: string = null;
 
   constructor(
     private resetPasswordEmailService: ResetPasswordEmailService,
@@ -32,23 +31,20 @@ export class ResetPasswordEmailComponent implements OnInit {
     });
   }
 
- async onSubmit() {
-    // console.log(this.resetForm);
+  async onSubmit() {
+    this.error = null;
+    this.emailSent = false;
     const userEmail: string = this.resetForm.value.user_email;
-    const result = await this.resetPasswordEmailService.sendResetEmail(userEmail);
-
-
-    if (result.success) {
-     // Handle success (e.g., show a success message)
-     console.log(result.message);
-
-      //TODO: Handle success (e.g., show a success message)
-      this.emailSent = true;
-
-      this.resetForm.reset();
-    } else {
-     // Handle failure (e.g., show an error message)
-     console.log(result.message);
-   }
+    try {
+      const result = await this.resetPasswordEmailService.sendResetEmail(userEmail);
+      if (result.success) {
+        this.emailSent = true;
+        this.resetForm.reset();
+      } else {
+        this.error = result.message;
+      }
+    } catch (err) {
+      this.error = 'An unexpected error occurred. Please try again.';
+    }
   }
 }

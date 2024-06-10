@@ -6,7 +6,6 @@ import {FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Valida
 import {NgIf} from "@angular/common";
 import {AuthenticationRequest} from "../shared/models/AuthenticationRequest.model";
 import {LoadingSpinnerComponent} from "../components/dom-element/loading-spinner/loading-spinner.component";
-import {LoadingService} from "../services/loading.service";
 
 @Component({
   selector: 'app-auth',

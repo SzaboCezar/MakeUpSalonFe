@@ -4,6 +4,7 @@ import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { ChangePasswordRequest } from "../../shared/models/DTO/ChangePasswordRequestDTO.model";
 import {ResetPasswordRequest} from "../../shared/models/ResetPasswordRequest.model";
+import {er} from "@fullcalendar/core/internal-common";
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class PasswordService {
         catchError(error => {
           // Tratează erorile și emite eroarea mai departe
           console.error("A apărut o eroare în timpul apelului HTTP:", error);
-          return throwError(error);
+          throw new Error(error.message);
         })
       );
   }
@@ -68,16 +69,22 @@ export class PasswordService {
     }
   }
 
+  checkEmailTokenInLocalStorage(): boolean {
+    const emailTokenData = localStorage.getItem('emailToken');
 
+    if (emailTokenData) {
+      const { emailToken } = JSON.parse(emailTokenData);
 
-
-
-
-
-
-
-
-
-
-
+      if (emailToken) {
+        console.log('Email token found in local storage:', emailToken);
+        return true;
+      } else {
+        console.log('Invalid email token in local storage.');
+        return false;
+      }
+    } else {
+      console.log('No email token found in local storage.');
+      return false;
+    }
+  }
 }
