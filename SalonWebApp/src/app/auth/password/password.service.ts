@@ -10,14 +10,15 @@ import {ResetPasswordRequest} from "../../shared/models/ResetPasswordRequest.mod
 })
 export class PasswordService {
 
-  private resetPasswordURL = 'http://localhost:8080/api/users/recover-password/email/';
-  private changePasswordURL = 'http://localhost:8080/api/users/recover-password/id/';
+  private resetPasswordURL = 'http://localhost:8080/api/auth/recover-password/email/';
+  private changePasswordURL = 'http://localhost:8080/api/auth/recover-password/id/';
 
 
   constructor(private http: HttpClient) { }
 
   resetPassword(resetPasswordRequest: ResetPasswordRequest, email: string): Observable<any> {
     const url = `${this.resetPasswordURL}${email}`; // Construiește URL-ul complet cu adresa de email
+
 
     console.log("Reset Password Service | resetPasswordRequest: ", resetPasswordRequest);
     localStorage.removeItem('emailToken');

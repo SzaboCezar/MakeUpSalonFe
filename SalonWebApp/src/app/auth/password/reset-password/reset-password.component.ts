@@ -55,7 +55,7 @@ export class ResetPasswordComponent implements OnInit {
       },
       error => {
         console.log(error);
-        this.error = "Error: password was not reset!";
+        this.error = "Password was not reset!";
       }
     );
   }

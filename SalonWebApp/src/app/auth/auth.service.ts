@@ -10,7 +10,6 @@ import { User } from '../shared/models/User.model';
 import { Router } from '@angular/router';
 import { Role } from '../shared/models/Enum/Role.enum';
 import { Person } from '../shared/models/Person.model';
-import { em, ex } from '@fullcalendar/core/internal-common';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
