@@ -127,3 +127,68 @@
     font-size: 0.8rem;
   }
 }
+
+
+.lds-ellipsis,
+.lds-ellipsis div {
+  box-sizing: border-box;
+  color: #74b3b9;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 40px; /* Redu dimensiunea spinner-ului */
+  height: 40px; /* Redu dimensiunea spinner-ului */
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 18px; /* Ajustează poziția de la partea de sus */
+  width: 7px; /* Redu dimensiunea punctelor */
+  height: 7px; /* Redu dimensiunea punctelor */
+  border-radius: 50%;
+  background: currentColor;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 3px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 3px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 16px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 29px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(12px, 0); /* Ajustează distanța dintre puncte */
+  }
+}
+
+
+

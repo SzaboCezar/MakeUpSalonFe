@@ -37,7 +37,11 @@
         </li>
       </ul>
 
-      <div class="dropdown-center ms-auto">
+      <div *ngIf="!isAuthenticated">
+          <a class="dropdown-item bi bi-person-add text-start" routerLink="/enrollment"> Create account</a>
+      </div>
+
+      <div *ngIf="isAuthenticated" class="dropdown-center ms-auto">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center"
           href="#"
@@ -53,26 +57,25 @@
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="dropdownMenuButton">
           <li>
-            <a *ngIf="isAuthenticated" class="dropdown-item text-start" routerLink="/change-password">Change Password</a>
+            <a
+              class="dropdown-item text-start bi bi-journal-check"
+              routerLink="/my-appointments"
+              > My appointments</a
+            >
           </li>
           <li>
-            <a
-              class="dropdown-item text-start"
-              href="#"
-              routerLink="/my-appointments"
-              >My appointments</a
-            >
+            <a class="dropdown-item text-start bi bi-clipboard-heart" routerLink="/treatments"> Treatments</a>
+          </li>
+          <li>
+            <a class="dropdown-item text-start bi bi-patch-plus" routerLink="/treatment/add"> Add treatment</a>
           </li>
           <hr/>
           <li>
-            <a class="dropdown-item text-start"routerLink="/treatments">Treatments</a>
-          </li>
-          <li>
-            <a class="dropdown-item text-start"routerLink="/treatment/add">Add treatment</a>
+            <a class="dropdown-item text-start bi bi-shield-lock" routerLink="/change-password"> Change Password</a>
           </li>
         </ul>
       </div>
-      <div class="ms-3">
+      <div class="mt-3 mt-md-0 ms-md-3">
         <a *ngIf="!isAuthenticated" id="signin" routerLink="/auth" class="btn btn-outline-info small-button">Login</a>
         <a *ngIf="isAuthenticated" id="logout" (click)="onLogout()" routerLink="/auth" class="btn btn-outline-danger small-button">Logout</a>
       </div>

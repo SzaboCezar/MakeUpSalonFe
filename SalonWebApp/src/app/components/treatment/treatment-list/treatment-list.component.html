@@ -22,7 +22,7 @@
 
     <div id="treatment{{treatment.treatmentID}}" *ngFor="let treatment of treatments" class="col mb-3">
       <div class="card h-100">
-        <img [src]="treatment.pictureUrl || 'assets/img/HomePage/Home.gif'" class="card-img-top" alt="Treatment image">
+        <img [src]="treatment.pictureUrl"  (error)="handleImageError($event)" class="card-img-top" alt="Treatment image">
 
         <div class="card-body">
           <h6 class="card-title">{{ treatment.name }}</h6>
@@ -30,23 +30,76 @@
           <p class="card-text"><strong>Estimated duration:</strong> {{ treatment.estimatedDuration }}</p>
           <p class="card-text"><strong>Price:</strong> {{ treatment.price }}</p>
           <div *ngIf="selectedEmployeeTreatments[treatment.treatmentID]?.length > 0; else noEmployeeTreatments">
-            <div *ngFor="let employee of selectedEmployeeTreatments[treatment.treatmentID]" class="text-success">
-              Employee: {{ employee.firstName }}
+            <strong class="mb-1" style="color: #0c5460">Employee:</strong>
+            <div id="emplyee{{employee.personId}}" *ngFor="let employee of selectedEmployeeTreatments[treatment.treatmentID]" class="ms-2">
+              <span style="color: #0c5460"> • </span> {{ employee.firstName }} {{ employee.lastName }}
             </div>
           </div>
           <ng-template #noEmployeeTreatments>
-            <div>No employee treatments available.</div>
+<!--            <div>No employee treatments available.</div>-->
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
           </ng-template>
         </div>
         <div class="card-footer d-flex justify-content-end">
           <a routerLink="/treatment/detail/update/{{ treatment.treatmentID }}" class="me-2">
             <button type="button" class="btn btn-outline-success btn-sm" ngbTooltip="UPDATE">Edit</button>
           </a>
-          <a routerLink="/treatment/delete/{{ treatment.treatmentID }}">
-            <button type="button" class="btn btn-outline-danger btn-sm">Delete</button>
-          </a>
+
+<!--          <button *ngIf="selectedEmployeeTreatments[treatment.treatmentID]?.length <= 0" (click)="onSelect(treatment)" type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"  ngbTooltip="ID: {{treatment.treatmentID}}">Delete</button>-->
+          <button (click)="onSelect(treatment)" type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"  ngbTooltip="ID: {{treatment.treatmentID}}">Delete</button>
+
         </div>
       </div>
     </div>
   </div>
 </main>
+
+<!-- Modal delete-->
+<div *ngIf="selectedTreatment != undefined" class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel">Are you sure?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       You are about to delete the treatment:
+        <p>
+          <span class="text-danger">{{selectedTreatment.name}}</span> with <strong>estimated duration</strong> {{selectedTreatment.estimatedDuration}} and <strong>price</strong> {{selectedTreatment.price}}
+        </p>
+        <p class="text-muted">
+          Affected employees IDs: {{selectedTreatment.employeeIds}}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-outline-danger me-2" type="button" data-bs-dismiss="modal" (click)="onConfirm()">
+          Delete treatment
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal error -->
+<div #errorModal class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="errorModalLabel">Something went wrong. Please try again later.</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        We could not delete the treatment:
+        <p>
+          <span class="text-danger">{{selectedTreatment.name}}</span> with <strong>estimated duration</strong> {{selectedTreatment.estimatedDuration}} and <strong>price</strong> {{selectedTreatment.price}}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
