@@ -11,6 +11,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TreatmentService {
   private baseUrl: string = 'http://localhost:8080/api/treatments';
+  private baseUrlUpdate: string =
+    'http://localhost:8080/api/treatment/detail/update';
 
   treatmentsChanged = new Subject<Treatment[]>();
 
@@ -128,7 +130,10 @@ export class TreatmentService {
     }
 
     return this.http
-      .put<Treatment>(`${this.baseUrl}/${treatmentIndex}`, treatmentToBeUpdated)
+      .put<Treatment>(
+        `${this.baseUrl}/${treatmentToBeUpdated.treatmentID}`,
+        treatmentToBeUpdated
+      )
       .pipe(
         tap((updatedTreatment: Treatment) => {
           console.log(
