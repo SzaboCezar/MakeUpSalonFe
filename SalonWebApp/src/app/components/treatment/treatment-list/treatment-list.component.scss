@@ -4,13 +4,13 @@
   padding-bottom: 2rem; /* Adăugăm un padding la partea de jos a containerului */
 }
 
-.btn.btn-outline-primary {
-  color: #F2A285;
-  background: #F2E5BD;
-  border-color: #F2B56B;
+.bi-patch-plus {
+  background: #F2B56B;
+  color: green;
+  border-color: green;
 }
 
-.btn-outline-primary:hover {
+.bi-patch-plus:hover {
   background: #F2B56B;
   color: #F2E5BD;
   border-color: #F2E5BD;
@@ -75,10 +75,18 @@
   }
 }
 
+@media screen and (min-width: 2048px) {
+  /* Stilizare pentru titlul "Treatment list" */
+  .titleRow {
+    margin-left: 2.3rem;
+    padding-right: 100vh;
+  }
+}
+
 /* Diminuarea dimensiunilor pe ecrane mici */
 @media screen and (max-width: 768px) {
   .card {
-    max-width: 25vh;
+    max-width: 50vh;
   }
 
   .card-title {
@@ -100,7 +108,7 @@
 
 @media screen and (max-width: 576px) {
   .card {
-    max-width: 20vh;
+    max-width: 100vh;
   }
 
   .card-title {
@@ -117,21 +125,5 @@
 
   .card-text {
     font-size: 0.8rem;
-  }
-}
-
-/* Container pentru aliniere */
-.header-container,
-.footer-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  //padding: 0 10rem;
-}
-
-@media (max-width: 1200px) {
-  .header-container,
-  .footer-container {
-    //padding: 0 5rem;
   }
 }
