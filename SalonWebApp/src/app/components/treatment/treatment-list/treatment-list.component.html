@@ -1,7 +1,7 @@
 <app-nav-bar class="mb-3"></app-nav-bar>
 <main class="container-fluid pt-3 pb-5">
-  <div class="row titleRow mb-3 text-left">
-    <div class="col col-12">
+  <div class="row titleRow ms-2 mb-3 text-left">
+    <div class="col col-12 ms-1">
       <h3>Treatment list</h3> <!-- Adăugarea clasei "title" aici -->
       <a routerLink="/treatment/add" class="ms-2" ngbTooltip="Add new treatment">
         <a routerLink="/treatment/add">
@@ -29,7 +29,8 @@
           <p class="card-text text-muted">{{ treatment.description }}</p>
           <p class="card-text"><strong>Estimated duration:</strong> {{ treatment.estimatedDuration }}</p>
           <p class="card-text"><strong>Price:</strong> {{ treatment.price }}</p>
-          <div *ngIf="selectedEmployeeTreatments[treatment.treatmentID]?.length > 0; else noEmployeeTreatments">
+
+                    <div *ngIf="selectedEmployeeTreatments[treatment.treatmentID]?.length > 0; else noEmployeeTreatments">
             <strong class="mb-1" style="color: #0c5460">Employee:</strong>
             <div id="emplyee{{employee.personId}}" *ngFor="let employee of selectedEmployeeTreatments[treatment.treatmentID]" class="ms-2">
               <span style="color: #0c5460"> • </span> {{ employee.firstName }} {{ employee.lastName }}

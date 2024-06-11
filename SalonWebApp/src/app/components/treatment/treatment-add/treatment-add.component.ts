@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Treatment } from '../../../shared/models/Treatment.model';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { TreatmentService } from '../../../services/treatment.service';
 import { LogsService } from '../../../logs/logs.service';
 import { Location, NgForOf, NgIf } from '@angular/common';
@@ -19,12 +19,13 @@ import { PersonService } from '../../../services/person.service';
 import { User } from '../../../shared/models/User.model';
 import { Person } from '../../../shared/models/Person.model';
 import { forkJoin } from 'rxjs';
+import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-treatment-add',
   styleUrls: ['./treatment-add.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, LoadingSpinnerComponent, NgIf, NgForOf],
+  imports: [ReactiveFormsModule, LoadingSpinnerComponent, NgIf, NgForOf, NgbTooltip, RouterLink],
   templateUrl: './treatment-add.component.html',
 })
 export class TreatmentAddComponent implements OnInit {
@@ -49,7 +50,8 @@ export class TreatmentAddComponent implements OnInit {
     private location: Location,
     private employeeTreatmentService: EmployeeTreatmentService,
     private userService: UserService,
-    private personService: PersonService
+    private personService: PersonService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -120,7 +122,6 @@ export class TreatmentAddComponent implements OnInit {
                 this.logService.add(
                   `EmployeeTreatment added for treatmentID ${treatment.treatmentID}`
                 );
-                this.location.back();
               },
               (error) => {
                 console.error('Error while adding employee treatment:', error);
