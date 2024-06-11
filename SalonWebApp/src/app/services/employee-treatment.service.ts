@@ -42,12 +42,32 @@ export class EmployeeTreatmentService {
 
   getEmployeeTreatment(id: number): Observable<EmployeeTreatment> {
     const employeeTreatment = this.employeeTreatments.find(
-      (h) => h.employeeTreatmentsID === id
+      (h) => h.employeeTreatmentsId === id
     ) as EmployeeTreatment;
     this.logService.add(
       `EmployeeTreatmentService | getEmployeeTreatment: fetched employeeTreatment with id=${id}`
     );
     return of(employeeTreatment);
+  }
+
+  getEmployeeTreatmentById(id: number): Observable<EmployeeTreatment> {
+    return this.http.get<EmployeeTreatment>(`${this.baseUrl}/${id}`).pipe(
+      tap((employeeTreatment) => {
+        this.logService.add(
+          `EmployeeTreatmentService | getEmployeeTreatmentById: fetched employeeTreatment with id=${id}`
+        );
+      }),
+      catchError((error) => {
+        console.error(
+          `Error while fetching employeeTreatment with id=${id}:`,
+          error
+        );
+        this.logService.add(
+          `EmployeeTreatmentService | getEmployeeTreatmentById: error fetching employeeTreatment with id=${id}`
+        );
+        return of({} as EmployeeTreatment);
+      })
+    );
   }
 
   addEmployeeTreatment(
@@ -60,22 +80,6 @@ export class EmployeeTreatmentService {
       throw new Error('EmployeeTreatment is undefined');
     }
 
-    // employeeTreatment.employeeTreatmentsID =
-    //   +employeeTreatment.employeeTreatmentsID;
-
-    // if (
-    //   this.employeeTreatments.find(
-    //     (h) => h.employeeTreatmentsID === employeeTreatment.employeeTreatmentsID
-    //   )
-    // ) {
-    //   this.logService.add(
-    //     `EmployeeTreatment | Treatment Add: employeeTreatment with id=${
-    //       employeeTreatment.employeeTreatmentsID
-    //     } already exists - ${Date.now()}`
-    //   );
-    //   throw new Error('EmployeeTreatment with this id already exists');
-    // }
-
     return this.http
       .post<EmployeeTreatment>(`${this.baseUrl}`, employeeTreatment)
       .pipe(
@@ -87,13 +91,58 @@ export class EmployeeTreatmentService {
           this.employeeTreatments.push(newEmployeeTreatment);
           this.employeeTreatmentsChanged.next(this.employeeTreatments.slice());
           this.logService.add(
-            `EmployeeTreatmentService | Treatment Add: added ${employeeTreatment.employeeTreatmentsID}`
+            `EmployeeTreatmentService | Treatment Add: added ${employeeTreatment.employeeTreatmentsId}`
           );
         }),
         catchError((error) => {
           console.error('Error while adding employeeTreatment:', error);
           this.logService.add(
-            `EmployeeTreatmentService | EmployeeTreatment Add: error adding ${employeeTreatment.employeeTreatmentsID}`
+            `EmployeeTreatmentService | EmployeeTreatment Add: error adding ${employeeTreatment.employeeTreatmentsId}`
+          );
+          throw error;
+        })
+      );
+  }
+
+  /*
+   * Updates an existing employeeTreatment.
+   */
+  updateEmployeeTreatment(
+    id: number,
+    employeeTreatment: EmployeeTreatment
+  ): Observable<EmployeeTreatment> {
+    if (!employeeTreatment) {
+      this.logService.add(
+        `EmployeeTreatmentService | EmployeeTreatment Update: employeeTreatment is undefined or missing ID - ${Date.now()}`
+      );
+      throw new Error('EmployeeTreatment is undefined or missing ID');
+    }
+
+    return this.http
+      .put<EmployeeTreatment>(`${this.baseUrl}/${id}`, employeeTreatment)
+      .pipe(
+        tap((updatedEmployeeTreatment: EmployeeTreatment) => {
+          console.log(
+            'EmployeeTreatment Service | Treatment Update | Put employeeTreatment: ',
+            updatedEmployeeTreatment
+          );
+          const index = this.employeeTreatments.findIndex(
+            (et) => et.employeeTreatmentsId === id
+          );
+          if (index !== -1) {
+            this.employeeTreatments[index] = updatedEmployeeTreatment;
+            this.employeeTreatmentsChanged.next(
+              this.employeeTreatments.slice()
+            );
+          }
+          this.logService.add(
+            `EmployeeTreatmentService | Treatment Update: updated ${employeeTreatment.employeeTreatmentsId}`
+          );
+        }),
+        catchError((error) => {
+          console.error('Error while updating employeeTreatment:', error);
+          this.logService.add(
+            `EmployeeTreatmentService | EmployeeTreatment Update: error updating ${employeeTreatment.employeeTreatmentsId}`
           );
           throw error;
         })
