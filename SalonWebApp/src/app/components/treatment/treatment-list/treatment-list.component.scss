@@ -1,69 +1,194 @@
-///* PlantCareComponent's private CSS styles */
-
-//Accordion component customisation (x2 steps).
-//For the button shadow it was harder to modify the colors, because the syntax is harder. We had to set the radius
-//(raza sau dimensiunile umbrei, reminder rem reprezintă unitate de măsură) and after we can set the color.
-
-// 1. Set the accordion variables to those custom colors.
-//$accordion-button-active-bg: rgba(77, 80, 105, 0.3);
-//$accordion-button-focus-box-shadow: 0 0 0 0.25rem rgba(86, 68, 109, 0.4);
-
-//We have set the bg and color same as the body and now we cannot se it.
-//$accordion-button-bg:   rgba(237, 237, 237, 0.7);
-//$accordion-border-color: linear-gradient(0deg, rgba(192, 192, 211, 0.5) 3%, rgba(181, 178, 203, 0.5) 12%, rgba(188, 174, 207, 0.5) 33%);
-
-
-// 3. We must to import Bootstrap's styles modules.
-//We can choose between importing everything, only what we need.
-//I have imported everything because for now is easier.
-//The import is only after defining the variables.
-
-//https://getbootstrap.com/docs/5.3/customize/sass/#file-structure
-
-//@import "node_modules/bootstrap/scss/bootstrap";
-
-//.badge{
-//  text-align: center;
-//  background-color: #56446d;
-//  background-image: linear-gradient(43deg, #56446d 0%, #465a67 13%, #25845b 26%, #449f69 33%, #ce93d8 78%, #603771 100%);
-//}
-//
-//.accordion-body, main{
-//  background-color: rgba(192, 192, 211, 0.7);
-//  background-image: linear-gradient(0deg, rgba(192, 192, 211, 0.5) 3%, rgba(181, 178, 203, 0.5) 12%, rgba(188, 174, 207, 0.5) 33%);
-//}
-
-.rounded-start-2{
-  background-color: #56446d;
-
-  background-image: linear-gradient(to left,  #F2E5BD, #F2B56B, #F2A285);
-
-  //background-image: linear-gradient(43deg, #56446d 0%, #465a67 13%, #25845b 26%, #449f69 33%, #ce93d8 78%, #603771 100%);
-}
-
-//Plant common name border.
-  .border{
-    --bs-border-color: #F2B56B;
-  }
-
-//Improve space between paragraphs.
-  p{
-    margin: auto;
-  }
-
-.container-fluid{
+/* Stilizare pentru container */
+.container-fluid {
   background: linear-gradient(to top, #F2E5BD, #F2E5BD, #F2E5BD,  #F2B56B);
+  padding-bottom: 2rem; /* Adăugăm un padding la partea de jos a containerului */
 }
 
-
-.btn.btn-outline-primary{
-  color: #F2A285;
-  background: #F2E5BD;
-  border-color: #F2B56B;
+.bi-patch-plus {
+  background: #F2B56B;
+  color: green;
+  border-color: green;
 }
 
-.btn-outline-primary:hover {
+.bi-patch-plus:hover {
   background: #F2B56B;
   color: #F2E5BD;
   border-color: #F2E5BD;
 }
+
+/* Stilizare pentru card */
+.card {
+  max-width: 30vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.card-footer {
+  padding: 0.75rem 1.25rem;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-text {
+  margin-bottom: 0.5rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem; /* Am mărit spațiul dintre titlul și conținutul listei */
+}
+
+/* Layout responsive cu CSS Grid */
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30vh, 1fr));
+  gap: 0.5rem; /* Spațiul între coloane */
+  justify-content: center;
+  padding: 0 5rem; /* Adăugăm padding mai mare la stânga și la dreapta */
+}
+
+.col {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Limitarea la maxim 5 coloane */
+@media screen and (min-width: 1200px) {
+  .row {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media screen and (min-width: 2048px) {
+  /* Stilizare pentru titlul "Treatment list" */
+  .titleRow {
+    margin-left: 2.3rem;
+    padding-right: 100vh;
+  }
+}
+
+/* Diminuarea dimensiunilor pe ecrane mici */
+@media screen and (max-width: 768px) {
+  .card {
+    max-width: 50vh;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-footer {
+    padding: 0.5rem 1rem;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .card {
+    max-width: 100vh;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 0.75rem;
+  }
+
+  .card-footer {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .card-text {
+    font-size: 0.8rem;
+  }
+}
+
+
+.lds-ellipsis,
+.lds-ellipsis div {
+  box-sizing: border-box;
+  color: #74b3b9;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 40px; /* Redu dimensiunea spinner-ului */
+  height: 40px; /* Redu dimensiunea spinner-ului */
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 18px; /* Ajustează poziția de la partea de sus */
+  width: 7px; /* Redu dimensiunea punctelor */
+  height: 7px; /* Redu dimensiunea punctelor */
+  border-radius: 50%;
+  background: currentColor;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 3px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 3px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 16px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 29px; /* Ajustează distanța dintre puncte */
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(12px, 0); /* Ajustează distanța dintre puncte */
+  }
+}
+
+
+
