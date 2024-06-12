@@ -124,7 +124,11 @@
   max-height: 1vh;
 }
 
-@media (max-width: 758px) {
+.line-break {
+  display: none;
+}
+
+@media (max-width: 870px) {
   .carousel-item img {
     opacity: 0.07;
   }
@@ -145,5 +149,25 @@
   .catchy-text {
     font-style: normal;
     font-size: 3vh;
+  }
+
+  /*#firstCarouselText {*/
+  /*  max-width: 30vh;*/
+  /*}*/
+
+  h1.text-responsive{
+    font-size: 3vh;
+  }
+
+  p.catchy-text.mb-5{
+    font-size: 2vh;
+  }
+
+  #firstCarouselText {
+    max-width: 30vh;
+  }
+
+  .line-break {
+    display: inline;
   }
 }

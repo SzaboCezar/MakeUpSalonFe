@@ -88,6 +88,7 @@ export class TreatmentAddComponent implements OnInit {
       price: this.addTreatmentForm.get('price').value,
       pictureUrl: this.addTreatmentForm.get('pictureUrl').value,
     };
+
     console.log('treatment to add: ', treatmentData);
     this.treatmentService.addTreatment(treatmentData).subscribe(
       (treatment: Treatment) => {
@@ -122,16 +123,22 @@ export class TreatmentAddComponent implements OnInit {
                 this.logService.add(
                   `EmployeeTreatment added for treatmentID ${treatment.treatmentID}`
                 );
+                // Redirect to treatments page after successful addition of employee treatment
+                this.router.navigate(['/treatments']);
               },
               (error) => {
                 console.error('Error while adding employee treatment:', error);
                 this.logService.add(
                   `Error adding EmployeeTreatment for treatmentID ${treatment.treatmentID}`
                 );
+                // Redirect to treatments page even if there's an error in adding employee treatment
+                this.router.navigate(['/treatments']);
               }
             );
         } else {
           console.error('Selected employee not found');
+          // Redirect to treatments page if selected employee not found
+          this.router.navigate(['/treatments']);
         }
       },
       (error) => {

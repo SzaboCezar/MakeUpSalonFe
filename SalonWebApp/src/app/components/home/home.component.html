@@ -20,14 +20,14 @@
               <div class="col-lg-4 col-md-6 col-sm-12 CarouselImg">
                 <img class="img-fluid mb-3 mb-sm-0" src="./assets/img/HomePage/Home.gif" alt="Home Image">
               </div>
-              <div id="firstCarouselText" class="col-lg-8 col-md-6 col-sm-12 carousel-caption text-left">
-                <div class="text-container">
-                  <h1 class="text-responsive">Welcome to MakeUp Salon</h1>
+              <div class="col-lg-8 col-md-6 col-sm-12 carousel-caption text-left">
+                <div id="firstCarouselText"  class="text-container">
+                  <h1 class="text-responsive">Welcome to <br class="line-break"> MakeUp Salon</h1>
                   <p class="catchy-text mb-5">
                     It's Up to you to choose the best... It's Up to us to do the rest
                   </p>
-                  <button  *ngIf="!isAuthenticated" type="button" class="btn btn-responsive btn-primary me-3" routerLink="/auth">Sign in</button>
-                  <button  *ngIf="!isAuthenticated" type="button" class="btn btn-responsive btn-outline-info" routerLink="/enrollment">Register</button>
+                  <button  *ngIf="!isAuthenticated" type="button" class="btn btn-responsive btn-primary me-3" routerLink="/auth">Login</button>
+                  <button  *ngIf="!isAuthenticated" type="button" class="btn btn-responsive btn-outline-info" routerLink="/enrollment">Create account</button>
                   <button  *ngIf="isAuthenticated" type="button" class="btn btn-responsive btn-outline-primary me-3" routerLink="/treatments">Treatments</button>
 
                 </div>
@@ -112,7 +112,7 @@
   ================================================== -->
     <!-- Wrap the rest of the page in another container to center all the content. -->
 
-    <div class="container marketing">
+    <div id="about" class="container marketing">
 
       <!-- Three columns of text below the carousel -->
       <div class="row">
