@@ -43,14 +43,15 @@ export const routes: Routes = [
   },
   {
     path: 'treatment/detail/update/:id',
-    canActivate: [AuthGuard], // Guardul care protejează ruta
+    canActivate: [AuthGuard, RoleGuard], // Guardul care protejează ruta
     component: TreatmentDetailUpdateComponent,
     resolve: { treatments: TreatmentsResolverService }
   },
   {
     path: 'treatment/delete/:id',
-    canActivate: [AuthGuard], // Guardul care protejează ruta
+    canActivate: [AuthGuard, RoleGuard], // Guardul care protejează ruta
     component: TreatmentDeleteComponent,
+    data: { roles: [Role.EMPLOYEE, Role.ADMIN] }, // Specific roles that can access this route
     resolve: { treatments: TreatmentsResolverService }
   },
 
