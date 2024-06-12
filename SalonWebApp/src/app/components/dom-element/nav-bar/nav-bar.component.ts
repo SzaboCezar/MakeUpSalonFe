@@ -3,6 +3,7 @@ import {AuthService} from "../../../auth/auth.service";
 import {Subscription} from "rxjs";
 import {NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";
+import {getRoleDescription, Role} from "../../../shared/models/Enum/Role.enum";
 
 @Component({
   selector: 'app-nav-bar',
@@ -18,7 +19,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   private userSub: Subscription;
   @Output() isAuthenticatedChange: EventEmitter<boolean> = new EventEmitter<boolean>(); // Emit evenimentul atunci când starea de autentificare se schimbă
-
+  isEmployee: boolean = false;
 
   constructor(private authService: AuthService) { }
 
@@ -32,6 +33,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
          */
         this.isAuthenticated = !!user;
         this.isAuthenticatedChange.emit(this.isAuthenticated); // Emit evenimentul cu noua valoare a stării de autentificare
+
+        if (this.isAuthenticated) {
+          this.getRole();
+        }
       }
     )
   }
@@ -43,4 +48,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
   onLogout() {
     this.authService.logout();
   }
+
+  getRole() {
+    const role: Role = this.authService.getUserRole();
+    if(role === Role.EMPLOYEE.toUpperCase()) {
+      this.isEmployee = true;
+    }
+  }
+
 }

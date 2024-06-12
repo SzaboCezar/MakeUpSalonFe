@@ -14,7 +14,9 @@ export const RoleDescriptions: { [key in Role]: string } = {
 };
 
 // Function to get description from role
-export function getRoleDescription(role: Role): string {
+export function getRoleDescription(role: string): Role {
+  console.log("RoleDescriptions: ", RoleDescriptions);
+
   return RoleDescriptions[role];
 }
 

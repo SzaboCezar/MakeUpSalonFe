@@ -19,7 +19,7 @@
             class="nav-link active"
             aria-current="page"
             href="#commercial-photo"
-            >Home</a
+          >Home</a
           >
         </li>
         <li class="nav-item">
@@ -28,7 +28,6 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/treatments">Treatments</a>
         </li>
-
         <li class="nav-item">
           <a class="nav-link" href="/#Contact">Contact</a>
         </li>
@@ -36,11 +35,9 @@
           <a class="nav-link" routerLink="/book">Book now</a>
         </li>
       </ul>
-
       <div *ngIf="!isAuthenticated">
-          <a class="dropdown-item bi bi-person-add text-start" routerLink="/enrollment"> Create account</a>
+        <a class="dropdown-item bi bi-person-add text-start" routerLink="/enrollment"> Create account</a>
       </div>
-
       <div *ngIf="isAuthenticated" class="dropdown-center ms-auto">
         <a
           class="nav-link dropdown-toggle d-flex align-items-center"
@@ -60,15 +57,17 @@
             <a
               class="dropdown-item text-start bi bi-journal-check"
               routerLink="/my-appointments"
-              > My appointments</a
+            > My appointments</a
             >
           </li>
           <li>
             <a class="dropdown-item text-start bi bi-clipboard-heart" routerLink="/treatments"> Treatments</a>
           </li>
-          <li>
-            <a class="dropdown-item text-start bi bi-patch-plus" routerLink="/treatment/add"> Add treatment</a>
-          </li>
+          <section *ngIf="isEmployee">
+            <li>
+              <a class="dropdown-item text-start bi bi-patch-plus" routerLink="/treatment/add"> Add treatment</a>
+            </li>
+          </section>
           <hr/>
           <li>
             <a class="dropdown-item text-start bi bi-shield-lock" routerLink="/change-password"> Change Password</a>

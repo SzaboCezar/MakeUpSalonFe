@@ -88,7 +88,5 @@ export class PasswordService {
     }
   }
 
-  getUserRole(): Role {
-    return JSON.parse(localStorage.getItem("userData")).role;
-  }
+
 }
