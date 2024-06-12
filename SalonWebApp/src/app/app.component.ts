@@ -1,5 +1,5 @@
 // src/app/app.component.ts
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {AuthService} from "./auth/auth.service";
 import {LoadingSpinnerComponent} from "./components/dom-element/loading-spinner/loading-spinner.component";
@@ -33,6 +33,12 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     )
   }
+
+  @HostListener('window:beforeunload', ['$event'])
+  clearLocalStorage(event) {
+    localStorage.removeItem('emailToken');
+  }
+
 
   ngOnDestroy() {
     this.loadingSubscription.unsubscribe();

@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
-import { ChangePasswordRequest } from "../../shared/models/DTO/ChangePasswordRequestDTO.model";
+import {Injectable} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {Observable, throwError} from "rxjs";
+import {catchError} from "rxjs/operators";
+import {ChangePasswordRequest} from "../../shared/models/DTO/ChangePasswordRequestDTO.model";
 import {ResetPasswordRequest} from "../../shared/models/ResetPasswordRequest.model";
-import {er} from "@fullcalendar/core/internal-common";
+import {Role} from "../../shared/models/Enum/Role.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -86,5 +86,9 @@ export class PasswordService {
       console.log('No email token found in local storage.');
       return false;
     }
+  }
+
+  getUserRole(): Role {
+    return JSON.parse(localStorage.getItem("userData")).role;
   }
 }
