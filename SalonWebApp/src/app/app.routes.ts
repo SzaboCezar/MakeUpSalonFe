@@ -19,6 +19,8 @@ import {
   ResetPasswordEmailComponent
 } from "./auth/password/reset-password/reset-password-email/reset-password-email.component";
 import {ResetPasswordComponent} from "./auth/password/reset-password/reset-password.component";
+import {RoleGuard} from "./auth/role.guard";
+import {Role} from "./shared/models/Enum/Role.enum";
 
 export const routes: Routes = [
   //General routes
@@ -35,7 +37,8 @@ export const routes: Routes = [
   },
   {
     path: 'treatment/add',
-    canActivate: [AuthGuard], // Guardul care protejează ruta
+    canActivate: [AuthGuard, RoleGuard], // Guardul care protejează ruta
+    data: { roles: [Role.EMPLOYEE, Role.ADMIN] }, // Specific roles that can access this route
     component: TreatmentAddComponent,
   },
   {

@@ -242,7 +242,12 @@ export class AuthService {
     );
   }
 
-  getUserRole(): Role {
+  isEmployee(): boolean {
+      const role: Role = this.getUserRole();
+      return role === Role.EMPLOYEE.toUpperCase()
+  }
+
+  private getUserRole(): Role {
     return JSON.parse(localStorage.getItem("userData")).role;
   }
 }

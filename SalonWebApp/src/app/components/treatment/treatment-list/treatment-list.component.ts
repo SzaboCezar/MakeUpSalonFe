@@ -19,6 +19,7 @@ import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loadi
 import { PersonService } from '../../../services/person.service';
 import { Person } from '../../../shared/models/Person.model';
 import { Location } from '@angular/common';
+import {AuthService} from "../../../auth/auth.service";
 
 declare global {
   interface Window {
@@ -53,6 +54,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   selectedEmployeeTreatments: { [key: number]: Person[] } = {};
   error: string = null;
   private modalInstance: any;
+  isEmployee: boolean = false;
 
   @ViewChild('errorModal') errorModal: ElementRef;
 
@@ -64,10 +66,13 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.checkRole();
+
     this.treatmentSubscription =
       this.treatmentService.treatmentsChanged.subscribe(
         (treatments: Treatment[]) => {
@@ -154,6 +159,10 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   handleImageError(event): void {
     // Dacă imaginea specificată în treatment.pictureUrl nu poate fi încărcată, afișăm imaginea de rezervă
     event.target.src = 'assets/img/HomePage/RealisticMakeup.png';
+  }
+
+  checkRole() {
+   this.isEmployee = this.authService.isEmployee();
   }
 
   ngOnDestroy() {
