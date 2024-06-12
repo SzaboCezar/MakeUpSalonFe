@@ -20,7 +20,6 @@ import {
 } from "./auth/password/reset-password/reset-password-email/reset-password-email.component";
 import {ResetPasswordComponent} from "./auth/password/reset-password/reset-password.component";
 import {RoleGuard} from "./auth/role.guard";
-import {Role} from "./shared/models/Enum/Role.enum";
 
 export const routes: Routes = [
   //General routes
@@ -38,20 +37,21 @@ export const routes: Routes = [
   {
     path: 'treatment/add',
     canActivate: [AuthGuard, RoleGuard], // Guardul care protejează ruta
-    data: { roles: [Role.EMPLOYEE, Role.ADMIN] }, // Specific roles that can access this route
+    data: { roles: ['ADMIN', 'EMPLOYEE'] }, // Datele necesare pentru guard
     component: TreatmentAddComponent,
   },
   {
     path: 'treatment/detail/update/:id',
     canActivate: [AuthGuard, RoleGuard], // Guardul care protejează ruta
     component: TreatmentDetailUpdateComponent,
+    data: { roles: ['ADMIN', 'EMPLOYEE'] }, // Datele necesare pentru guard
     resolve: { treatments: TreatmentsResolverService }
   },
   {
     path: 'treatment/delete/:id',
     canActivate: [AuthGuard, RoleGuard], // Guardul care protejează ruta
     component: TreatmentDeleteComponent,
-    data: { roles: [Role.EMPLOYEE, Role.ADMIN] }, // Specific roles that can access this route
+    data: { roles: ['ADMIN', 'EMPLOYEE'] }, // Datele necesare pentru guard
     resolve: { treatments: TreatmentsResolverService }
   },
 

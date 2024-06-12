@@ -1,5 +1,5 @@
 // src/app/app.component.ts
-import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {AuthService} from "./auth/auth.service";
 import {LoadingSpinnerComponent} from "./components/dom-element/loading-spinner/loading-spinner.component";
@@ -22,7 +22,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private cdRef: ChangeDetectorRef  // inject ChangeDetectorRef
+
   ) {}
 
   ngOnInit() {
@@ -30,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.loadingSubscription = this.loadingService.loading$.subscribe(
       (isLoading) => {
         this.isLoading = isLoading;
+        this.cdRef.detectChanges();  // trigger change detection
       }
     )
   }

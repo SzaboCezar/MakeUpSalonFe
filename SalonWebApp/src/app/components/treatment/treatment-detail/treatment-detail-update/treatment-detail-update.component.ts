@@ -28,7 +28,7 @@ import { EmployeeTreatmentService } from '../../../../services/employee-treatmen
 })
 export class TreatmentDetailUpdateComponent implements OnInit {
   treatment?: Treatment;
-  updateTreatmentForm: FormGroup;
+  updateTreatmentForm?: FormGroup;
   employeeTreatments?: EmployeeTreatment[] = [];
   employees: Person[] = [];
   associatedEmployeeId: number | null = null;

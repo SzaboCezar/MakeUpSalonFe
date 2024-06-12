@@ -1,10 +1,10 @@
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {map, take} from 'rxjs/operators';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
-import {AuthService} from './auth.service';
-import {Role} from "../shared/models/Enum/Role.enum";
+import { AuthService } from './auth.service';
+import { Role } from "../shared/models/Enum/Role.enum";
 
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
@@ -22,7 +22,8 @@ export class RoleGuard implements CanActivate {
           return true;
         }
 
-        return this.router.createUrlTree(['/']);
+        // Returnați un UrlTree în cazul în care utilizatorul nu este autentificat sau nu are rolul necesar
+        return this.router.parseUrl('/'); // Sau orice altă cale dorită
       })
     );
   }
