@@ -1,16 +1,16 @@
 // src/app/services/authentification.services.ts
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, of, switchMap, throwError} from 'rxjs';
-import { AuthenticationRequest } from '../shared/models/AuthenticationRequest.model';
-import { RegisterRequest } from '../shared/models/RegisterRequest.model';
-import { AuthenticationResponse } from '../shared/models/AuthenticationResponse.model';
+import {AuthenticationRequest} from '../shared/models/AuthenticationRequest.model';
+import {RegisterRequest} from '../shared/models/RegisterRequest.model';
+import {AuthenticationResponse} from '../shared/models/AuthenticationResponse.model';
 import {map, tap} from 'rxjs/operators';
-import { User } from '../shared/models/User.model';
-import { Router } from '@angular/router';
-import { Role } from '../shared/models/Enum/Role.enum';
-import { Person } from '../shared/models/Person.model';
-import { firstValueFrom } from 'rxjs';
+import {User} from '../shared/models/User.model';
+import {Router} from '@angular/router';
+import {Role} from '../shared/models/Enum/Role.enum';
+import {Person} from '../shared/models/Person.model';
+import {firstValueFrom} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,8 @@ export class AuthService {
   //BE token expiration function: setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
   tokenExpirationTimer: any;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+  }
 
   login(authenticationRequest: AuthenticationRequest): Observable<any> {
     return this.http
@@ -118,6 +119,7 @@ export class AuthService {
       this.logout();
     }, expirationDuration);
   }
+
   singUp(registerRequest: RegisterRequest): Observable<any> {
     return this.checkUserExists(registerRequest.email).pipe(
       switchMap((userExists) => {
@@ -161,6 +163,7 @@ export class AuthService {
       token
     );
 
+
     const email = this.extractEmailFromToken(token);
     const fetchedUser = await this.fetchUserByEmail(email);
 
@@ -174,26 +177,28 @@ export class AuthService {
     user.enabled = fetchedUser.enabled;
 
     //Emitem user-ul care s-a logat, cu token-ul în el.
-    this.user.next(user);
+    if (fetchedUser) {
+      this.user.next(user);
 
-    console.log('Emitted user: ');
-    console.log(user);
+      console.log('Emitted user: ');
+      console.log(user);
 
-    //For auto logout
-    // Calculăm timpul la care token-ul va expira în cazul autoLogIn, din local storage.
-    const expirationTime = new Date().getTime() + 1000 * 60 * 20; // Token-ul expiră în 20 minute
+      //For auto logout
+      // Calculăm timpul la care token-ul va expira în cazul autoLogIn, din local storage.
+      const expirationTime = new Date().getTime() + 1000 * 60 * 20; // Token-ul expiră în 20 minute
 
-    // Calculăm durata până la expirare pentru logIn făcut de user.
-    const expirationDuration = expirationTime - new Date().getTime();
+      // Calculăm durata până la expirare pentru logIn făcut de user.
+      const expirationDuration = expirationTime - new Date().getTime();
 
-    // Setăm un timer pentru a face logout automat după ce token-ul expiră
-    this.autoLogout(expirationDuration);
+      // Setăm un timer pentru a face logout automat după ce token-ul expiră
+      this.autoLogout(expirationDuration);
 
-    //Trimitem user-ul în localStorage pentru a-l putea folosi și după refresh
-    localStorage.setItem(
-      'userData',
-      JSON.stringify({ ...user, expirationTime })
-    );
+      //Trimitem user-ul în localStorage pentru a-l putea folosi și după refresh
+      localStorage.setItem(
+        'userData',
+        JSON.stringify({...user, expirationTime})
+      );
+    }
   }
 
   private extractEmailFromToken(token: string): string {
@@ -243,8 +248,8 @@ export class AuthService {
   }
 
   isEmployee(): boolean {
-      const role: Role = this.getUserRole();
-      return role === Role.EMPLOYEE.toUpperCase()
+    const role: Role = this.getUserRole();
+    return role === Role.EMPLOYEE.toUpperCase()
   }
 
   private getUserRole(): Role {

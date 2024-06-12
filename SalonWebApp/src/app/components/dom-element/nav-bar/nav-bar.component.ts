@@ -24,7 +24,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
   @Output() isAuthenticatedChange: EventEmitter<boolean> = new EventEmitter<boolean>(); // Emit evenimentul atunci când starea de autentificare se schimbă
   personSubscription: Subscription;
-  person: Person;
+  person?: Person;
 
   constructor(
     private authService: AuthService,
@@ -47,7 +47,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
           this.isEmployee = (user.role ===  Role.EMPLOYEE.toUpperCase());
           this.getPerson(user);
         } else {
-          console.error('No user data found in local storage');
+          console.log('No user data found in local storage');
         }
       }
     )
@@ -66,7 +66,8 @@ export class NavBarComponent implements OnInit, OnDestroy {
         },
       });
   }
-  
+
+
 
 
   ngOnDestroy() {
@@ -75,6 +76,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   }
 
   onLogout() {
+    this.personSubscription.unsubscribe();
     this.authService.logout();
   }
 

@@ -54,7 +54,9 @@
           class="dropdown-menu dropdown-menu-end"
           aria-labelledby="dropdownMenuButton">
           <li class="dropdown-header text-center text-gradient bi bi-heart">
-            Welcome, {{person.firstName}} {{person.lastName}}
+            Welcome,
+            {{ person?.firstName && person.firstName.length > 12 ? person.firstName.substring(0, 12) + '...' : person?.firstName }}
+            {{ person?.lastName && person.lastName.length > 12 ? person.lastName.substring(0, 12) + '...' : person?.lastName }}
           </li>
           <div class="dropdown-divider"></div>
           <li class="mt-2">
