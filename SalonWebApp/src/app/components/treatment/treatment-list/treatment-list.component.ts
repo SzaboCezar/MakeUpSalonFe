@@ -19,7 +19,6 @@ import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loadi
 import { PersonService } from '../../../services/person.service';
 import { Person } from '../../../shared/models/Person.model';
 import { Location } from '@angular/common';
-import {TreatmentEmployeeListComponent} from "../treatment-employee-list/treatment-employee-list.component";
 
 declare global {
   interface Window {
@@ -43,7 +42,6 @@ declare global {
     NavBarComponent,
     NgbTooltip,
     LoadingSpinnerComponent,
-    TreatmentEmployeeListComponent,
   ],
   templateUrl: './treatment-list.component.html',
   styleUrl: './treatment-list.component.scss',

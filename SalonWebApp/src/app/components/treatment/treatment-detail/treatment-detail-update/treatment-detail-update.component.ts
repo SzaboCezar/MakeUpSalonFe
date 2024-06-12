@@ -18,12 +18,11 @@ import { forkJoin } from 'rxjs';
 import { User } from '../../../../shared/models/User.model';
 import { UserService } from '../../../../services/user.service';
 import { EmployeeTreatmentService } from '../../../../services/employee-treatment.service';
-import {TreatmentEmployeeListComponent} from "../../treatment-employee-list/treatment-employee-list.component";
 
 @Component({
   selector: 'app-treatment-detail-update',
   standalone: true,
-  imports: [NgForOf, ReactiveFormsModule, NgIf, NgbTooltip, RouterLink, TreatmentEmployeeListComponent],
+  imports: [NgForOf, ReactiveFormsModule, NgIf, NgbTooltip, RouterLink],
   templateUrl: './treatment-detail-update.component.html',
   styleUrl: './treatment-detail-update.component.css',
 })
