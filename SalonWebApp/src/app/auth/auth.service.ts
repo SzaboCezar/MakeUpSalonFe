@@ -161,9 +161,6 @@ export class AuthService {
       token
     );
 
-    //Emitem user-ul care s-a logat, cu token-ul în el.
-    this.user.next(user);
-
     const email = this.extractEmailFromToken(token);
     const fetchedUser = await this.fetchUserByEmail(email);
 
@@ -175,6 +172,9 @@ export class AuthService {
     user.accountNonLocked = fetchedUser.accountNonLocked;
     user.credentialsNonExpired = fetchedUser.credentialsNonExpired;
     user.enabled = fetchedUser.enabled;
+
+    //Emitem user-ul care s-a logat, cu token-ul în el.
+    this.user.next(user);
 
     console.log('Emitted user: ');
     console.log(user);

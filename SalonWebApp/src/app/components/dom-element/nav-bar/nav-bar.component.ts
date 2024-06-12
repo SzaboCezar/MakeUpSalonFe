@@ -4,6 +4,9 @@ import {Subscription} from "rxjs";
 import {NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {Role} from "../../../shared/models/Enum/Role.enum";
+import {Person} from "../../../shared/models/Person.model";
+import {PersonService} from "../../../services/person.service";
+import {User} from "../../../shared/models/User.model";
 
 @Component({
   selector: 'app-nav-bar',
@@ -20,8 +23,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
   isEmployee = false;
   private userSub: Subscription;
   @Output() isAuthenticatedChange: EventEmitter<boolean> = new EventEmitter<boolean>(); // Emit evenimentul atunci când starea de autentificare se schimbă
+  personSubscription: Subscription;
+  person: Person;
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private personService: PersonService
+  ) { }
 
   ngOnInit(): void {
     this.userSub = this.authService.user.subscribe(
@@ -37,14 +45,33 @@ export class NavBarComponent implements OnInit, OnDestroy {
         if (this.isAuthenticated) {
           console.log("Nav bar user role: ", (user.role ===  Role.EMPLOYEE.toUpperCase()));
           this.isEmployee = (user.role ===  Role.EMPLOYEE.toUpperCase());
+          this.getPerson(user);
+        } else {
+          console.error('No user data found in local storage');
         }
-
       }
     )
   }
 
+  getPerson(user: User) {
+    this.personSubscription = this.personService
+      .getPersonById(user.userId)
+      .subscribe({
+        next: (person: Person) => {
+          this.person = person;
+          console.log('Fetched person:', this.person); // Debugging log
+        },
+        error: (error) => {
+          console.error('Error fetching person:', error);
+        },
+      });
+  }
+  
+
+
   ngOnDestroy() {
     this.userSub.unsubscribe();
+    this.personSubscription.unsubscribe();
   }
 
   onLogout() {

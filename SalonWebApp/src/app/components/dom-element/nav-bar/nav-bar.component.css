@@ -15,3 +15,17 @@
   background: #f6f7f8;
   border-color: #3F858C;
 }
+
+.text-gradient {
+  background: linear-gradient(90deg, #3F858C 0%, #007bff 100%); /* Modificăm culorile pentru un gradient mai vizibil */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dropdown-divider {
+  height: 1px; /* Setăm înălțimea separatorului */
+  margin: 0.5rem 0; /* Setăm margini pentru a delimita spațiul în jurul separatorului */
+  background: linear-gradient(90deg, #3F858C, #007bff); /* Aplicăm un gradient orizontal de la albastru la verde */
+  border: none; /* Eliminăm orice border */
+}
+
