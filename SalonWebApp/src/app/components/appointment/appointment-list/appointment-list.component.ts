@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { NavBarComponent } from '../../dom-element/nav-bar/nav-bar.component';
 import { Subscription, forkJoin, of } from 'rxjs';
 import { Appointment } from '../../../shared/models/Appointment.model';
@@ -12,7 +12,7 @@ import {
   NgbAccordionCollapse,
   NgbAccordionDirective,
   NgbAccordionHeader,
-  NgbAccordionItem,
+  NgbAccordionItem, NgbModal,
   NgbTooltip,
 } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loading-spinner.component';
@@ -21,6 +21,14 @@ import { Status } from '../../../shared/models/Enum/Status.enum';
 import { TreatmentService } from '../../../services/treatment.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import {Role} from "../../../shared/models/Enum/Role.enum";
+
+declare global {
+  interface Window {
+    bootstrap: any;
+  }
+}
+
 
 @Component({
   selector: 'app-appointment-list',
@@ -50,13 +58,20 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   treatments: Treatment[];
   treatment: Treatment;
   role: string;
+  private modalInstance: any;
+  error?: string;
+
+  @ViewChild('errorModalAppointment') errorModalAppointment: ElementRef;
+
 
   constructor(
     private appointmentService: AppointmentService,
     private treatmentService: TreatmentService,
     private route: ActivatedRoute,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal,
+
   ) {}
 
   ngOnInit(): void {
@@ -77,6 +92,8 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       );
     } else {
       console.error('No user data found in local storage');
+      this.error = 'No user data found in local storage';
+      this.openModal();
     }
   }
 
@@ -97,8 +114,11 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       } else if (this.role === 'ADMIN') {
         this.relevantAppointments = appointments;
       }
-
       console.log('Relevant appointments: ', this.relevantAppointments);
+      if (this.relevantAppointments.length === 0) {
+        this.error = 'We could not find any appointment.';
+        this.openModal();
+      }
     }
   }
 
@@ -147,7 +167,33 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     });
   }
 
+  openModal() {
+    const modalElement = document.getElementById('errorModalAppointment');
+    if (modalElement) {
+      this.modalInstance = new window.bootstrap.Modal(modalElement);
+      this.modalInstance.show();
+    }
+  }
+
+  onCancel(): void {
+    if (this.modalInstance) {
+      this.modalInstance.hide();
+      this.error = null;
+      this.router.navigate(['/']);
+    }
+  }
+
+  onExit(): void {
+    if (this.modalInstance) {
+      this.modalInstance.hide();
+      this.error = null;
+    }
+  }
+
+
   ngOnDestroy() {
     this.appointmentSubscription.unsubscribe();
   }
+
+  protected readonly Role = Role;
 }

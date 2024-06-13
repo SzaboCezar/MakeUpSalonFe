@@ -1,5 +1,5 @@
 <app-nav-bar></app-nav-bar>
-<main>
+<main *ngIf="!error">
   <h3 class="d-flex justify-content-between">
     <i>My appointments</i>
   </h3>
@@ -97,3 +97,57 @@
     </div>
   </div>
 </main>
+
+
+<!-- Modal no appointments -->
+
+<div
+#errorModalAppointment
+class="modal fade"
+id="errorModalAppointment"
+tabindex="-1"
+aria-labelledby="exampleModalLabel"
+aria-hidden="true"
+data-bs-backdrop="static"
+data-bs-keyboard="false"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="errorModalAppointmentLabel">
+        Something went wrong...
+      </h1>
+      <button
+        (click)="onCancel()"
+        type="button"
+        class="btn-close"
+        ngbTooltip="You will be redirected to home"
+      ></button>
+    </div>
+    <div class="modal-body">
+     <p>{{ error }}</p>
+      <ul *ngIf="role === Role.CUSTOMER.toUpperCase()" class="text-start" style="list-style: none; font-size: 0.9rem">
+        <li class="text-muted mt-1 mb-0">
+          • Looking for best treatment? <a (click)="onExit()" routerLink="/treatments" class="fw-bold text-body" style="text-decoration: none">Our treatments are <u style="color: #0c5460">here</u></a>
+        </li>
+        <li class="text-muted mt-1 mb-0">
+          • Already know what suits you best? <a (click)="onExit()" routerLink="/book" class="fw-bold text-body" style="text-decoration: none" >Book now <u style="color: #0c5460">here</u></a>
+        </li>
+      </ul>
+    </div>
+    <div class="modal-body mt-0">
+      <p class="text-muted">
+          <span style="color: #da3544"
+          >Contact the administrator for more information.</span
+          >
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" ngbTooltip="You will be redirected to home" class="btn btn-secondary" (click)="onCancel()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+</div>

@@ -68,7 +68,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   treatments: Treatment[];
   appointments: Appointment[] = [];
   selectedEmployeeTreatments: { [key: number]: Person[] } = {};
-  error: string = null;
+  error?: string;
   private modalInstance: any;
   isEmployee: boolean = false;
 
