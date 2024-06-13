@@ -237,7 +237,11 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
         const customerId = parsedUserData.userId;
         const startDate = this.appointmentForm.get('date')?.value;
         const startTime = this.appointmentForm.get('time')?.value;
-        const startDateTime = `${startDate}T${startTime}:00`;
+        // const startDateTime = `${startDate}T${startTime}:00`;
+        const startDateTime = moment(
+          `${startDate} ${startTime}`,
+          'YYYY-MM-DD HH:mm'
+        ).format('YYYY-MM-DD HH:mm:ss');
         const employeeId = this.appointmentForm.get('employee')?.value;
         const treatmentId = this.appointmentForm.get('appointmentFor')?.value;
 

@@ -71,10 +71,11 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     if (userData) {
       const parsedUserData = JSON.parse(userData);
       const userId = parsedUserData.userId;
-
+      console.log('appointmets:::  ', appointments);
       const relevantAppointments = appointments.filter(
-        (appointment) => appointment.customer.personId === userId
+        (appointment) => appointment.customerId === userId
       );
+      console.log('relevant appointments: ', relevantAppointments);
 
       // Map over each appointment to create an observable that fetches the treatment
       const appointmentsWithTreatments = relevantAppointments.map(
@@ -96,6 +97,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       // Combine all observables to ensure all treatments are fetched before updating the view
       forkJoin(appointmentsWithTreatments).subscribe((combinedAppointments) => {
         this.filteredAppointments = combinedAppointments;
+        console.log('filtered appointments: ', this.filteredAppointments);
       });
     }
   }

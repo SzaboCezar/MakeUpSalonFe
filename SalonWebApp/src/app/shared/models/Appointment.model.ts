@@ -6,6 +6,7 @@ export interface Appointment {
   appointmentID: number;
   treatmentID: number;
   customer: Person;
+  customerId?: number;
 
   //TODO: check the format of the date.
   startDateTime: Date;

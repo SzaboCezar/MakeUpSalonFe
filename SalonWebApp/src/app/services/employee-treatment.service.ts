@@ -148,4 +148,33 @@ export class EmployeeTreatmentService {
         })
       );
   }
+
+  deleteEmployeeTreatment(id: number): Observable<any> {
+    const treatmentIndex = this.employeeTreatments.findIndex(
+      (t) => t.employeeTreatmentsId === id
+    );
+    if (treatmentIndex === -1) {
+      this.logService.add(
+        `EmployeeTreatmentService | EmployeeTreatment Delete: EmployeeTreatment with id=${id} not found`
+      );
+      throw new Error('EmployeeTreatment with this id does not exist');
+    }
+
+    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
+      tap(() => {
+        this.employeeTreatments.splice(treatmentIndex, 1);
+        this.employeeTreatmentsChanged.next(this.employeeTreatments.slice());
+        console.log(
+          `EmployeeTreatmentService | EmployeeTreatment Delete: deleted EmployeeTreatment with id=${id}`
+        );
+      }),
+      catchError((error) => {
+        console.error('Error while deleting EmployeeTreatment:', error);
+        this.logService.add(
+          `EmployeeTreatmentService | EmployeeTreatment Delete: error deleting ${id}`
+        );
+        throw error;
+      })
+    );
+  }
 }
