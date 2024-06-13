@@ -150,6 +150,34 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     });
   }
 
+  declineAppointment(appointmentId: number): void {
+    console.log('Appointment id=', appointmentId);
+    let toBeUpdatedAppointment = this.relevantAppointments.filter(
+      (appointment) => appointment.appointmentId === appointmentId
+    );
+    console.log('appointment to be updated: ', toBeUpdatedAppointment);
+    const appointmentData = {
+      appointmentId: appointmentId,
+      customerId: toBeUpdatedAppointment[0].customerId,
+      startDateTime: toBeUpdatedAppointment[0].startDateTime,
+      approvalStatus: Status.REJECTED,
+      employeeId: toBeUpdatedAppointment[0].employeeId,
+      treatmentId: toBeUpdatedAppointment[0].treatmentId,
+    };
+
+    console.log('appointment data to be sent: ', appointmentData);
+
+    this.appointmentService.updateAppointment(appointmentData).subscribe({
+      next: (appointment: Appointment) => {
+        console.log('Appointment approved:', appointment);
+        window.location.reload(); // Refresh the list after approval
+      },
+      error: (error) => {
+        console.error('Error approving appointment:', error);
+      },
+    });
+  }
+
   onSelect(appointment: Appointment): void {
     this.selectedAppointment = appointment;
   }

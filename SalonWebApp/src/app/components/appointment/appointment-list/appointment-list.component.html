@@ -10,10 +10,10 @@
         <h2 ngbAccordionHeader>
           <button ngbAccordionButton>
             <span class="p-2 border rounded-start-2">{{
-              appointment.appointmentId
-            }}</span>
+                appointment.appointmentId
+              }}</span>
             <span class="p-2 border rounded-end-2"
-              >Treatment name: {{ appointment.treatmentName }}</span
+            >Treatment name: {{ appointment.treatmentName }}</span
             >
           </button>
         </h2>
@@ -23,22 +23,22 @@
               <p>
                 <strong>Treatment description </strong>
                 <em>{{ appointment.treatmentDescription }}</em>
-                <br />
+                <br/>
                 <strong>Treatment price </strong>
                 <em>{{ appointment.treatmentPrice }}</em>
-                <br />
+                <br/>
                 <span class="text-primary-emphasis"
-                  >Treatment date and time:
+                >Treatment date and time:
                 </span>
                 On {{ appointment.startDateTime | date : "yyyy-MM-dd" }} from
                 {{ appointment.startDateTime | date : "HH:mm" }} to
                 {{ appointment.endDateTime | date : "HH:mm" }}
 
-                <br />
+                <br/>
                 <span class="text-success">Treatment status: </span>
                 {{ appointment.approvalStatus }}
 
-                <br />
+                <br/>
                 <span *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'">
                   <strong>Customer Name: </strong>
                   {{ appointment.customerFirstName }}
@@ -59,36 +59,48 @@
                     type="button"
                     *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
                     (click)="approveAppointment(appointment.appointmentId)"
-                    class="btn btn-outline-success"
+                    class="btn btn-outline-success bi-check2"
                   >
                     Approve
                   </button>
                 </a>
-                <a class="mt-2 me-2" routerLink="/treatment/detail/update/">
-                  <button
-                    type="button"
-                    class="btn btn-outline-info bi-gear"
-                    ngbTooltip="UPDATE"
-                    disabled
-                  >
-                    Edit
-                  </button>
-                </a>
-
-                <!-- <a class="mt-2 me-2" routerLink="/treatment/delete/">
-                  <button type="button" class="btn btn-outline-danger" disabled>
-                    Delete
-                  </button>
-                </a> -->
                 <a class="mt-2 me-2">
                   <button
-                    class="btn btn-outline-danger"
                     type="button"
-                    (click)="onConfirm(appointment.appointmentId)"
+                    *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
+                    (click)="declineAppointment(appointment.appointmentId)"
+                    class="btn btn btn-outline-danger bi-ban"
                   >
-                    Delete
+                    Decline
                   </button>
                 </a>
+                <section *ngIf="role === Role.CUSTOMER.toUpperCase()" id="customer">
+                  <a class="mt-2 me-2" routerLink="/treatment/detail/update/">
+                    <button
+                      type="button"
+                      class="btn btn-outline-info bi-gear"
+                      ngbTooltip="UPDATE"
+                      disabled
+                    >
+                      Edit
+                    </button>
+                  </a>
+
+                  <!-- <a class="mt-2 me-2" routerLink="/treatment/delete/">
+                    <button type="button" class="btn btn-outline-danger" disabled>
+                      Delete
+                    </button>
+                  </a> -->
+                  <a class="mt-2 me-2">
+                    <button
+                      class="btn btn-outline-danger"
+                      type="button"
+                      (click)="onConfirm(appointment.appointmentId)"
+                    >
+                      Delete
+                    </button>
+                  </a>
+                </section>
               </div>
             </ng-template>
           </div>
@@ -102,52 +114,56 @@
 <!-- Modal no appointments -->
 
 <div
-#errorModalAppointment
-class="modal fade"
-id="errorModalAppointment"
-tabindex="-1"
-aria-labelledby="exampleModalLabel"
-aria-hidden="true"
-data-bs-backdrop="static"
-data-bs-keyboard="false"
+  #errorModalAppointment
+  class="modal fade"
+  id="errorModalAppointment"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
 >
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h1 class="modal-title fs-5" id="errorModalAppointmentLabel">
-        Something went wrong...
-      </h1>
-      <button
-        (click)="onCancel()"
-        type="button"
-        class="btn-close"
-        ngbTooltip="You will be redirected to home"
-      ></button>
-    </div>
-    <div class="modal-body">
-     <p>{{ error }}</p>
-      <ul *ngIf="role === Role.CUSTOMER.toUpperCase()" class="text-start" style="list-style: none; font-size: 0.9rem">
-        <li class="text-muted mt-1 mb-0">
-          • Looking for best treatment? <a (click)="onExit()" routerLink="/treatments" class="fw-bold text-body" style="text-decoration: none">Our treatments are <u style="color: #0c5460">here</u></a>
-        </li>
-        <li class="text-muted mt-1 mb-0">
-          • Already know what suits you best? <a (click)="onExit()" routerLink="/book" class="fw-bold text-body" style="text-decoration: none" >Book now <u style="color: #0c5460">here</u></a>
-        </li>
-      </ul>
-    </div>
-    <div class="modal-body mt-0">
-      <p class="text-muted">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="errorModalAppointmentLabel">
+          Something went wrong...
+        </h1>
+        <button
+          (click)="onCancel()"
+          type="button"
+          class="btn-close"
+          ngbTooltip="You will be redirected to home"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ error }}</p>
+        <ul *ngIf="role === Role.CUSTOMER.toUpperCase()" class="text-start" style="list-style: none; font-size: 0.9rem">
+          <li class="text-muted mt-1 mb-0">
+            • Looking for best treatment? <a (click)="onExit()" routerLink="/treatments" class="fw-bold text-body"
+                                             style="text-decoration: none">Our treatments are <u style="color: #0c5460">here</u></a>
+          </li>
+          <li class="text-muted mt-1 mb-0">
+            • Already know what suits you best? <a (click)="onExit()" routerLink="/book" class="fw-bold text-body"
+                                                   style="text-decoration: none">Book now <u
+            style="color: #0c5460">here</u></a>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-body mt-0">
+        <p class="text-muted">
           <span style="color: #da3544"
           >Contact the administrator for more information.</span
           >
-      </p>
-    </div>
+        </p>
+      </div>
 
-    <div class="modal-footer">
-      <button type="button" ngbTooltip="You will be redirected to home" class="btn btn-secondary" (click)="onCancel()">
-        Close
-      </button>
+      <div class="modal-footer">
+        <button type="button" ngbTooltip="You will be redirected to home" class="btn btn-secondary"
+                (click)="onCancel()">
+          Close
+        </button>
+      </div>
     </div>
   </div>
-</div>
 </div>
