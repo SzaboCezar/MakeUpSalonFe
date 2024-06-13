@@ -30,6 +30,8 @@ import { Location } from '@angular/common';
 import { AuthService } from '../../../auth/auth.service';
 import { EmployeeTreatmentService } from '../../../services/employee-treatment.service';
 import { EmployeeTreatment } from '../../../shared/models/EmployeeTreatment.model';
+import { AppointmentService } from '../../../services/appointment.service';
+import { Appointment } from '../../../shared/models/Appointment.model';
 
 declare global {
   interface Window {
@@ -59,9 +61,12 @@ declare global {
 })
 export class TreatmentListComponent implements OnInit, OnDestroy {
   treatmentSubscription: Subscription;
+  appointmentSubscription: Subscription;
   selectedTreatment?: Treatment;
   employeeTreatments?: EmployeeTreatment[] = [];
+  relevantAppointments: Appointment[] = [];
   treatments: Treatment[];
+  appointments: Appointment[] = [];
   selectedEmployeeTreatments: { [key: number]: Person[] } = {};
   error: string = null;
   private modalInstance: any;
@@ -71,6 +76,7 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
 
   constructor(
     private treatmentService: TreatmentService,
+    private appointmentService: AppointmentService,
     private personService: PersonService,
     private employeeTreatmentService: EmployeeTreatmentService,
     private location: Location,
@@ -83,6 +89,15 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.checkRole();
+
+    this.appointmentSubscription =
+      this.appointmentService.appointmentsChanged.subscribe(
+        (appointments: Appointment[]) => {
+          this.appointments = appointments;
+        }
+      );
+
+    this.appointmentService.getAppointments();
 
     this.treatmentSubscription =
       this.treatmentService.treatmentsChanged.subscribe(
@@ -99,6 +114,17 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
     }
     console.log('treatments: ', this.treatments);
     this.initializeEmployeeTreatments();
+  }
+
+  loadAppointmentsWithTreatments(
+    appointments: Appointment[],
+    treatmentId: number
+  ): Observable<Appointment[]> {
+    this.relevantAppointments = appointments.filter(
+      (appointment) => appointment.treatmentId === treatmentId
+    );
+    console.log('Relevant appointments: ', this.relevantAppointments);
+    return of(this.relevantAppointments);
   }
 
   initializeEmployeeTreatments(): void {
@@ -139,27 +165,48 @@ export class TreatmentListComponent implements OnInit, OnDestroy {
   fetchEmployeeTreatments(treatmentId: number): Observable<void> {
     return this.employeeTreatmentService.fetchEmployeeTreatments().pipe(
       switchMap((employeeTreatments) => {
-        this.employeeTreatments = employeeTreatments.filter(
+        const employeeTreatmentsToDelete = employeeTreatments.filter(
           (et) => et.treatmentID === treatmentId
         );
-        console.log('EMPLOYEE TREATMENTS FETCH: ', this.employeeTreatments);
-        const employeeTreatment = this.employeeTreatments[0];
-        console.log('employee Treatment id: ', employeeTreatment);
-
-        // Return an observable that deletes the employee treatment
-        return this.employeeTreatmentService.deleteEmployeeTreatment(
-          employeeTreatment.employeeTreatmentsId
+        console.log('EMPLOYEE TREATMENTS FETCH: ', employeeTreatmentsToDelete);
+        if (employeeTreatmentsToDelete.length === 0) {
+          return of(null); // If no employee treatments, skip deletion
+        }
+        const deleteEmployeeTreatmentObservables =
+          employeeTreatmentsToDelete.map((et) =>
+            this.employeeTreatmentService.deleteEmployeeTreatment(
+              et.employeeTreatmentsId
+            )
+          );
+        return forkJoin(deleteEmployeeTreatmentObservables).pipe(
+          map(() => void 0)
         );
       })
     );
   }
 
-  onConfirm(): void {
+  onConfirm(treatmentId: number): void {
     if (this.selectedTreatment) {
       this.fetchEmployeeTreatments(this.selectedTreatment.treatmentID)
         .pipe(
+          switchMap(() => this.appointmentService.fetchAppointments()), // Fetch all appointments
+          switchMap((appointments) =>
+            this.loadAppointmentsWithTreatments(appointments, treatmentId)
+          ), // Filter relevant appointments
+          switchMap((relevantAppointments) => {
+            if (relevantAppointments.length === 0) {
+              return of(null); // If no appointments, skip deletion
+            }
+            const deleteAppointmentObservables = relevantAppointments.map(
+              (appointment) =>
+                this.appointmentService.deleteAppointment(
+                  appointment.appointmentId
+                )
+            );
+            return forkJoin(deleteAppointmentObservables);
+          }),
           switchMap(() => {
-            // Delete the treatment only after the employee treatment has been deleted
+            // Delete the treatment only after the employee treatments and appointments have been deleted
             return this.treatmentService.deleteTreatment(
               this.selectedTreatment.treatmentID
             );

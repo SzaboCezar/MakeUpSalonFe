@@ -116,76 +116,33 @@ export class AppointmentService {
         })
       );
   }
-  // updateAppointment(
-  //   appointmentToBeUpdated: Appointment
-  // ): Observable<Appointment> {
-  //   if (!appointmentToBeUpdated) {
-  //     this.logService.add(
-  //       `AppointmentService | Appointment Update: appointment is undefined - ${Date.now()}`
-  //     );
-  //     throw new Error('Appointment is undefined');
-  //   }
 
-  //   const id = appointmentToBeUpdated.appointmentId;
-  //   console.log('+++++++++++++++++++++++', id);
-  //   console.log('+++++++++++++++++++++++++++', appointmentToBeUpdated);
+  deleteAppointment(id: number): Observable<any> {
+    const appointmentIndex = this.appointments.findIndex(
+      (t) => t.appointmentId === id
+    );
+    if (appointmentIndex === -1) {
+      this.logService.add(
+        `AppointmentService | Appointment Delete: appointment with id=${id} not found`
+      );
+      throw new Error('Appointment with this id does not exist');
+    }
 
-  //   return this.http
-  //     .put<Appointment>(`${this.baseUrl}/${id}`, appointmentToBeUpdated)
-  //     .pipe(
-  //       tap((updatedAppointment: Appointment) => {
-  //         console.log(
-  //           'Inside tap operator - updated appointment:',
-  //           updatedAppointment
-  //         );
-
-  //         const index = this.appointments.findIndex(
-  //           (a) => a.appointmentId === id
-  //         );
-  //         if (index !== -1) {
-  //           this.appointments[index] = updatedAppointment;
-  //           this.appointmentsChanged.next(this.appointments.slice());
-  //         }
-
-  //         this.logService.add(
-  //           `AppointmentService | Appointment Update: updated appointment with id=${id}`
-  //         );
-  //       }),
-  //       catchError((error) => {
-  //         console.error('Error while updating appointment:', error);
-
-  //         this.logService.add(
-  //           `AppointmentService | Appointment Update: error updating appointment with id=${id}`
-  //         );
-
-  //         throw error; // Rethrow the error to propagate it to the subscriber
-  //       })
-  //     );
-  // }
-
-  // updateAppointmentStatus(id: number, status: Status): Observable<Appointment> {
-  //   return this.getAppointment(id).pipe(
-  //     switchMap((appointment) => {
-  //       if (!appointment) {
-  //         console.error(
-  //           `Appointment with id=${id} not found for status update.`
-  //         );
-  //         throw new Error(
-  //           `Appointment with id=${id} not found for status update.`
-  //         );
-  //       }
-
-  //       const updatedAppointment = { ...appointment, approvalStatus: status };
-  //       console.log('Updating appointment status:', updatedAppointment);
-  //       return this.updateAppointment(updatedAppointment);
-  //     }),
-  //     catchError((error) => {
-  //       console.error(
-  //         `Error fetching appointment with id=${id} for status update:`,
-  //         error
-  //       );
-  //       return of({} as Appointment); // Return empty appointment on error
-  //     })
-  //   );
-  // }
+    return this.http.delete(`${this.baseUrl}/${id}`).pipe(
+      tap(() => {
+        this.appointments.splice(appointmentIndex, 1);
+        this.appointmentsChanged.next(this.appointments.slice());
+        console.log(
+          `AppointmentService | Appointment Delete: deleted appointment with id=${id}`
+        );
+      }),
+      catchError((error) => {
+        console.error('Error while deleting appointment:', error);
+        this.logService.add(
+          `AppointmentService | Appointment Delete: error deleting ${id}`
+        );
+        throw error;
+      })
+    );
+  }
 }

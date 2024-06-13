@@ -134,6 +134,19 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     this.selectedAppointment = appointment;
   }
 
+  onConfirm(appointmentId: number): void {
+    this.appointmentService.deleteAppointment(appointmentId).subscribe({
+      next: () => {
+        console.log('Appointment deleted successfully.');
+        // Perform any additional actions like refreshing the appointment list
+        window.location.reload();
+      },
+      error: (error) => {
+        console.error('Error deleting appointment:', error);
+      },
+    });
+  }
+
   ngOnDestroy() {
     this.appointmentSubscription.unsubscribe();
   }
