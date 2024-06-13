@@ -46,6 +46,7 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   filteredAppointments: Appointment[] = [];
   treatments: Treatment[];
   treatment: Treatment;
+  role: string;
 
   constructor(
     private appointmentService: AppointmentService,
@@ -54,16 +55,24 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.appointmentSubscription =
-      this.appointmentService.appointmentsChanged.subscribe(
-        (appointments: Appointment[]) => {
-          this.loadAppointmentsWithTreatments(appointments);
-        }
-      );
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      this.role = parsedUserData.role;
 
-    this.loadAppointmentsWithTreatments(
-      this.appointmentService.getAppointments()
-    );
+      this.appointmentSubscription =
+        this.appointmentService.appointmentsChanged.subscribe(
+          (appointments: Appointment[]) => {
+            this.loadAppointmentsWithTreatments(appointments);
+          }
+        );
+
+      this.loadAppointmentsWithTreatments(
+        this.appointmentService.getAppointments()
+      );
+    } else {
+      console.error('No user data found in local storage');
+    }
   }
 
   loadAppointmentsWithTreatments(appointments: Appointment[]): void {
@@ -71,13 +80,23 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     if (userData) {
       const parsedUserData = JSON.parse(userData);
       const userId = parsedUserData.userId;
-      console.log('appointmets:::  ', appointments);
-      const relevantAppointments = appointments.filter(
-        (appointment) => appointment.customerId === userId
-      );
-      console.log('relevant appointments: ', relevantAppointments);
 
-      // Map over each appointment to create an observable that fetches the treatment
+      let relevantAppointments: Appointment[] = [];
+
+      if (this.role === 'CUSTOMER') {
+        relevantAppointments = appointments.filter(
+          (appointment) => appointment.customerId === userId
+        );
+      } else if (this.role === 'EMPLOYEE') {
+        relevantAppointments = appointments.filter(
+          (appointment) => appointment.employeeId === userId
+        );
+      } else if (this.role === 'ADMIN') {
+        relevantAppointments = appointments;
+      }
+
+      console.log('Relevant appointments: ', relevantAppointments);
+
       const appointmentsWithTreatments = relevantAppointments.map(
         (appointment) =>
           this.treatmentService.getTreatment(appointment.treatmentID).pipe(
@@ -94,10 +113,9 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
           )
       );
 
-      // Combine all observables to ensure all treatments are fetched before updating the view
       forkJoin(appointmentsWithTreatments).subscribe((combinedAppointments) => {
         this.filteredAppointments = combinedAppointments;
-        console.log('filtered appointments: ', this.filteredAppointments);
+        console.log('Filtered appointments: ', this.filteredAppointments);
       });
     }
   }

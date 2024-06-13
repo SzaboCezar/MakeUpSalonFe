@@ -37,6 +37,13 @@
                 <br />
                 <span class="text-success">Treatment status: </span>
                 {{ appointment.approvalStatus }}
+
+                <br />
+                <span *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'">
+                  <strong>Customer Name: </strong>
+                  {{ appointment.customerFirstName }}
+                  {{ appointment.customerLastName }}
+                </span>
               </p>
 
               <!--Details, edit and delete buttons.-->
