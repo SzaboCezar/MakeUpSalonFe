@@ -1,25 +1,25 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectorRef} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { NavBarComponent } from '../../dom-element/nav-bar/nav-bar.component';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import {CommonModule} from '@angular/common';
+import {NavBarComponent} from '../../dom-element/nav-bar/nav-bar.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import moment from 'moment';
-import { Treatment } from '../../../shared/models/Treatment.model';
-import { TreatmentService } from '../../../services/treatment.service';
-import { Subscription, forkJoin } from 'rxjs';
-import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loading-spinner.component';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { EmployeeTreatment } from '../../../shared/models/EmployeeTreatment.model';
-import { Person } from '../../../shared/models/Person.model';
-import { PersonService } from '../../../services/person.service';
-import { IntervalDTO } from '../../../shared/models/DTO/IntervalDTO.model';
-import { AppointmentService } from '../../../services/appointment.service';
-import { Location } from '@angular/common';
+import {Treatment} from '../../../shared/models/Treatment.model';
+import {TreatmentService} from '../../../services/treatment.service';
+import {Subscription, forkJoin} from 'rxjs';
+import {LoadingSpinnerComponent} from '../../dom-element/loading-spinner/loading-spinner.component';
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {EmployeeTreatment} from '../../../shared/models/EmployeeTreatment.model';
+import {Person} from '../../../shared/models/Person.model';
+import {PersonService} from '../../../services/person.service';
+import {IntervalDTO} from '../../../shared/models/DTO/IntervalDTO.model';
+import {AppointmentService} from '../../../services/appointment.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-appointment-add',
@@ -58,13 +58,19 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
     private location: Location,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
+    this.personService.fetchPersons().subscribe((persons) => {
+        console.log('Persons:', persons);
+      }
+    );
+
     this.appointmentForm = this.fb.group({
-      name: [{ value: '', disabled: true }, Validators.required],
+      name: [{value: '', disabled: true}, Validators.required],
       email: [
-        { value: '', disabled: true },
+        {value: '', disabled: true},
         [Validators.required, Validators.email],
       ],
       date: ['', Validators.required],
@@ -80,8 +86,8 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
     this.appointmentForm
       .get('appointmentFor')
       ?.valueChanges.subscribe((treatmentID) => {
-        this.updateEmployeeDropdown(treatmentID);
-      });
+      this.updateEmployeeDropdown(treatmentID);
+    });
 
     this.fetchAllTreatments();
 

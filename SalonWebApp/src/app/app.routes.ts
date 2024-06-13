@@ -64,7 +64,7 @@ export const routes: Routes = [
     resolve: {
       treatments: TreatmentsResolverService,
       // appointments: AppointmentsResolverService,
-      // // persons:  PersonsResolverService
+      // persons:  PersonsResolverService
     }
 
   },
