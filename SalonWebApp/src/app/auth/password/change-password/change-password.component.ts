@@ -35,7 +35,7 @@ export class ChangePasswordComponent {
       this.changeForm = new FormGroup({
         newPassword: new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)]),
         // newPassword: new FormControl(null, Validators.required),
-        confirmPassword: new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)])
+        confirmationPassword: new FormControl(null, [Validators.required, Validators.pattern(/^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d).{8,}$/)])
         // confirmationPassword: new FormControl(null, Validators.required)
       });
     } else {

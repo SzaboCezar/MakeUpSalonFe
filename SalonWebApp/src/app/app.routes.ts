@@ -20,6 +20,7 @@ import {
 } from "./auth/password/reset-password/reset-password-email/reset-password-email.component";
 import {ResetPasswordComponent} from "./auth/password/reset-password/reset-password.component";
 import {RoleGuard} from "./auth/role.guard";
+import {PersonsResolverService} from "./resolvers/persons-resolver.service";
 
 export const routes: Routes = [
   //General routes
@@ -60,6 +61,12 @@ export const routes: Routes = [
     path: 'book',
     canActivate: [AuthGuard],
     component: AppointmentAddComponent,
+    resolve: {
+      treatments: TreatmentsResolverService,
+      // appointments: AppointmentsResolverService,
+      // // persons:  PersonsResolverService
+    }
+
   },
 
   //Appointment
@@ -68,8 +75,8 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     component: AppointmentListComponent,
     resolve: {
-      treatments: AppointmentsResolverService,
-      TreatmentsResolverService,
+      treatments: TreatmentsResolverService,
+      appointments: AppointmentsResolverService
     },
   },
 
