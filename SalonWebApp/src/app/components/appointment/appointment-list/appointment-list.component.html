@@ -4,13 +4,13 @@
     <i>My appointments</i>
   </h3>
 
-  <div *ngFor="let appointment of filteredAppointments">
+  <div *ngFor="let appointment of relevantAppointments">
     <div ngbAccordion (shown)="onSelect(appointment)" [closeOthers]="true">
-      <div ngbAccordionItem="{{ appointment.appointmentID }}">
+      <div ngbAccordionItem="{{ appointment.appointmentId }}">
         <h2 ngbAccordionHeader>
           <button ngbAccordionButton>
             <span class="p-2 border rounded-start-2">{{
-              appointment.appointmentID
+              appointment.appointmentId
             }}</span>
             <span class="p-2 border rounded-end-2"
               >Treatment name: {{ appointment.treatmentName }}</span
@@ -53,10 +53,21 @@
                 <!--                    Details</button>-->
                 <!--                </a>-->
 
+                <!-- Approve Button -->
+                <a class="mt-2 me-2">
+                  <button
+                    type="button"
+                    *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
+                    (click)="approveAppointment(appointment.appointmentId)"
+                    class="btn btn-outline-success"
+                  >
+                    Approve
+                  </button>
+                </a>
                 <a class="mt-2 me-2" routerLink="/treatment/detail/update/">
                   <button
                     type="button"
-                    class="btn btn-outline-success bi-gear"
+                    class="btn btn-outline-info bi-gear"
                     ngbTooltip="UPDATE"
                     disabled
                   >

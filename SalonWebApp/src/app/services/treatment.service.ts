@@ -113,8 +113,8 @@ export class TreatmentService {
     treatmentToBeUpdated.treatmentID = +treatmentToBeUpdated.treatmentID;
 
     const treatmentIndex = this.treatments.findIndex(
-      (foundedTreatment) =>
-        foundedTreatment.treatmentID === treatmentToBeUpdated.treatmentID
+      (foundTreatment) =>
+        foundTreatment.treatmentID === treatmentToBeUpdated.treatmentID
     );
     console.log(
       'TreatmentService | Treatment Update: treatmentIndex: ',
