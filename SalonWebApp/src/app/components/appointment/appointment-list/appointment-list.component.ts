@@ -17,7 +17,10 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loading-spinner.component';
 import { Treatment } from '../../../shared/models/Treatment.model';
+import { Status } from '../../../shared/models/Enum/Status.enum';
 import { TreatmentService } from '../../../services/treatment.service';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-appointment-list',
@@ -43,27 +46,38 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   appointmentSubscription: Subscription;
   selectedAppointment?: Appointment;
   appointments: Appointment[];
-  filteredAppointments: Appointment[] = [];
+  relevantAppointments: Appointment[] = [];
   treatments: Treatment[];
   treatment: Treatment;
+  role: string;
 
   constructor(
     private appointmentService: AppointmentService,
     private treatmentService: TreatmentService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.appointmentSubscription =
-      this.appointmentService.appointmentsChanged.subscribe(
-        (appointments: Appointment[]) => {
-          this.loadAppointmentsWithTreatments(appointments);
-        }
-      );
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      this.role = parsedUserData.role;
 
-    this.loadAppointmentsWithTreatments(
-      this.appointmentService.getAppointments()
-    );
+      this.appointmentSubscription =
+        this.appointmentService.appointmentsChanged.subscribe(
+          (appointments: Appointment[]) => {
+            this.loadAppointmentsWithTreatments(appointments);
+          }
+        );
+
+      this.loadAppointmentsWithTreatments(
+        this.appointmentService.getAppointments()
+      );
+    } else {
+      console.error('No user data found in local storage');
+    }
   }
 
   loadAppointmentsWithTreatments(appointments: Appointment[]): void {
@@ -72,36 +86,65 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       const parsedUserData = JSON.parse(userData);
       const userId = parsedUserData.userId;
 
-      const relevantAppointments = appointments.filter(
-        (appointment) => appointment.customer.personId === userId
-      );
+      if (this.role === 'CUSTOMER') {
+        this.relevantAppointments = appointments.filter(
+          (appointment) => appointment.customerId === userId
+        );
+      } else if (this.role === 'EMPLOYEE') {
+        this.relevantAppointments = appointments.filter(
+          (appointment) => appointment.employeeId === userId
+        );
+      } else if (this.role === 'ADMIN') {
+        this.relevantAppointments = appointments;
+      }
 
-      // Map over each appointment to create an observable that fetches the treatment
-      const appointmentsWithTreatments = relevantAppointments.map(
-        (appointment) =>
-          this.treatmentService.getTreatment(appointment.treatmentID).pipe(
-            map((treatment) => ({
-              ...appointment,
-              treatmentName: treatment.name,
-              treatmentDescription: treatment.description,
-              treatmentPrice: treatment.price,
-            })),
-            catchError((error) => {
-              console.error('Error fetching treatment', error);
-              return of({ ...appointment }); // Return the appointment without treatment details on error
-            })
-          )
-      );
-
-      // Combine all observables to ensure all treatments are fetched before updating the view
-      forkJoin(appointmentsWithTreatments).subscribe((combinedAppointments) => {
-        this.filteredAppointments = combinedAppointments;
-      });
+      console.log('Relevant appointments: ', this.relevantAppointments);
     }
+  }
+
+  approveAppointment(appointmentId: number): void {
+    console.log('Appointment id=', appointmentId);
+    let toBeUpdatedAppointment = this.relevantAppointments.filter(
+      (appointment) => appointment.appointmentId === appointmentId
+    );
+    console.log('appointment to be updated: ', toBeUpdatedAppointment);
+    const appointmentData = {
+      appointmentId: appointmentId,
+      customerId: toBeUpdatedAppointment[0].customerId,
+      startDateTime: toBeUpdatedAppointment[0].startDateTime,
+      approvalStatus: Status.APPROVED,
+      employeeId: toBeUpdatedAppointment[0].employeeId,
+      treatmentId: toBeUpdatedAppointment[0].treatmentId,
+    };
+
+    console.log('appointment data to be sent: ', appointmentData);
+
+    this.appointmentService.updateAppointment(appointmentData).subscribe({
+      next: (appointment: Appointment) => {
+        console.log('Appointment approved:', appointment);
+        window.location.reload(); // Refresh the list after approval
+      },
+      error: (error) => {
+        console.error('Error approving appointment:', error);
+      },
+    });
   }
 
   onSelect(appointment: Appointment): void {
     this.selectedAppointment = appointment;
+  }
+
+  onConfirm(appointmentId: number): void {
+    this.appointmentService.deleteAppointment(appointmentId).subscribe({
+      next: () => {
+        console.log('Appointment deleted successfully.');
+        // Perform any additional actions like refreshing the appointment list
+        window.location.reload();
+      },
+      error: (error) => {
+        console.error('Error deleting appointment:', error);
+      },
+    });
   }
 
   ngOnDestroy() {

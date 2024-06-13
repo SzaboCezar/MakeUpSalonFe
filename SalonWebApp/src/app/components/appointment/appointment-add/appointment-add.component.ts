@@ -49,6 +49,7 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
   person: Person | null = null;
   email: String = '';
   successMessage: string = '';
+  today: string;
 
   constructor(
     private fb: FormBuilder,
@@ -78,6 +79,8 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
       appointmentFor: ['', Validators.required],
       employee: ['', Validators.required],
     });
+
+    this.today = moment().format('YYYY-MM-DD');
 
     this.appointmentForm.get('date')?.valueChanges.subscribe((date) => {
       this.availableTimes = this.getAvailableTimes(date);
@@ -116,9 +119,22 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
       .getUnavailableTimes(employeeId)
       .subscribe({
         next: (intervals: IntervalDTO[]) => {
+          console.log('intervals: ', intervals);
           this.unavailableTimes = intervals.map((interval) => ({
-            start: new Date(interval.start),
-            end: new Date(interval.end),
+            start: moment({
+              year: interval.start[0],
+              month: interval.start[1] - 1, // Month should be zero-indexed
+              day: interval.start[2],
+              hour: interval.start[3],
+              minute: interval.start[4],
+            }).toDate(),
+            end: moment({
+              year: interval.end[0],
+              month: interval.end[1] - 1, // Month should be zero-indexed
+              day: interval.end[2],
+              hour: interval.end[3],
+              minute: interval.end[4],
+            }).toDate(),
           }));
           console.log('Fetched unavailable times:', this.unavailableTimes); // Debugging log
           this.cdr.detectChanges(); // Manually trigger change detection
@@ -167,7 +183,7 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
   }
 
   isTimeUnavailable(time: string, date: string): boolean {
-    const selectedTime = moment(`${date}T${time}`);
+    const selectedTime = moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm');
     return this.unavailableTimes.some((unavailable) => {
       const startTime = moment(unavailable.start);
       const endTime = moment(unavailable.end);
@@ -177,9 +193,33 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
 
   getAvailableTimes(date: string): string[] {
     const times: string[] = [];
-    const startTime = moment(date).startOf('day');
-    const endTime = moment(date).endOf('day');
-    while (startTime.isBefore(endTime)) {
+    const today = moment().format('YYYY-MM-DD');
+
+    let startTime = moment(date).startOf('day');
+
+    if (date === today) {
+      // If today, start from the current hour
+      startTime = moment()
+        .add(30 - (moment().minute() % 30), 'minutes')
+        .startOf('minute');
+    } else {
+      startTime = moment(date).set({
+        hour: 8,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+      });
+    }
+
+    const limitTime = moment(date).set({
+      hour: 21,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+    });
+
+    // const endTime = moment(date).endOf('day');
+    while (startTime.isBefore(limitTime)) {
       const timeStr = startTime.format('HH:mm');
       if (!this.isTimeUnavailable(timeStr, date)) {
         times.push(timeStr);
@@ -243,7 +283,10 @@ export class AppointmentAddComponent implements OnInit, OnDestroy {
         const customerId = parsedUserData.userId;
         const startDate = this.appointmentForm.get('date')?.value;
         const startTime = this.appointmentForm.get('time')?.value;
-        const startDateTime = `${startDate}T${startTime}:00`;
+        const startDateTime = moment(
+          `${startDate} ${startTime}`,
+          'YYYY-MM-DD HH:mm'
+        ).format('YYYY-MM-DD HH:mm:ss');
         const employeeId = this.appointmentForm.get('employee')?.value;
         const treatmentId = this.appointmentForm.get('appointmentFor')?.value;
 
