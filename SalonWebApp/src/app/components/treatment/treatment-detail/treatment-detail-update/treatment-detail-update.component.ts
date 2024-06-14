@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Treatment } from '../../../../shared/models/Treatment.model';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TreatmentService } from '../../../../services/treatment.service';
 import { LogsService } from '../../../../logs/logs.service';
 import { Location, NgForOf, NgIf } from '@angular/common';
@@ -168,7 +168,7 @@ export class TreatmentDetailUpdateComponent implements OnInit {
                 this.logService.add(
                   `EmployeeTreatment added for treatmentID ${treatment.treatmentID}`
                 );
-               this.router.navigate(['/treatments']);
+                this.router.navigate(['/treatments']);
               },
               (error) => {
                 console.error('Error while adding employee treatment:', error);
@@ -185,21 +185,6 @@ export class TreatmentDetailUpdateComponent implements OnInit {
         console.error('Error while adding treatment:', error);
       }
     );
-
-    // this.treatment = this.updateTreatmentForm.getRawValue();
-
-    // try {
-    //   this.treatmentService.updateTreatment(this.treatment).subscribe(() => {
-    //     this.logService.add(
-    //       `TreatmentDetailUpdateComponent: updated ${this.treatment?.name}`
-    //     );
-    //     this.location.back();
-    //   });
-    // } catch (error) {
-    //   this.logService.add(
-    //     `TreatmentDetailUpdateComponent: error updating ${this.treatment?.name}`
-    //   );
-    // }
   }
 
   onBack(): void {

@@ -13,8 +13,9 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import moment from 'moment';
 import { NavBarComponent } from '../../../dom-element/nav-bar/nav-bar.component';
 import { Person } from '../../../../shared/models/Person.model';
-import { Subscription, forkJoin } from 'rxjs';
+import { Observable, Subscription, forkJoin } from 'rxjs';
 import { IntervalDTO } from '../../../../shared/models/DTO/IntervalDTO.model';
+import { Status } from '../../../../shared/models/Enum/Status.enum';
 
 @Component({
   selector: 'app-appointment-detail-update',
@@ -44,7 +45,7 @@ export class AppointmentDetailUpdateComponent implements OnInit {
   unavailableSubscription: Subscription;
   unavailableTimes: IntervalDTO[] = [];
   availableTimes: string[] = [];
-  selectedEmployeeTreatments: Person[] = [];
+  selectedEmployee: Person;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,18 +59,6 @@ export class AppointmentDetailUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.appointmentForm = this.fb.group({
-    //   name: [{value: '', disabled: true}, Validators.required],
-    //   email: [
-    //     {value: '', disabled: true},
-    //     [Validators.required, Validators.email],
-    //   ],
-    //   date: ['', Validators.required],
-    //   time: ['', Validators.required],
-    //   appointmentFor: ['', Validators.required],
-    //   employee: ['', Validators.required],
-    // });
-
     this.appointmentForm = new FormGroup({
       name: new FormControl({ value: '', disabled: true }, [
         Validators.required,
@@ -90,12 +79,15 @@ export class AppointmentDetailUpdateComponent implements OnInit {
 
     this.today = moment().format('YYYY-MM-DD');
     this.getAppointment();
+    console.log(
+      'appointment employee id is ++++ ',
+      this.appointment.employeeId
+    );
+    this.getEmployee(this.appointment.employeeId);
 
-    // this.appointmentForm
-    //   .get('appointmentFor')
-    //   ?.valueChanges.subscribe((treatmentID) => {
-    //     this.updateEmployeeDropdown(treatmentID);
-    //   });
+    this.appointmentForm.get('date')?.valueChanges.subscribe((date) => {
+      this.availableTimes = this.getAvailableTimes(date);
+    });
 
     this.fetchPersonFromLocalStorage();
   }
@@ -108,35 +100,24 @@ export class AppointmentDetailUpdateComponent implements OnInit {
         console.log('APPOINT FETCHED IS: ', this.appointment);
         this.populateForm(appointment);
       });
-      this.fetchUnavailableTimes(+id);
+      this.fetchUnavailableTimes(this.appointment.employeeId);
     });
   }
 
-  updateEmployeeDropdown(treatmentId: number): void {
-    const selectedTreatment = this.treatments.find(
-      (treatment) => treatment.treatmentID === treatmentId
+  getEmployee(employeeId: number): void {
+    this.personService.getPersonById(employeeId).subscribe(
+      (employee: Person) => {
+        const employeeName = `${employee.firstName} ${employee.lastName}`;
+        this.appointmentForm?.get('employee')?.setValue(employeeName);
+        console.log('Selected employee:', employeeName);
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Error fetching employee details', error);
+        this.appointmentForm?.get('employee')?.setValue('');
+        this.cdr.detectChanges();
+      }
     );
-    if (selectedTreatment) {
-      const employeeObservables = selectedTreatment.employeeIds.map((id) =>
-        this.personService.getPersonById(id)
-      );
-
-      forkJoin(employeeObservables).subscribe(
-        (employees: Person[]) => {
-          this.selectedEmployeeTreatments = employees;
-          console.log('Selected employees:', this.selectedEmployeeTreatments);
-          this.cdr.detectChanges();
-        },
-        (error) => {
-          console.error('Error fetching employee details', error);
-          this.selectedEmployeeTreatments = [];
-          this.cdr.detectChanges();
-        }
-      );
-    } else {
-      this.selectedEmployeeTreatments = [];
-      this.cdr.detectChanges();
-    }
   }
 
   populateForm(appointment: Appointment): void {
@@ -149,13 +130,6 @@ export class AppointmentDetailUpdateComponent implements OnInit {
       this.appointmentForm
         ?.get('appointmentFor')
         ?.setValue(appointment.treatmentName);
-      this.appointmentForm?.get('employee')?.setValue(appointment.employeeId);
-      this.appointmentForm
-        ?.get('date')
-        ?.setValue(moment(appointment.startDateTime).format('YYYY-MM-DD'));
-      this.appointmentForm.get('date')?.valueChanges.subscribe((date) => {
-        this.availableTimes = this.getAvailableTimes(date);
-      });
     }
   }
 
@@ -165,30 +139,9 @@ export class AppointmentDetailUpdateComponent implements OnInit {
       const parsedUserData = JSON.parse(userData);
       const userId = parsedUserData.userId;
       this.email = parsedUserData.email;
-      this.personSubscription = this.personService
-        .getPersonById(userId)
-        .subscribe({
-          next: (person: Person) => {
-            this.person = person;
-            console.log('Fetched person:', this.person); // Debugging log
-            this.setFormValues();
-            this.cdr.detectChanges(); // Manually trigger change detection
-          },
-          error: (error) => {
-            console.error('Error fetching person:', error);
-          },
-        });
+      this.appointmentForm.get('email')?.setValue(this.email);
     } else {
       console.error('No user data found in local storage');
-    }
-  }
-
-  setFormValues(): void {
-    if (this.person) {
-      // this.appointmentForm
-      //   .get('name')
-      //   ?.setValue(`${this.person.firstName} ${this.person.lastName}`);
-      this.appointmentForm.get('email')?.setValue(this.email);
     }
   }
 
@@ -227,7 +180,8 @@ export class AppointmentDetailUpdateComponent implements OnInit {
     if (this.appointmentForm.invalid) {
       return;
     }
-
+    const appointmentId = this.appointment.appointmentId;
+    const customerId = this.appointment.customerId;
     const startDate = this.appointmentForm.get('date')?.value;
     const startTime = this.appointmentForm.get('time')?.value;
     const startDateTime = moment(
@@ -235,19 +189,27 @@ export class AppointmentDetailUpdateComponent implements OnInit {
       'YYYY-MM-DD HH:mm'
     ).format('YYYY-MM-DD HH:mm:ss');
 
+    const employeeId = this.appointment.employeeId;
+    const treatmentId = this.appointment.treatmentId;
+    const approvalStatus = Status.PENDING;
+
     const updatedAppointment = {
-      ...this.appointment,
+      appointmentId,
+      customerId,
       startDateTime,
+      employeeId: +employeeId,
+      approvalStatus,
+      treatmentId: +treatmentId,
     };
 
-    this.appointmentService.updateAppointment(null).subscribe(
+    this.appointmentService.updateAppointment(updatedAppointment).subscribe(
       (appointment: Appointment) => {
         console.log('Appointment updated successfully:', appointment);
         this.successMessage = 'Appointment updated successfully!';
         this.logService.add(
           `AppointmentDetailUpdateComponent: updated ${appointment.appointmentId}`
         );
-        this.router.navigate(['/appointments']);
+        this.router.navigate(['/my-appointments']);
       },
       (error) => {
         console.error('Error while updating appointment:', error);

@@ -119,16 +119,14 @@ export class AppointmentService {
     return this.http.post<any>(this.baseUrl, appointment);
   }
 
-  updateAppointment(
-    appointmentToBeUpdated: Appointment
-  ): Observable<Appointment> {
-    if (!appointmentToBeUpdated) {
-      this.logService.add(
-        `AppointmentService | Appointment Update: appointment is undefined - ${Date.now()}`
-      );
-      throw new Error('Appointment is undefined');
-    }
-
+  updateAppointment(appointmentToBeUpdated: {
+    appointmentId: number;
+    customerId: number;
+    startDateTime: string;
+    employeeId: number;
+    approvalStatus: Status;
+    treatmentId: number;
+  }): Observable<any> {
     appointmentToBeUpdated.appointmentId =
       +appointmentToBeUpdated.appointmentId;
 

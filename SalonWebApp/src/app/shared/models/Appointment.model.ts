@@ -12,9 +12,9 @@ export interface Appointment {
   customerLastName?: string;
 
   //TODO: check the format of the date.
-  startDateTime?: Date;
-  endDateTime?: Date;
-  dateCreated?: Date;
+  startDateTime?: string;
+  endDateTime?: string;
+  dateCreated?: string;
 
   approvalStatus?: Status;
   employee?: Person;

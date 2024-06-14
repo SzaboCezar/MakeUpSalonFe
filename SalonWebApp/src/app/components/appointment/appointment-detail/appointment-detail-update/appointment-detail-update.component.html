@@ -54,19 +54,14 @@
                           <label class="control-label" for="appointmentfor"
                             >Appointment For</label
                           >
-                          <select
+                          <input
                             id="appointmentfor"
                             formControlName="appointmentFor"
+                            type="text"
+                            placeholder="Name"
                             class="form-control"
                             [disabled]
-                          >
-                            <option
-                              *ngFor="let treatment of treatments"
-                              [value]="treatment.treatmentID"
-                            >
-                              {{ treatment.name }}
-                            </option>
-                          </select>
+                          />
                         </div>
                       </div>
                       <div class="col-md-12 mt-3">
@@ -74,21 +69,14 @@
                           <label class="control-label" for="employee"
                             >Employee</label
                           >
-                          <select
+                          <input
                             id="employee"
                             formControlName="employee"
+                            type="text"
+                            placeholder="Name"
                             class="form-control"
                             [disabled]
-                          >
-                            <option
-                              *ngFor="
-                                let employee of selectedEmployeeTreatments
-                              "
-                              [value]="employee.personId"
-                            >
-                              {{ employee.firstName }} {{ employee.lastName }}
-                            </option>
-                          </select>
+                          />
                         </div>
                       </div>
                       <div class="col-md-6 mt-3">
