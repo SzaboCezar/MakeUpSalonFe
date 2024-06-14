@@ -26,9 +26,8 @@
                       <div ngbAccordionItem="{{ appointment.appointmentId }}">
                         <h2 ngbAccordionHeader>
                           <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.appointmentId }}</span>
-                            <span
-                              class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
+                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
+                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
                           </button>
                         </h2>
                         <div ngbAccordionCollapse>
@@ -105,9 +104,8 @@
                       <div ngbAccordionItem="{{ appointment.appointmentId }}">
                         <h2 ngbAccordionHeader>
                           <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.appointmentId }}</span>
-                            <span
-                              class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
+                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
+                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
                           </button>
                         </h2>
                         <div ngbAccordionCollapse>
@@ -188,9 +186,8 @@
                       <div ngbAccordionItem="{{ appointment.appointmentId }}">
                         <h2 ngbAccordionHeader>
                           <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.appointmentId }}</span>
-                            <span
-                              class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
+                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
+                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
                           </button>
                         </h2>
                         <div ngbAccordionCollapse>
@@ -267,9 +264,8 @@
                       <div ngbAccordionItem="{{ appointment.appointmentId }}">
                         <h2 ngbAccordionHeader>
                           <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.appointmentId }}</span>
-                            <span
-                              class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
+                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
+                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
                           </button>
                         </h2>
                         <div ngbAccordionCollapse>
