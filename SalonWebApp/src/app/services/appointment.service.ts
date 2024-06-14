@@ -26,8 +26,41 @@ export class AppointmentService {
       tap((appointments) => {
         this.setAppointments(appointments);
         console.log('AppointmentService → fetchAppointments() called');
+
+        if (appointments.length > 0) {
+          for (let appointment of appointments) {
+            if(appointment.approvalStatus === Status.EXPIRED.toUpperCase()) {
+              return;
+            }
+
+            if (this.isAppointmentExpired(appointment)) {
+              console.log('Marking appointment as EXPIRED:', appointment);
+              appointment.approvalStatus = Status.EXPIRED;
+              this.updateAppointment(appointment).subscribe(
+                () => {
+                  console.log('Appointment updated successfully');
+                },
+                (error) => {
+                  console.error('Error updating appointment:', error);
+                }
+              );
+            }
+          }
+        }
+      }),
+      catchError((error) => {
+        console.error('Error fetching appointments:', error);
+        throw error; // throw error further to handle in component
       })
     );
+  }
+
+  private isAppointmentExpired(appointment: Appointment): boolean {
+    if (appointment.startDateTime) {
+      const startDateTime = new Date(appointment.startDateTime);
+      return startDateTime < new Date(); // compare with current date/time
+    }
+    return false; // handle case where startDateTime is not defined
   }
 
   setAppointments(appointments: Appointment[]) {

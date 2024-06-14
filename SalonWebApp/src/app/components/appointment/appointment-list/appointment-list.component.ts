@@ -60,6 +60,10 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
   role: string;
   private modalInstance: any;
   error?: string;
+  pendingAppointmentsNumber?: number;
+  approvedAppointmentsNumber?: number;
+  declinedAppointmentsNumber?: number;
+  expiredAppointmentsNumber?: number;
 
   @ViewChild('errorModalAppointment') errorModalAppointment: ElementRef;
 
@@ -107,13 +111,16 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
         this.relevantAppointments = appointments.filter(
           (appointment) => appointment.customerId === userId
         );
+      this.countAppointmentsNumbers();
       } else if (this.role === 'EMPLOYEE') {
         this.relevantAppointments = appointments.filter(
           (appointment) => appointment.employeeId === userId
         );
+        this.countAppointmentsNumbers();
       } else if (this.role === 'ADMIN') {
         this.relevantAppointments = appointments;
       }
+      this.countAppointmentsNumbers();
       console.log('Relevant appointments: ', this.relevantAppointments);
       if (this.relevantAppointments.length === 0) {
         this.error = 'We could not find any appointment.';
@@ -165,18 +172,20 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       treatmentId: toBeUpdatedAppointment[0].treatmentId,
     };
 
+
     console.log('appointment data to be sent: ', appointmentData);
 
     this.appointmentService.updateAppointment(appointmentData).subscribe({
       next: (appointment: Appointment) => {
-        console.log('Appointment approved:', appointment);
+        console.log('Appointment declined:', appointment);
         window.location.reload(); // Refresh the list after approval
       },
       error: (error) => {
-        console.error('Error approving appointment:', error);
+        console.error('Error declining appointment:', error);
       },
     });
   }
+
 
   onSelect(appointment: Appointment): void {
     this.selectedAppointment = appointment;
@@ -218,10 +227,37 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     }
   }
 
+  countAppointmentsNumbers(){
+    this.pendingAppointmentsNumber = this.countAppointmentsByStatus(Status.PENDING);
+    this.approvedAppointmentsNumber = this.countAppointmentsByStatus(Status.APPROVED);
+    this.declinedAppointmentsNumber = this.countAppointmentsByStatus(Status.REJECTED);
+    this.expiredAppointmentsNumber = this.countAppointmentsByStatus(Status.EXPIRED);
+  }
+
+  countAppointmentsByStatus(status: Status): number {
+    return this.relevantAppointments.filter(appointment => appointment.approvalStatus === status.toUpperCase()).length;
+  }
+
+  hasPendingAppointments(): boolean {
+    return (this.pendingAppointmentsNumber > 0);
+  }
+
+  hasApprovedAppointments(): boolean {
+    return (this.approvedAppointmentsNumber > 0);
+  }
+
+  hasDeclinedAppointments(): boolean {
+    return (this.declinedAppointmentsNumber > 0);
+  }
+
+  hasExpiredAppointments(): boolean {
+    return (this.expiredAppointmentsNumber > 0);
+  }
 
   ngOnDestroy() {
     this.appointmentSubscription.unsubscribe();
   }
 
   protected readonly Role = Role;
+  protected readonly Status = Status;
 }
