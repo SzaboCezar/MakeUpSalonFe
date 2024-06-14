@@ -1,4 +1,10 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { NavBarComponent } from '../../dom-element/nav-bar/nav-bar.component';
 import { Subscription, forkJoin, of } from 'rxjs';
 import { Appointment } from '../../../shared/models/Appointment.model';
@@ -12,7 +18,8 @@ import {
   NgbAccordionCollapse,
   NgbAccordionDirective,
   NgbAccordionHeader,
-  NgbAccordionItem, NgbModal,
+  NgbAccordionItem,
+  NgbModal,
   NgbTooltip,
 } from '@ng-bootstrap/ng-bootstrap';
 import { LoadingSpinnerComponent } from '../../dom-element/loading-spinner/loading-spinner.component';
@@ -21,14 +28,13 @@ import { Status } from '../../../shared/models/Enum/Status.enum';
 import { TreatmentService } from '../../../services/treatment.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import {Role} from "../../../shared/models/Enum/Role.enum";
+import { Role } from '../../../shared/models/Enum/Role.enum';
 
 declare global {
   interface Window {
     bootstrap: any;
   }
 }
-
 
 @Component({
   selector: 'app-appointment-list',
@@ -67,15 +73,13 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
 
   @ViewChild('errorModalAppointment') errorModalAppointment: ElementRef;
 
-
   constructor(
     private appointmentService: AppointmentService,
     private treatmentService: TreatmentService,
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
-    private modalService: NgbModal,
-
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -106,12 +110,12 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     if (userData) {
       const parsedUserData = JSON.parse(userData);
       const userId = parsedUserData.userId;
-
+      console.log('appointments fetched: ', appointments);
       if (this.role === 'CUSTOMER') {
         this.relevantAppointments = appointments.filter(
           (appointment) => appointment.customerId === userId
         );
-      this.countAppointmentsNumbers();
+        this.countAppointmentsNumbers();
       } else if (this.role === 'EMPLOYEE') {
         this.relevantAppointments = appointments.filter(
           (appointment) => appointment.employeeId === userId
@@ -157,6 +161,34 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     });
   }
 
+  editAppointment(appointmentId: number): void {
+    console.log('Appointment id=', appointmentId);
+    let toBeUpdatedAppointment = this.relevantAppointments.filter(
+      (appointment) => appointment.appointmentId === appointmentId
+    );
+    console.log('appointment to be updated: ', toBeUpdatedAppointment);
+    const appointmentData = {
+      appointmentId: appointmentId,
+      customerId: toBeUpdatedAppointment[0].customerId,
+      startDateTime: toBeUpdatedAppointment[0].startDateTime,
+      approvalStatus: Status.APPROVED,
+      employeeId: toBeUpdatedAppointment[0].employeeId,
+      treatmentId: toBeUpdatedAppointment[0].treatmentId,
+    };
+
+    console.log('appointment data to be sent: ', appointmentData);
+
+    this.appointmentService.updateAppointment(appointmentData).subscribe({
+      next: (appointment: Appointment) => {
+        console.log('Appointment approved:', appointment);
+        window.location.reload(); // Refresh the list after approval
+      },
+      error: (error) => {
+        console.error('Error approving appointment:', error);
+      },
+    });
+  }
+
   declineAppointment(appointmentId: number): void {
     console.log('Appointment id=', appointmentId);
     let toBeUpdatedAppointment = this.relevantAppointments.filter(
@@ -172,7 +204,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       treatmentId: toBeUpdatedAppointment[0].treatmentId,
     };
 
-
     console.log('appointment data to be sent: ', appointmentData);
 
     this.appointmentService.updateAppointment(appointmentData).subscribe({
@@ -185,7 +216,6 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
       },
     });
   }
-
 
   onSelect(appointment: Appointment): void {
     this.selectedAppointment = appointment;
@@ -227,31 +257,41 @@ export class AppointmentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  countAppointmentsNumbers(){
-    this.pendingAppointmentsNumber = this.countAppointmentsByStatus(Status.PENDING);
-    this.approvedAppointmentsNumber = this.countAppointmentsByStatus(Status.APPROVED);
-    this.declinedAppointmentsNumber = this.countAppointmentsByStatus(Status.REJECTED);
-    this.expiredAppointmentsNumber = this.countAppointmentsByStatus(Status.EXPIRED);
+  countAppointmentsNumbers() {
+    this.pendingAppointmentsNumber = this.countAppointmentsByStatus(
+      Status.PENDING
+    );
+    this.approvedAppointmentsNumber = this.countAppointmentsByStatus(
+      Status.APPROVED
+    );
+    this.declinedAppointmentsNumber = this.countAppointmentsByStatus(
+      Status.REJECTED
+    );
+    this.expiredAppointmentsNumber = this.countAppointmentsByStatus(
+      Status.EXPIRED
+    );
   }
 
   countAppointmentsByStatus(status: Status): number {
-    return this.relevantAppointments.filter(appointment => appointment.approvalStatus === status.toUpperCase()).length;
+    return this.relevantAppointments.filter(
+      (appointment) => appointment.approvalStatus === status.toUpperCase()
+    ).length;
   }
 
   hasPendingAppointments(): boolean {
-    return (this.pendingAppointmentsNumber > 0);
+    return this.pendingAppointmentsNumber > 0;
   }
 
   hasApprovedAppointments(): boolean {
-    return (this.approvedAppointmentsNumber > 0);
+    return this.approvedAppointmentsNumber > 0;
   }
 
   hasDeclinedAppointments(): boolean {
-    return (this.declinedAppointmentsNumber > 0);
+    return this.declinedAppointmentsNumber > 0;
   }
 
   hasExpiredAppointments(): boolean {
-    return (this.expiredAppointmentsNumber > 0);
+    return this.expiredAppointmentsNumber > 0;
   }
 
   ngOnDestroy() {

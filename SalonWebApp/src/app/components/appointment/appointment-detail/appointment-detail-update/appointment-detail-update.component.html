@@ -1,0 +1,180 @@
+<app-nav-bar></app-nav-bar>
+
+<section
+  class="vh-100 bg-image"
+  style="
+    background-image: url('./assets/img/Enrollment/Enrollment_Wallpaper.jpg');
+  "
+>
+  <div
+    class="mask d-flex align-items-center justify-content-center h-100 gradient-custom-3"
+  >
+    <div class="container">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+          <div class="row justify-content-center">
+            <!-- Form Section -->
+            <div class="col-md-10 mb-4">
+              <div class="card" style="border-radius: 15px">
+                <div class="card-body p-4 p-md-5">
+                  <h2 class="text-center mb-4">Update Appointment</h2>
+                  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                      <div *ngIf="successMessage" class="alert alert-success">
+                        {{ successMessage }}
+                      </div>
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label class="control-label" for="name">Name</label>
+                          <input
+                            id="name"
+                            formControlName="name"
+                            type="text"
+                            placeholder="Name"
+                            class="form-control input-md"
+                            [disabled]
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12 mt-3">
+                        <div class="form-group">
+                          <label class="control-label" for="email">Email</label>
+                          <input
+                            id="email"
+                            formControlName="email"
+                            type="text"
+                            placeholder="E-Mail"
+                            class="form-control input-md"
+                            [disabled]
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-12 mt-3">
+                        <div class="form-group">
+                          <label class="control-label" for="appointmentfor"
+                            >Appointment For</label
+                          >
+                          <select
+                            id="appointmentfor"
+                            formControlName="appointmentFor"
+                            class="form-control"
+                            [disabled]
+                          >
+                            <option
+                              *ngFor="let treatment of treatments"
+                              [value]="treatment.treatmentID"
+                            >
+                              {{ treatment.name }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-12 mt-3">
+                        <div class="form-group">
+                          <label class="control-label" for="employee"
+                            >Employee</label
+                          >
+                          <select
+                            id="employee"
+                            formControlName="employee"
+                            class="form-control"
+                            [disabled]
+                          >
+                            <option
+                              *ngFor="
+                                let employee of selectedEmployeeTreatments
+                              "
+                              [value]="employee.personId"
+                            >
+                              {{ employee.firstName }} {{ employee.lastName }}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mt-3">
+                        <div class="form-group">
+                          <label class="control-label" for="date"
+                            >Preferred Date</label
+                          >
+                          <input
+                            id="date"
+                            formControlName="date"
+                            type="date"
+                            placeholder="Preferred Date"
+                            class="form-control input-md"
+                            [min]="today"
+                            required
+                          />
+                          <div
+                            *ngIf="
+                              appointmentForm.get('date').invalid &&
+                              appointmentForm.get('date').touched
+                            "
+                          >
+                            Date is required.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mt-3">
+                        <div class="form-group">
+                          <label class="control-label" for="time"
+                            >Preferred Time</label
+                          >
+                          <select
+                            id="time"
+                            formControlName="time"
+                            class="form-control"
+                            required
+                          >
+                            <option
+                              *ngFor="let time of availableTimes"
+                              [value]="time"
+                            >
+                              {{ time }}
+                            </option>
+                          </select>
+                          <div
+                            *ngIf="
+                              appointmentForm.get('time').invalid &&
+                              appointmentForm.get('time').touched
+                            "
+                          >
+                            Time is required.
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="col-md-12 mt-2 d-flex justify-content-between mt-3"
+                      >
+                        <div class="form-group">
+                          <button
+                            id="singlebutton"
+                            name="singlebutton"
+                            class="btn btn-outline-success btn-lg"
+                          >
+                            Update Appointment
+                          </button>
+                        </div>
+                        <div class="form-group">
+                          <button
+                            id="backButton"
+                            name="backButton"
+                            class="btn btn-outline-secondary btn-lg"
+                            (click)="onCancel()"
+                          >
+                            Back
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Additional Content (if any) -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

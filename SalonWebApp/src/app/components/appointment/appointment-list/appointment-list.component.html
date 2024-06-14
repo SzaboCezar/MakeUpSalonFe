@@ -1,355 +1,580 @@
 <app-nav-bar></app-nav-bar>
 
 <main *ngIf="!error" class="container-fluid">
-    <h3 class="text-center mt-4 mb-5">My Appointments</h3>
-    <div class="mask d-flex align-items-center gradient-custom-3">
-      <div class="container">
-        <div class="row mt-4">
-          <!-- List 1: Approved and Declined -->
-          <div class="col">
-            <div class="text-start mb-5">
-              <div class="position-relative text-center">
-                <h4 class="mb-3 bi bi-journal-check" style="position: relative; display: inline-block;">
-                  Approved Appointments
-                  <span *ngIf="hasApprovedAppointments()"
-                        ngbTooltip="You have {{ approvedAppointmentsNumber }} approved appointments"
-                        class="badge rounded-pill bg-success">
+  <h3 class="text-center mt-4 mb-5">My Appointments</h3>
+  <div class="mask d-flex align-items-center gradient-custom-3">
+    <div class="container">
+      <div class="row mt-4">
+        <!-- List 1: Approved and Declined -->
+        <div class="col">
+          <div class="text-start mb-5">
+            <div class="position-relative text-center">
+              <h4
+                class="mb-3 bi bi-journal-check"
+                style="position: relative; display: inline-block"
+              >
+                Approved Appointments
+                <span
+                  *ngIf="hasApprovedAppointments()"
+                  ngbTooltip="You have {{
+                    approvedAppointmentsNumber
+                  }} approved appointments"
+                  class="badge rounded-pill bg-success"
+                >
                   {{ approvedAppointmentsNumber }}
-                    <span class="visually-hidden">objects number</span>
+                  <span class="visually-hidden">objects number</span>
                 </span>
-                </h4>
-              </div>
-              <div *ngIf="hasApprovedAppointments()">
-                <div *ngFor="let appointment of relevantAppointments">
-                  <div *ngIf="appointment.approvalStatus === Status.APPROVED.toUpperCase()">
-                    <div ngbAccordion (shown)="onSelect(appointment)" [closeOthers]="true">
-                      <div ngbAccordionItem="{{ appointment.appointmentId }}">
-                        <h2 ngbAccordionHeader>
-                          <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
-                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
-                          </button>
-                        </h2>
-                        <div ngbAccordionCollapse>
-                          <div ngbAccordionBody>
-                            <ng-template>
-                              <p>
-                                <strong>Treatment description </strong>
-                                <em>{{ appointment.treatmentDescription }}</em>
-                                <br/>
-                                <strong>Treatment price </strong>
-                                <em>{{ appointment.treatmentPrice }}</em>
-                                <br/>
-                                <span class="text-primary-emphasis">Treatment date and time:</span>
-                                On {{ appointment.startDateTime | date : "yyyy-MM-dd" }} from
-                                {{ appointment.startDateTime | date : "HH:mm" }} to
-                                {{ appointment.endDateTime | date : "HH:mm" }}
-                                <br/>
-                                <span class="text-success">Treatment status: </span>
-                                {{ appointment.approvalStatus }}
-                                <br/>
-                                <span *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'">
-                                <strong>Customer Name: </strong>
-                                  {{ appointment.customerFirstName }}
-                                  {{ appointment.customerLastName }}
+              </h4>
+            </div>
+            <div *ngIf="hasApprovedAppointments()">
+              <div *ngFor="let appointment of relevantAppointments">
+                <div
+                  *ngIf="
+                    appointment.approvalStatus === Status.APPROVED.toUpperCase()
+                  "
+                >
+                  <div
+                    ngbAccordion
+                    (shown)="onSelect(appointment)"
+                    [closeOthers]="true"
+                  >
+                    <div ngbAccordionItem="{{ appointment.appointmentId }}">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                          <span class="p-2 border rounded-start-2">{{
+                            appointment.startDateTime | date : "dd.MM.yyyy"
+                          }}</span>
+                          <span class="p-2 border rounded-end-2"
+                            >Treatment name:
+                            {{ appointment.treatmentName }}</span
+                          >
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <p>
+                              <strong>Treatment description </strong>
+                              <em>{{ appointment.treatmentDescription }}</em>
+                              <br />
+                              <strong>Treatment price </strong>
+                              <em>{{ appointment.treatmentPrice }}</em>
+                              <br />
+                              <span class="text-primary-emphasis"
+                                >Treatment date and time:</span
+                              >
+                              On
+                              {{
+                                appointment.startDateTime | date : "yyyy-MM-dd"
+                              }}
+                              from
+                              {{ appointment.startDateTime | date : "HH:mm" }}
+                              to
+                              {{ appointment.endDateTime | date : "HH:mm" }}
+                              <br />
+                              <span class="text-success"
+                                >Treatment status:
                               </span>
-                              </p>
-                              <!-- Details, edit and delete buttons -->
-                              <div class="d-flex justify-content-end mx-auto">
-                                <a class="mt-2 me-2">
-                                  <button type="button"
-                                          *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
-                                          class="btn btn-outline-danger bi-ban"
-                                          (click)="declineAppointment(appointment.appointmentId)">
-                                    Decline
-                                  </button>
-                                </a>
-                              </div>
-                            </ng-template>
-                          </div>
+                              {{ appointment.approvalStatus }}
+                              <br />
+                              <span
+                                *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
+                              >
+                                <strong>Customer Name: </strong>
+                                {{ appointment.customerFirstName }}
+                                {{ appointment.customerLastName }}
+                              </span>
+                            </p>
+                            <!-- Details, edit and delete buttons -->
+                            <div class="d-flex justify-content-end mx-auto">
+                              <a class="mt-2 me-2">
+                                <button
+                                  type="button"
+                                  *ngIf="
+                                    role === 'EMPLOYEE' || role === 'ADMIN'
+                                  "
+                                  class="btn btn-outline-danger bi-ban"
+                                  (click)="
+                                    declineAppointment(
+                                      appointment.appointmentId
+                                    )
+                                  "
+                                >
+                                  Decline
+                                </button>
+                              </a>
+                            </div>
+                          </ng-template>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div *ngIf="!hasApprovedAppointments()" class="accordion custom-accordion">
-                <div class="accordion-item">
-                  <h2 role="heading" class="accordion-header">
-                    <button class="collapsed accordion-button text-center">
-                      <div class="text-muted p-2"> • No such appointments</div>
-                    </button>
-                  </h2>
-                </div>
-              </div>
             </div>
 
-            <div class="text-start mb-5">
-              <div class="position-relative text-center">
-                <h4 class="mb-3 bi bi-ban" style="position: relative; display: inline-block;">
-                  Declined Appointments
-                  <span *ngIf="hasDeclinedAppointments()"
-                        ngbTooltip="You have {{ declinedAppointmentsNumber }} declined appointments"
-                        class="badge rounded-pill bg-danger">
-                  {{ declinedAppointmentsNumber }}
-                    <span class="visually-hidden">objects number</span>
-                </span>
-                </h4>
-              </div>
-              <div *ngIf="hasDeclinedAppointments()">
-                <div *ngFor="let appointment of relevantAppointments">
-                  <div *ngIf="appointment.approvalStatus === Status.APPROVED.toUpperCase()">
-                    <div ngbAccordion (shown)="onSelect(appointment)" [closeOthers]="true">
-                      <div ngbAccordionItem="{{ appointment.appointmentId }}">
-                        <h2 ngbAccordionHeader>
-                          <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
-                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
-                          </button>
-                        </h2>
-                        <div ngbAccordionCollapse>
-                          <div ngbAccordionBody>
-                            <ng-template>
-                              <p>
-                                <strong>Treatment description </strong>
-                                <em>{{ appointment.treatmentDescription }}</em>
-                                <br/>
-                                <strong>Treatment price </strong>
-                                <em>{{ appointment.treatmentPrice }}</em>
-                                <br/>
-                                <span class="text-primary-emphasis">Treatment date and time:</span>
-                                On {{ appointment.startDateTime | date : "yyyy-MM-dd" }} from
-                                {{ appointment.startDateTime | date : "HH:mm" }} to
-                                {{ appointment.endDateTime | date : "HH:mm" }}
-                                <br/>
-                                <span class="text-success">Treatment status: </span>
-                                {{ appointment.approvalStatus }}
-                                <br/>
-                                <span *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'">
-                                <strong>Customer Name: </strong>
-                                  {{ appointment.customerFirstName }}
-                                  {{ appointment.customerLastName }}
-                              </span>
-                              </p>
-                              <!-- Details, edit and delete buttons -->
-                              <div class="d-flex justify-content-end mx-auto">
-                                <a class="mt-2 me-2">
-                                  <button type="button"
-                                          *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
-                                          class="btn btn-outline-danger bi-ban"
-                                          (click)="declineAppointment(appointment.appointmentId)">
-                                    Decline
-                                  </button>
-                                </a>
-                              </div>
-                            </ng-template>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div *ngIf="!hasDeclinedAppointments()" class="accordion custom-accordion">
-                <div class="accordion-item">
-                  <h2 role="heading" class="accordion-header">
-                    <button class="collapsed accordion-button text-center">
-                      <div class="text-muted p-2"> • No such appointments</div>
-                    </button>
-                  </h2>
-                </div>
+            <div
+              *ngIf="!hasApprovedAppointments()"
+              class="accordion custom-accordion"
+            >
+              <div class="accordion-item">
+                <h2 role="heading" class="accordion-header">
+                  <button class="collapsed accordion-button text-center">
+                    <div class="text-muted p-2">• No such appointments</div>
+                  </button>
+                </h2>
               </div>
             </div>
-
           </div>
 
-          <!-- List 2: Pending and Expired -->
-          <div class="col">
-            <div class="text-start mb-5">
-              <div class="position-relative text-center">
-                <h4 class="mb-3 bi bi-clock-history" style="position: relative; display: inline-block;">
-                  Pending Appointments
-                  <span *ngIf="hasPendingAppointments()"
-                        ngbTooltip="You have {{ pendingAppointmentsNumber }} pending appointments"
-                        class="badge rounded-pill bg-warning">
-                  {{ pendingAppointmentsNumber }}
-                    <span class="visually-hidden">objects number</span>
+          <div class="text-start mb-5">
+            <div class="position-relative text-center">
+              <h4
+                class="mb-3 bi bi-ban"
+                style="position: relative; display: inline-block"
+              >
+                Declined Appointments
+                <span
+                  *ngIf="hasDeclinedAppointments()"
+                  ngbTooltip="You have {{
+                    declinedAppointmentsNumber
+                  }} declined appointments"
+                  class="badge rounded-pill bg-danger"
+                >
+                  {{ declinedAppointmentsNumber }}
+                  <span class="visually-hidden">objects number</span>
                 </span>
-                </h4>
-              </div>
-              <div *ngIf="hasPendingAppointments()">
-                <div *ngFor="let appointment of relevantAppointments">
-                  <div *ngIf="appointment.approvalStatus === Status.APPROVED.toUpperCase()">
-                    <div ngbAccordion (shown)="onSelect(appointment)" [closeOthers]="true">
-                      <div ngbAccordionItem="{{ appointment.appointmentId }}">
-                        <h2 ngbAccordionHeader>
-                          <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
-                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
-                          </button>
-                        </h2>
-                        <div ngbAccordionCollapse>
-                          <div ngbAccordionBody>
-                            <ng-template>
-                              <p>
-                                <strong>Treatment description </strong>
-                                <em>{{ appointment.treatmentDescription }}</em>
-                                <br/>
-                                <strong>Treatment price </strong>
-                                <em>{{ appointment.treatmentPrice }}</em>
-                                <br/>
-                                <span class="text-primary-emphasis">Treatment date and time:</span>
-                                On {{ appointment.startDateTime | date : "yyyy-MM-dd" }} from
-                                {{ appointment.startDateTime | date : "HH:mm" }} to
-                                {{ appointment.endDateTime | date : "HH:mm" }}
-                                <br/>
-                                <span class="text-success">Treatment status: </span>
-                                {{ appointment.approvalStatus }}
-                                <br/>
-                                <span *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'">
-                                <strong>Customer Name: </strong>
-                                  {{ appointment.customerFirstName }}
-                                  {{ appointment.customerLastName }}
+              </h4>
+            </div>
+            <div *ngIf="hasDeclinedAppointments()">
+              <div *ngFor="let appointment of relevantAppointments">
+                <div
+                  *ngIf="
+                    appointment.approvalStatus === Status.REJECTED.toUpperCase()
+                  "
+                >
+                  <div
+                    ngbAccordion
+                    (shown)="onSelect(appointment)"
+                    [closeOthers]="true"
+                  >
+                    <div ngbAccordionItem="{{ appointment.appointmentId }}">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                          <span class="p-2 border rounded-start-2">{{
+                            appointment.startDateTime | date : "dd.MM.yyyy"
+                          }}</span>
+                          <span class="p-2 border rounded-end-2"
+                            >Treatment name:
+                            {{ appointment.treatmentName }}</span
+                          >
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <p>
+                              <strong>Treatment description </strong>
+                              <em>{{ appointment.treatmentDescription }}</em>
+                              <br />
+                              <strong>Treatment price </strong>
+                              <em>{{ appointment.treatmentPrice }}</em>
+                              <br />
+                              <span class="text-primary-emphasis"
+                                >Treatment date and time:</span
+                              >
+                              On
+                              {{
+                                appointment.startDateTime | date : "yyyy-MM-dd"
+                              }}
+                              from
+                              {{ appointment.startDateTime | date : "HH:mm" }}
+                              to
+                              {{ appointment.endDateTime | date : "HH:mm" }}
+                              <br />
+                              <span class="text-success"
+                                >Treatment status:
                               </span>
-                              </p>
-                              <!-- Details, edit and delete buttons -->
-                              <div class="d-flex justify-content-end mx-auto">
-                                <a class="mt-2 me-2">
-                                  <button type="button"
-                                          *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
-                                          class="btn btn-outline-danger bi-ban"
-                                          (click)="declineAppointment(appointment.appointmentId)">
-                                    Decline
-                                  </button>
-                                </a>
-                              </div>
-                            </ng-template>
-                          </div>
+                              {{ appointment.approvalStatus }}
+                              <br />
+                              <span
+                                *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
+                              >
+                                <strong>Customer Name: </strong>
+                                {{ appointment.customerFirstName }}
+                                {{ appointment.customerLastName }}
+                              </span>
+                            </p>
+                            <!-- Details, edit and delete buttons -->
+                            <div class="d-flex justify-content-end mx-auto">
+                              <a class="mt-2 me-2">
+                                <button
+                                  type="button"
+                                  *ngIf="
+                                    role === 'EMPLOYEE' || role === 'ADMIN'
+                                  "
+                                  class="btn btn-outline-success bi-ban"
+                                  (click)="
+                                    approveAppointment(
+                                      appointment.appointmentId
+                                    )
+                                  "
+                                >
+                                  Approve
+                                </button>
+                              </a>
+                            </div>
+                          </ng-template>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <div *ngIf="!hasPendingAppointments()" class="accordion custom-accordion">
-                <div class="accordion-item">
-                  <h2 role="heading" class="accordion-header">
-                    <button class="collapsed accordion-button text-center">
-                      <div class="text-muted p-2"> • No such appointments</div>
-                    </button>
-                  </h2>
                 </div>
               </div>
             </div>
 
-            <div class="text-start mb-5">
-              <div class="position-relative text-center">
-                <h4 class="mb-3 bi bi-journal-x" style="position: relative; display: inline-block;">
-                  Expired Appointments
-                  <span *ngIf="hasExpiredAppointments()"
-                        ngbTooltip="You have {{ expiredAppointmentsNumber }} expired appointments"
-                        class="badge rounded-pill bg-secondary">
-                  {{ expiredAppointmentsNumber }}
-                    <span class="visually-hidden">objects number</span>
-                </span>
-                </h4>
+            <div
+              *ngIf="!hasDeclinedAppointments()"
+              class="accordion custom-accordion"
+            >
+              <div class="accordion-item">
+                <h2 role="heading" class="accordion-header">
+                  <button class="collapsed accordion-button text-center">
+                    <div class="text-muted p-2">• No such appointments</div>
+                  </button>
+                </h2>
               </div>
-              <div *ngIf="hasExpiredAppointments()">
-                <div *ngFor="let appointment of relevantAppointments">
-                  <div *ngIf="appointment.approvalStatus === Status.EXPIRED.toUpperCase()">
-                    <div ngbAccordion (shown)="onSelect(appointment)" [closeOthers]="true">
-                      <div ngbAccordionItem="{{ appointment.appointmentId }}">
-                        <h2 ngbAccordionHeader>
-                          <button ngbAccordionButton>
-                            <span class="p-2 border rounded-start-2">{{ appointment.startDateTime | date : "dd.MM.yyyy" }}</span>
-                            <span class="p-2 border rounded-end-2">Treatment name: {{ appointment.treatmentName }}</span>
-                          </button>
-                        </h2>
-                        <div ngbAccordionCollapse>
-                          <div ngbAccordionBody>
-                            <ng-template>
-                              <p>
-                                <strong>Treatment description </strong>
-                                <em>{{ appointment.treatmentDescription }}</em>
-                                <br/>
-                                <strong>Treatment price </strong>
-                                <em>{{ appointment.treatmentPrice }}</em>
-                                <br/>
-                                <span class="text-primary-emphasis">Treatment date and time:</span>
-                                On {{ appointment.startDateTime | date : "yyyy-MM-dd" }} from
-                                {{ appointment.startDateTime | date : "HH:mm" }} to
-                                {{ appointment.endDateTime | date : "HH:mm" }}
-                                <br/>
-                                <span class="text-success">Treatment status: </span>
-                                {{ appointment.approvalStatus }}
-                                <br/>
-                                <span *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'">
-                                <strong>Customer Name: </strong>
-                                  {{ appointment.customerFirstName }}
-                                  {{ appointment.customerLastName }}
+            </div>
+          </div>
+        </div>
+
+        <!-- List 2: Pending and Expired -->
+        <div class="col">
+          <div class="text-start mb-5">
+            <div class="position-relative text-center">
+              <h4
+                class="mb-3 bi bi-clock-history"
+                style="position: relative; display: inline-block"
+              >
+                Pending Appointments
+                <span
+                  *ngIf="hasPendingAppointments()"
+                  ngbTooltip="You have {{
+                    pendingAppointmentsNumber
+                  }} pending appointments"
+                  class="badge rounded-pill bg-warning"
+                >
+                  {{ pendingAppointmentsNumber }}
+                  <span class="visually-hidden">objects number</span>
+                </span>
+              </h4>
+            </div>
+            <div *ngIf="hasPendingAppointments()">
+              <div *ngFor="let appointment of relevantAppointments">
+                <div
+                  *ngIf="
+                    appointment.approvalStatus === Status.PENDING.toUpperCase()
+                  "
+                >
+                  <div
+                    ngbAccordion
+                    (shown)="onSelect(appointment)"
+                    [closeOthers]="true"
+                  >
+                    <div ngbAccordionItem="{{ appointment.appointmentId }}">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                          <span class="p-2 border rounded-start-2">{{
+                            appointment.startDateTime | date : "dd.MM.yyyy"
+                          }}</span>
+                          <span class="p-2 border rounded-end-2"
+                            >Treatment name:
+                            {{ appointment.treatmentName }}</span
+                          >
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <p>
+                              <strong>Treatment description </strong>
+                              <em>{{ appointment.treatmentDescription }}</em>
+                              <br />
+                              <strong>Treatment price </strong>
+                              <em>{{ appointment.treatmentPrice }}</em>
+                              <br />
+                              <span class="text-primary-emphasis"
+                                >Treatment date and time:</span
+                              >
+                              On
+                              {{
+                                appointment.startDateTime | date : "yyyy-MM-dd"
+                              }}
+                              from
+                              {{ appointment.startDateTime | date : "HH:mm" }}
+                              to
+                              {{ appointment.endDateTime | date : "HH:mm" }}
+                              <br />
+                              <span class="text-success"
+                                >Treatment status:
                               </span>
-                              </p>
-                            </ng-template>
-                          </div>
+                              {{ appointment.approvalStatus }}
+                              <br />
+                              <span
+                                *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
+                              >
+                                <strong>Customer Name: </strong>
+                                {{ appointment.customerFirstName }}
+                                {{ appointment.customerLastName }}
+                              </span>
+                            </p>
+                            <!-- Details, edit and delete buttons -->
+
+                            <a
+                              class="mt-2 me-2"
+                              routerLink="/appointment/detail/update/{{
+                                appointment.appointmentId
+                              }}"
+                            >
+                              <button
+                                type="button"
+                                *ngIf="role === 'CUSTOMER'"
+                                class="btn btn-outline-info bi-ban"
+                              >
+                                Edit
+                              </button>
+                            </a>
+                            <div class="d-flex justify-content-end mx-auto">
+                              <a class="mt-2 me-2">
+                                <button
+                                  type="button"
+                                  *ngIf="
+                                    role === 'EMPLOYEE' || role === 'ADMIN'
+                                  "
+                                  class="btn btn-outline-success bi-ban"
+                                  (click)="
+                                    approveAppointment(
+                                      appointment.appointmentId
+                                    )
+                                  "
+                                >
+                                  Approve
+                                </button>
+                              </a>
+                              <a class="mt-2 me-2">
+                                <button
+                                  type="button"
+                                  *ngIf="
+                                    role === 'EMPLOYEE' || role === 'ADMIN'
+                                  "
+                                  class="btn btn-outline-danger bi-ban"
+                                  (click)="
+                                    declineAppointment(
+                                      appointment.appointmentId
+                                    )
+                                  "
+                                >
+                                  Decline
+                                </button>
+                              </a>
+                            </div>
+                          </ng-template>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div *ngIf="!hasExpiredAppointments()" class="accordion custom-accordion">
-                <div class="accordion-item">
-                  <h2 role="heading" class="accordion-header">
-                    <button class="collapsed accordion-button text-center">
-                      <div class="text-muted p-2"> • No such appointments</div>
-                    </button>
-                  </h2>
+            <div
+              *ngIf="!hasPendingAppointments()"
+              class="accordion custom-accordion"
+            >
+              <div class="accordion-item">
+                <h2 role="heading" class="accordion-header">
+                  <button class="collapsed accordion-button text-center">
+                    <div class="text-muted p-2">• No such appointments</div>
+                  </button>
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-start mb-5">
+            <div class="position-relative text-center">
+              <h4
+                class="mb-3 bi bi-journal-x"
+                style="position: relative; display: inline-block"
+              >
+                Expired Appointments
+                <span
+                  *ngIf="hasExpiredAppointments()"
+                  ngbTooltip="You have {{
+                    expiredAppointmentsNumber
+                  }} expired appointments"
+                  class="badge rounded-pill bg-secondary"
+                >
+                  {{ expiredAppointmentsNumber }}
+                  <span class="visually-hidden">objects number</span>
+                </span>
+              </h4>
+            </div>
+            <div *ngIf="hasExpiredAppointments()">
+              <div *ngFor="let appointment of relevantAppointments">
+                <div
+                  *ngIf="
+                    appointment.approvalStatus === Status.EXPIRED.toUpperCase()
+                  "
+                >
+                  <div
+                    ngbAccordion
+                    (shown)="onSelect(appointment)"
+                    [closeOthers]="true"
+                  >
+                    <div ngbAccordionItem="{{ appointment.appointmentId }}">
+                      <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                          <span class="p-2 border rounded-start-2">{{
+                            appointment.startDateTime | date : "dd.MM.yyyy"
+                          }}</span>
+                          <span class="p-2 border rounded-end-2"
+                            >Treatment name:
+                            {{ appointment.treatmentName }}</span
+                          >
+                        </button>
+                      </h2>
+                      <div ngbAccordionCollapse>
+                        <div ngbAccordionBody>
+                          <ng-template>
+                            <p>
+                              <strong>Treatment description </strong>
+                              <em>{{ appointment.treatmentDescription }}</em>
+                              <br />
+                              <strong>Treatment price </strong>
+                              <em>{{ appointment.treatmentPrice }}</em>
+                              <br />
+                              <span class="text-primary-emphasis"
+                                >Treatment date and time:</span
+                              >
+                              On
+                              {{
+                                appointment.startDateTime | date : "yyyy-MM-dd"
+                              }}
+                              from
+                              {{ appointment.startDateTime | date : "HH:mm" }}
+                              to
+                              {{ appointment.endDateTime | date : "HH:mm" }}
+                              <br />
+                              <span class="text-success"
+                                >Treatment status:
+                              </span>
+                              {{ appointment.approvalStatus }}
+                              <br />
+                              <span
+                                *ngIf="role === 'EMPLOYEE' || role === 'ADMIN'"
+                              >
+                                <strong>Customer Name: </strong>
+                                {{ appointment.customerFirstName }}
+                                {{ appointment.customerLastName }}
+                              </span>
+                            </p>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+            <div
+              *ngIf="!hasExpiredAppointments()"
+              class="accordion custom-accordion"
+            >
+              <div class="accordion-item">
+                <h2 role="heading" class="accordion-header">
+                  <button class="collapsed accordion-button text-center">
+                    <div class="text-muted p-2">• No such appointments</div>
+                  </button>
+                </h2>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </main>
 
 <!-- Modal no appointments -->
-<div #errorModalAppointment class="modal fade" id="errorModalAppointment" tabindex="-1"
-     aria-labelledby="exampleModalLabel"
-     aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div
+  #errorModalAppointment
+  class="modal fade"
+  id="errorModalAppointment"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="errorModalAppointmentLabel">Something went wrong...</h1>
-        <button (click)="onCancel()" type="button" class="btn-close"
-                ngbTooltip="You will be redirected to home"></button>
+        <h1 class="modal-title fs-5" id="errorModalAppointmentLabel">
+          Something went wrong...
+        </h1>
+        <button
+          (click)="onCancel()"
+          type="button"
+          class="btn-close"
+          ngbTooltip="You will be redirected to home"
+        ></button>
       </div>
       <div class="modal-body">
         <p>{{ error }}</p>
-        <ul *ngIf="role === Role.CUSTOMER.toUpperCase()" class="text-start" style="list-style: none; font-size: 0.9rem">
+        <ul
+          *ngIf="role === Role.CUSTOMER.toUpperCase()"
+          class="text-start"
+          style="list-style: none; font-size: 0.9rem"
+        >
           <li class="text-muted mt-1 mb-0">
-            • Looking for best treatment? <a (click)="onExit()" routerLink="/treatments" class="fw-bold text-body"
-                                             style="text-decoration: none">Our treatments are <u style="color: #0c5460">here</u></a>
+            • Looking for best treatment?
+            <a
+              (click)="onExit()"
+              routerLink="/treatments"
+              class="fw-bold text-body"
+              style="text-decoration: none"
+              >Our treatments are <u style="color: #0c5460">here</u></a
+            >
           </li>
           <li class="text-muted mt-1 mb-0">
-            • Already know what suits you best? <a (click)="onExit()" routerLink="/book" class="fw-bold text-body"
-                                                   style="text-decoration: none">Book now <u
-            style="color: #0c5460">here</u></a>
+            • Already know what suits you best?
+            <a
+              (click)="onExit()"
+              routerLink="/book"
+              class="fw-bold text-body"
+              style="text-decoration: none"
+              >Book now <u style="color: #0c5460">here</u></a
+            >
           </li>
         </ul>
       </div>
       <div class="modal-body mt-0">
         <p class="text-muted">
-          <span style="color: #da3544">Contact the administrator for more information.</span>
+          <span style="color: #da3544"
+            >Contact the administrator for more information.</span
+          >
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" ngbTooltip="You will be redirected to home" class="btn btn-secondary"
-                (click)="onCancel()">Close
+        <button
+          type="button"
+          ngbTooltip="You will be redirected to home"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+        >
+          Close
         </button>
       </div>
     </div>

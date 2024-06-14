@@ -28,24 +28,50 @@ export class AppointmentService {
         console.log('AppointmentService → fetchAppointments() called');
 
         if (appointments.length > 0) {
-          for (let appointment of appointments) {
-            if(appointment.approvalStatus === Status.EXPIRED.toUpperCase()) {
+          appointments.forEach((appointment) => {
+            console.log('appointment fetched ++++ ', appointment);
+            if (appointment.approvalStatus === Status.EXPIRED.toUpperCase()) {
               return;
             }
 
             if (this.isAppointmentExpired(appointment)) {
-              console.log('Marking appointment as EXPIRED:', appointment);
-              appointment.approvalStatus = Status.EXPIRED;
-              this.updateAppointment(appointment).subscribe(
+              const appointmentData = {
+                appointmentId: appointment.appointmentId,
+                customerId: appointment.customerId,
+                startDateTime: appointment.startDateTime,
+                approvalStatus: appointment.approvalStatus,
+                employeeId: appointment.employeeId,
+                treatmentId: appointment.treatmentId,
+                // treatmentName: appointment.treatmentName,
+                // treatmentPrice: appointment.treatmentPrice,
+                // treatmentDescription: appointment.treatmentDescription,
+              };
+              console.log(
+                'appointment status:++++++++++ ',
+                appointment.approvalStatus
+              );
+              if (
+                appointment.approvalStatus ===
+                Status.PENDING.valueOf().toUpperCase()
+              ) {
+                console.log(
+                  'ENTERED APOINTMENT DATA MODIFY ?++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+                );
+                appointmentData.approvalStatus = Status.EXPIRED;
+              }
+
+              console.log('Marking appointment as EXPIRED:', appointmentData);
+              this.updateAppointment(appointmentData).subscribe(
                 () => {
                   console.log('Appointment updated successfully');
+                  this.fetchAppointments().subscribe();
                 },
                 (error) => {
                   console.error('Error updating appointment:', error);
                 }
               );
             }
-          }
+          });
         }
       }),
       catchError((error) => {
