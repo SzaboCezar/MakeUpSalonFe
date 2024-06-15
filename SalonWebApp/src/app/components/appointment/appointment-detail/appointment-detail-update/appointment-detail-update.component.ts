@@ -209,6 +209,8 @@ export class AppointmentDetailUpdateComponent implements OnInit {
         this.logService.add(
           `AppointmentDetailUpdateComponent: updated ${appointment.appointmentId}`
         );
+
+        //TODO: refresh on on submit
         this.router.navigate(['/my-appointments']);
       },
       (error) => {
@@ -218,6 +220,10 @@ export class AppointmentDetailUpdateComponent implements OnInit {
         );
       }
     );
+  }
+
+  goToAppointments(): void {
+    
   }
 
   isTimeUnavailable(time: string, date: string): boolean {
